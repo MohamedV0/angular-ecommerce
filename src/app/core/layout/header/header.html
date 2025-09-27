@@ -1,1 +1,39 @@
-<p>header works!</p>
+<!-- FreshCart Header - Following PrimeNG + Tailwind Best Practices -->
+<div class="header-container">
+  <p-menubar 
+    [model]="menuItems" 
+    class="header-menubar">
+    
+    <!-- Brand/Logo -->
+    <ng-template pTemplate="start">
+      <h1 class="brand-title">{{ 'COMMON.APP_NAME' | translate }}</h1>
+    </ng-template>
+    
+    <!-- Language Toggle & User Actions -->
+    <ng-template pTemplate="end">
+      <!-- ✅ Using Tailwind utilities for layout only -->
+      <div class="flex items-center gap-3 header-actions">
+        
+        <!-- Language Toggle Button -->
+        <p-button 
+          [label]="getCurrentLanguage() === 'en' ? 'العربية' : 'English'" 
+          [icon]="'pi pi-globe'"
+          severity="secondary"
+          [text]="true"
+          (click)="toggleLanguage()"
+          [attr.aria-label]="'Toggle language to ' + (getCurrentLanguage() === 'en' ? 'Arabic' : 'English')"
+          styleClass="language-toggle-btn">
+        </p-button>
+        
+        <!-- User Menu (Future Implementation) -->
+        <p-button 
+          [icon]="'pi pi-user'"
+          severity="secondary" 
+          [text]="true"
+          label="Account">
+        </p-button>
+        
+      </div>
+    </ng-template>
+  </p-menubar>
+</div>

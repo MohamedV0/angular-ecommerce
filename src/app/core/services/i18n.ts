@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { PrimeNG } from 'primeng/config';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
@@ -7,6 +8,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class I18nService {
   private translateService = inject(TranslateService);
+  private primeNGConfig = inject(PrimeNG);
   private currentLanguageSubject = new BehaviorSubject<string>('en');
   
   // Supported languages for FreshCart
@@ -45,6 +47,13 @@ export class I18nService {
     if (this.supportedLanguages.some(lang => lang.code === langCode)) {
       this.translateService.use(langCode);
       this.currentLanguageSubject.next(langCode);
+      
+      // Sync PrimeNG translations dynamically (per documentation lines 151-153)
+      this.translateService.get('PRIMENG').subscribe(translations => {
+        if (translations && typeof translations === 'object') {
+          this.primeNGConfig.setTranslation(translations);
+        }
+      });
       
       // Update document direction for RTL support
       const language = this.supportedLanguages.find(lang => lang.code === langCode);

@@ -1,0 +1,38 @@
+/* Header Component Styles - Following PrimeNG + Tailwind Best Practices */
+
+/* Container styling using standard CSS (not overriding PrimeNG) */
+.header-container {
+  background: linear-gradient(135deg, theme('colors.emerald.600') 0%, theme('colors.emerald.700') 100%);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Brand title styling */
+.brand-title {
+  color: white;
+  font-size: theme('fontSize.xl');
+  font-weight: theme('fontWeight.bold');
+  margin: 0;
+}
+
+/* Use PrimeNG's CSS custom properties instead of overriding */
+.header-menubar {
+  /* Let PrimeNG handle the component styling, only customize colors through CSS variables */
+  --p-menubar-background: transparent;
+  --p-menubar-border: none;
+  --p-menubar-item-color: white;
+  --p-menubar-item-hover-background: rgba(255, 255, 255, 0.1);
+  --p-menubar-item-hover-color: white;
+}
+
+/* Language toggle button customization using PrimeNG design tokens */
+.language-toggle-btn {
+  --p-button-text-color: white;
+  --p-button-text-hover-background: rgba(255, 255, 255, 0.1);
+}
+
+/* RTL Support using Tailwind utilities */
+:host-context([dir="rtl"]) {
+  .header-actions {
+    @apply flex-row-reverse;
+  }
+}

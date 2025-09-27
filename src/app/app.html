@@ -1,19 +1,5 @@
-<!-- FreshCart Application -->
-<header class="app-header">
-  <div class="container">
-    <h1>{{ 'COMMON.APP_NAME' | translate }}</h1>
-    
-    <!-- Language Toggle Button -->
-    <div class="language-toggle">
-      <button 
-        class="toggle-btn" 
-        (click)="toggleLanguage()"
-        [attr.aria-label]="'Toggle language to ' + (getCurrentLanguage() === 'en' ? 'Arabic' : 'English')">
-        🌐 {{ getCurrentLanguage() === 'en' ? 'العربية' : 'English' }}
-      </button>
-    </div>
-  </div>
-</header>
+<!-- FreshCart Application with PrimeNG Header -->
+<app-header></app-header>
 
 <!-- Main Application Content -->
 <main class="main-content">
@@ -30,56 +16,9 @@
   padding: 0 1rem;
 }
 
-.app-header {
-  background: linear-gradient(135deg, #059669 0%, #047857 100%);
-  color: white;
-  padding: 1rem 0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.app-header .container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.app-header h1 {
-  margin: 0;
-  font-size: 1.75rem;
-  font-weight: 700;
-}
-
-.language-toggle {
-  display: flex;
-  align-items: center;
-}
-
-.toggle-btn {
-  background: rgba(255, 255, 255, 0.2);
-  border: 2px solid white;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.toggle-btn:hover {
-  background: white;
-  color: #059669;
-  transform: translateY(-1px);
-}
-
 .main-content {
   min-height: calc(100vh - 80px);
   padding: 2rem 0;
-}
-
-/* RTL Support */
-[dir="rtl"] .app-header .container {
-  flex-direction: row-reverse;
 }
 </style>
 
