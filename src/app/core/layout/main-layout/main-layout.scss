@@ -1,0 +1,109 @@
+// Main Layout Styles
+// Provides consistent layout structure across the application
+
+.main-layout-container {
+  // Ensure full viewport height with flexbox layout
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  
+  // Header Section
+  .layout-header {
+    // Fixed positioning for sticky header (optional, can be modified)
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+  }
+  
+  // Main Content Area
+  .layout-main {
+    // Takes remaining space between header and footer
+    flex: 1;
+    min-height: 0; // Allows proper flex behavior
+    
+    // Ensure content doesn't touch edges
+    padding: 0;
+    
+    // Content container styling
+    .content-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+  }
+  
+  // Footer Section
+  .layout-footer {
+    // Footer styling is handled in footer component
+    margin-top: auto; // Pushes footer to bottom when content is short
+  }
+}
+
+// Dark mode support
+.dark {
+  .main-layout-container {
+    .layout-header {
+      background: #1f2937;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+  }
+}
+
+// RTL Support
+[dir="rtl"] {
+  .main-layout-container {
+    // RTL-specific adjustments if needed
+    // Most layout is handled by Tailwind's RTL support
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .main-layout-container {
+    .layout-header {
+      // Mobile header adjustments
+      position: sticky; // Ensure header behavior on mobile
+    }
+    
+    .layout-main {
+      .content-wrapper {
+        padding: 0.5rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .main-layout-container {
+    .layout-main {
+      .content-wrapper {
+        padding: 0.25rem;
+      }
+    }
+  }
+}
+
+// Animation for layout transitions
+.main-layout-container {
+  .layout-main {
+    transition: all 0.3s ease;
+  }
+}
+
+// Print styles
+@media print {
+  .main-layout-container {
+    .layout-header,
+    .layout-footer {
+      display: none;
+    }
+    
+    .layout-main {
+      margin: 0;
+      padding: 0;
+    }
+  }
+}

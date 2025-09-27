@@ -1,1 +1,107 @@
-<p>product-card works!</p>
+<!-- Product Card - Following FreshCart Design -->
+<p-card class="product-card h-full cursor-pointer transition-all duration-300 hover:shadow-lg hover:scale-105" 
+        styleClass="border-gray-200 dark:border-gray-700 h-full">
+  
+  <!-- Product Image -->
+  <ng-template #header>
+    <div class="product-image-container relative overflow-hidden">
+      <img 
+        [src]="product().imageCover" 
+        [alt]="product().title"
+        class="w-full h-48 object-cover transition-transform duration-300 hover:scale-110"
+        loading="lazy">
+      
+      <!-- Discount Badge -->
+      @if (hasDiscount()) {
+        <p-badge 
+          [value]="getDiscountPercentage()"
+          severity="danger"
+          class="absolute top-2 left-2">
+        </p-badge>
+      }
+      
+      <!-- Wishlist Button -->
+      <button class="wishlist-btn absolute top-2 right-2 w-8 h-8 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-md transition-all duration-200 hover:scale-110">
+        <i class="pi pi-heart text-gray-600 hover:text-red-500 text-sm"></i>
+      </button>
+    </div>
+  </ng-template>
+  
+  <!-- Product Info -->
+  <div class="product-info p-4">
+    
+    <!-- Brand/Category -->
+    @if (product().brand || product().category) {
+      <p class="text-xs text-primary-600 dark:text-primary-400 font-medium mb-1 uppercase tracking-wide">
+        {{ product().brand || product().category }}
+      </p>
+    }
+    
+    <!-- Product Title -->
+    <h3 class="product-title text-sm font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2 leading-tight">
+      {{ product().title }}
+    </h3>
+    
+    <!-- Rating -->
+    @if (product().ratingsAverage) {
+      <div class="flex items-center gap-2 mb-3">
+        <p-rating 
+          [ngModel]="product().ratingsAverage" 
+          [readonly]="true"
+          [stars]="5"
+          class="text-xs">
+        </p-rating>
+        <span class="text-xs text-gray-500 dark:text-gray-400">
+          ({{ product().ratingsQuantity || 0 }})
+        </span>
+      </div>
+    }
+    
+    <!-- Price Section -->
+    <div class="price-section mb-4">
+      <div class="flex items-center gap-2">
+        <!-- Current/Discounted Price -->
+        <span class="text-lg font-bold text-green-600 dark:text-green-400">
+          {{ getCurrentPrice() | number:'1.0-0' }} EGP
+        </span>
+        
+        <!-- Original Price (if discounted) -->
+        @if (hasDiscount()) {
+          <span class="text-sm text-gray-500 line-through">
+            {{ product().price | number:'1.0-0' }} EGP
+          </span>
+        }
+      </div>
+      
+      <!-- Sold Count -->
+      @if (product().sold) {
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+          {{ product().sold }} sold
+        </p>
+      }
+    </div>
+    
+  </div>
+  
+  <!-- Action Buttons -->
+  <ng-template #footer>
+    <div class="product-actions flex gap-2">
+      <p-button 
+        label="Add to Cart"
+        icon="pi pi-shopping-cart"
+        severity="primary"
+        size="small"
+        class="flex-1"
+        styleClass="text-xs py-2">
+      </p-button>
+      <p-button 
+        icon="pi pi-eye"
+        severity="secondary"
+        [outlined]="true"
+        size="small"
+        class="aspect-square">
+      </p-button>
+    </div>
+  </ng-template>
+  
+</p-card>

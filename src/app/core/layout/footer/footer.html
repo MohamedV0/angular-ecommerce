@@ -1,1 +1,155 @@
-<p>footer works!</p>
+<!-- FreshCart Footer - Following BRD Requirements -->
+<footer class="footer-container bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
+  
+  <!-- Main Footer Content -->
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      
+      <!-- Newsletter Subscription Section -->
+      <p-card class="newsletter-section lg:col-span-2" styleClass="border-none shadow-none bg-transparent">
+        <ng-template #title>
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+            {{ 'FOOTER.GET_APP' | translate }}
+          </h3>
+        </ng-template>
+        <p class="text-gray-600 dark:text-gray-300 mb-4">
+          {{ 'FOOTER.DELIVERY_INFO' | translate }}
+        </p>
+        
+        <!-- Newsletter Form -->
+        <form [formGroup]="newsletterForm" (ngSubmit)="onSubscribe()" class="max-w-md">
+          <p-inputgroup>
+            <input 
+              pInputText 
+              type="email" 
+              formControlName="email"
+              [placeholder]="'FOOTER.EMAIL_PLACEHOLDER' | translate"
+              [invalid]="isEmailInvalid()"
+              class="flex-1" />
+            <p-inputgroup-addon>
+              <p-button 
+                type="submit"
+                [label]="'FOOTER.SUBSCRIBE' | translate"
+                icon="pi pi-send"
+                severity="primary"
+                [disabled]="newsletterForm.invalid">
+              </p-button>
+            </p-inputgroup-addon>
+          </p-inputgroup>
+          
+          <!-- Email Validation Message -->
+          @if (isEmailInvalid()) {
+            <p-message 
+              severity="error" 
+              size="small" 
+              variant="simple"
+              text="Please enter a valid email address"
+              class="mt-2">
+            </p-message>
+          }
+        </form>
+      </p-card>
+      
+      <!-- App Download Section -->
+      <p-card class="app-download-section" styleClass="border-none shadow-none bg-transparent">
+        <ng-template #title>
+          <h4 class="text-md font-semibold text-gray-900 dark:text-white">
+            {{ 'FOOTER.DOWNLOAD_APP' | translate }}
+          </h4>
+        </ng-template>
+        <div class="flex flex-col gap-3">
+          <p-button 
+            (click)="openAppStore()"
+            [label]="'FOOTER.APP_STORE' | translate"
+            icon="pi pi-apple"
+            severity="secondary"
+            [text]="true"
+            class="justify-start">
+          </p-button>
+          <p-button 
+            (click)="openGooglePlay()"
+            [label]="'FOOTER.GOOGLE_PLAY' | translate"
+            icon="pi pi-android"
+            severity="secondary"
+            [text]="true"
+            class="justify-start">
+          </p-button>
+        </div>
+      </p-card>
+      
+      <!-- Social Media Section -->
+      <p-card class="social-media-section" styleClass="border-none shadow-none bg-transparent">
+        <ng-template #title>
+          <h4 class="text-md font-semibold text-gray-900 dark:text-white">
+            {{ 'FOOTER.SOCIAL_FOLLOW' | translate }}
+          </h4>
+        </ng-template>
+        <div class="flex flex-wrap gap-2">
+          @for (social of socialLinks; track social.label) {
+            <p-button 
+              (click)="openSocialLink(social.url)"
+              [icon]="social.icon"
+              [aria-label]="social.label"
+              severity="secondary"
+              [text]="true"
+              [rounded]="true"
+              size="small">
+            </p-button>
+          }
+        </div>
+      </p-card>
+    </div>
+    
+    <!-- Divider -->
+    <p-divider class="mt-6"></p-divider>
+    
+    <!-- Payment Partners Section -->
+    <p-card class="payment-partners-section" styleClass="border-none shadow-none bg-transparent">
+      <ng-template #title>
+        <h4 class="text-md font-semibold text-gray-900 dark:text-white text-center">
+          {{ 'FOOTER.PAYMENT_PARTNERS' | translate }}
+        </h4>
+      </ng-template>
+      <div class="flex justify-center items-center gap-6 flex-wrap">
+        @for (partner of paymentPartners; track partner.name) {
+          <div class="payment-icon-container p-2 flex flex-col items-center gap-1">
+            <i 
+              [class]="partner.icon"
+              [style.color]="partner.color"
+              [attr.aria-label]="partner.name"
+              class="text-2xl opacity-70 hover:opacity-100 transition-opacity">
+            </i>
+            <span class="text-xs text-gray-500 dark:text-gray-400">
+              {{ partner.name }}
+            </span>
+          </div>
+        }
+      </div>
+    </p-card>
+  </div>
+  
+  <!-- Footer Bottom -->
+  <div class="footer-bottom bg-gray-100 dark:bg-gray-800 py-4">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+        
+        <!-- Copyright -->
+        <div class="copyright text-center md:text-left">
+          <p class="text-sm text-gray-600 dark:text-gray-400">
+            {{ 'FOOTER.COPYRIGHT' | translate }}
+          </p>
+        </div>
+        
+        <!-- Brand Name -->
+        <div class="brand-footer text-center md:text-right">
+          <span class="text-primary font-semibold">
+            {{ 'COMMON.APP_NAME' | translate }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Toast Container for Notifications -->
+  <p-toast position="top-right"></p-toast>
+</footer>

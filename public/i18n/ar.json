@@ -58,6 +58,18 @@
     "EMPTY_CART": "سلتك فارغة",
     "CONTINUE_SHOPPING": "متابعة التسوق"
   },
+  "FOOTER": {
+    "GET_APP": "احصل على تطبيق فريش كارت",
+    "EMAIL_PLACEHOLDER": "أدخل بريدك الإلكتروني",
+    "SUBSCRIBE": "اشترك",
+    "PAYMENT_PARTNERS": "نحن نقبل",
+    "DOWNLOAD_APP": "تحميل التطبيق",
+    "APP_STORE": "تحميل من أب ستور",
+    "GOOGLE_PLAY": "احصل عليه من جوجل بلاي",
+    "SOCIAL_FOLLOW": "تابعنا",
+    "DELIVERY_INFO": "احصل على التوصيل مع فريش كارت",
+    "COPYRIGHT": "© 2025 فريش كارت. جميع الحقوق محفوظة."
+  },
   "PRIMENG": {
     "startsWith": "يبدأ بـ",
     "contains": "يحتوي على",

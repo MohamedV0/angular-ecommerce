@@ -1,0 +1,185 @@
+// FreshCart Footer Styles
+// Following BRD design requirements
+
+.footer-container {
+  // Ensure footer sticks to bottom when content is short
+  margin-top: auto;
+  
+  // Newsletter section styling
+  .newsletter-section {
+    .p-inputgroup {
+      width: 100%;
+      
+      .p-inputtext {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+      
+      .p-inputgroup-addon {
+        padding: 0;
+        
+        .p-button {
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+          height: 100%;
+        }
+      }
+    }
+  }
+  
+  // App download section
+  .app-download-section {
+    .p-button {
+      width: 100%;
+      text-align: left;
+      
+      .p-button-label {
+        flex: 1;
+        text-align: left;
+      }
+    }
+  }
+  
+  // Social media buttons
+  .social-media-section {
+    .p-button {
+      width: 2.5rem;
+      height: 2.5rem;
+      
+      &:hover {
+        transform: translateY(-2px);
+        transition: transform 0.2s ease;
+      }
+    }
+  }
+  
+  // Payment partners
+  .payment-partners-section {
+    .payment-icon-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease;
+      
+      &:hover {
+        transform: translateY(-2px);
+        
+        i {
+          opacity: 1 !important;
+          transform: scale(1.1);
+        }
+      }
+      
+      i {
+        transition: opacity 0.3s ease, transform 0.2s ease;
+      }
+      
+      span {
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+      
+      &:hover span {
+        color: #374151;
+      }
+    }
+  }
+  
+  // Footer bottom
+  .footer-bottom {
+    .brand-footer {
+      .text-primary {
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+    }
+  }
+}
+
+// Dark mode adjustments
+.dark {
+  .footer-container {
+    .payment-icon-container {
+      &:hover span {
+        color: #d1d5db;
+      }
+      
+      span {
+        color: #9ca3af;
+      }
+    }
+  }
+}
+
+// RTL Support
+[dir="rtl"] {
+  .footer-container {
+    .newsletter-section {
+      .p-inputgroup {
+        .p-inputtext {
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+          border-top-right-radius: var(--p-border-radius);
+          border-bottom-right-radius: var(--p-border-radius);
+        }
+        
+        .p-inputgroup-addon .p-button {
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+          border-top-left-radius: var(--p-border-radius);
+          border-bottom-left-radius: var(--p-border-radius);
+        }
+      }
+    }
+    
+    .app-download-section .p-button {
+      text-align: right;
+      
+      .p-button-label {
+        text-align: right;
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .footer-container {
+    .newsletter-section {
+      margin-bottom: 2rem;
+    }
+    
+    .payment-partners-section {
+      .payment-icon-container {
+        i {
+          font-size: 1.25rem;
+        }
+        
+        span {
+          font-size: 0.625rem;
+        }
+      }
+    }
+  }
+}
+
+// Animation for newsletter subscription
+.newsletter-section {
+  .p-message {
+    animation: slideDown 0.3s ease-out;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

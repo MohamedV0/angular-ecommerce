@@ -1,12 +1,10 @@
 import { Component, signal, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
 import { I18nService } from './core/services/i18n';
-import { Header } from './core/layout/header/header';
+import { MainLayout } from './core/layout/main-layout/main-layout';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, TranslatePipe, Header],
+  imports: [MainLayout],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

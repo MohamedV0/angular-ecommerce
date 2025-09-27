@@ -58,6 +58,18 @@
     "EMPTY_CART": "Your cart is empty",
     "CONTINUE_SHOPPING": "Continue Shopping"
   },
+  "FOOTER": {
+    "GET_APP": "Get the FreshCart app",
+    "EMAIL_PLACEHOLDER": "Enter your email",
+    "SUBSCRIBE": "Subscribe",
+    "PAYMENT_PARTNERS": "We accept",
+    "DOWNLOAD_APP": "Download our app",
+    "APP_STORE": "Download on App Store",
+    "GOOGLE_PLAY": "Get it on Google Play",
+    "SOCIAL_FOLLOW": "Follow us",
+    "DELIVERY_INFO": "Get deliveries with FreshCart",
+    "COPYRIGHT": "© 2025 FreshCart. All rights reserved."
+  },
   "PRIMENG": {
     "startsWith": "Starts with",
     "contains": "Contains",
