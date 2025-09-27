@@ -1,0 +1,61 @@
+{
+  "COMMON": {
+    "APP_NAME": "فريش كارت",
+    "WELCOME": "مرحباً بك في فريش كارت",
+    "LOADING": "جاري التحميل...",
+    "ERROR": "حدث خطأ ما",
+    "SUCCESS": "تم بنجاح!",
+    "CONFIRM": "تأكيد",
+    "CANCEL": "إلغاء",
+    "SAVE": "حفظ",
+    "EDIT": "تعديل",
+    "DELETE": "حذف",
+    "SEARCH": "بحث",
+    "VIEW_ALL": "عرض الكل"
+  },
+  "NAVIGATION": {
+    "HOME": "الرئيسية",
+    "PRODUCTS": "المنتجات",
+    "CATEGORIES": "الفئات",
+    "CART": "السلة",
+    "WISHLIST": "المفضلة",
+    "PROFILE": "الملف الشخصي",
+    "LOGIN": "تسجيل الدخول",
+    "REGISTER": "إنشاء حساب",
+    "LOGOUT": "تسجيل الخروج"
+  },
+  "AUTH": {
+    "LOGIN_TITLE": "تسجيل الدخول إلى حسابك",
+    "REGISTER_TITLE": "إنشاء حساب جديد",
+    "EMAIL": "البريد الإلكتروني",
+    "PASSWORD": "كلمة المرور",
+    "CONFIRM_PASSWORD": "تأكيد كلمة المرور",
+    "REMEMBER_ME": "تذكرني",
+    "FORGOT_PASSWORD": "نسيت كلمة المرور؟",
+    "LOGIN_BUTTON": "دخول",
+    "REGISTER_BUTTON": "إنشاء حساب",
+    "ALREADY_HAVE_ACCOUNT": "لديك حساب بالفعل؟",
+    "DONT_HAVE_ACCOUNT": "ليس لديك حساب؟"
+  },
+  "PRODUCTS": {
+    "ADD_TO_CART": "أضف إلى السلة",
+    "ADD_TO_WISHLIST": "أضف إلى المفضلة",
+    "PRICE": "السعر",
+    "AVAILABILITY": "التوفر",
+    "IN_STOCK": "متوفر",
+    "OUT_OF_STOCK": "غير متوفر",
+    "PRODUCT_DETAILS": "تفاصيل المنتج",
+    "REVIEWS": "التقييمات",
+    "RATING": "التقييم"
+  },
+  "CART": {
+    "SHOPPING_CART": "سلة التسوق",
+    "ITEM": "المنتج",
+    "QUANTITY": "الكمية",
+    "TOTAL": "المجموع",
+    "SUBTOTAL": "المجموع الفرعي",
+    "CHECKOUT": "إتمام الشراء",
+    "EMPTY_CART": "سلتك فارغة",
+    "CONTINUE_SHOPPING": "متابعة التسوق"
+  }
+}
