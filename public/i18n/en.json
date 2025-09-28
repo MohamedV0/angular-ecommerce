@@ -35,7 +35,13 @@
     "LOGIN_BUTTON": "Sign In",
     "REGISTER_BUTTON": "Create Account",
     "ALREADY_HAVE_ACCOUNT": "Already have an account?",
-    "DONT_HAVE_ACCOUNT": "Don't have an account?"
+    "DONT_HAVE_ACCOUNT": "Don't have an account?",
+    "HEADER_LOGIN": "Login",
+    "HEADER_REGISTER": "Register",
+    "HEADER_LOGOUT": "Logout",
+    "ARIA_LOGIN": "Login to your account",
+    "ARIA_REGISTER": "Create new account",
+    "ARIA_LOGOUT": "Logout from your account"
   },
   "PRODUCTS": {
     "ADD_TO_CART": "Add to Cart",

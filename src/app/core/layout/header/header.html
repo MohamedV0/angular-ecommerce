@@ -25,13 +25,48 @@
           styleClass="language-toggle-btn">
         </p-button>
         
-        <!-- User Menu (Future Implementation) -->
-        <p-button 
-          [icon]="'pi pi-user'"
-          severity="secondary" 
-          [text]="true"
-          label="Account">
-        </p-button>
+        <!-- Authentication Buttons -->
+        @if (isAuthenticated()) {
+          <!-- Authenticated User Actions -->
+          <p-button 
+            [icon]="'pi pi-user'"
+            severity="secondary" 
+            [text]="true"
+            [label]="getCurrentUserName() || 'User'"
+            styleClass="user-name-btn">
+          </p-button>
+          
+          <p-button 
+            [icon]="'pi pi-sign-out'"
+            severity="secondary" 
+            [text]="true"
+            [label]="'AUTH.HEADER_LOGOUT' | translate"
+            (click)="logout()"
+            [attr.aria-label]="'AUTH.ARIA_LOGOUT' | translate"
+            styleClass="logout-btn">
+          </p-button>
+        } @else {
+          <!-- Guest User Actions -->
+          <p-button 
+            [icon]="'pi pi-sign-in'"
+            severity="secondary" 
+            [text]="true"
+            [label]="'AUTH.HEADER_LOGIN' | translate"
+            (click)="navigateToLogin()"
+            [attr.aria-label]="'AUTH.ARIA_LOGIN' | translate"
+            styleClass="login-btn">
+          </p-button>
+          
+          <p-button 
+            [icon]="'pi pi-user-plus'"
+            severity="success" 
+            [text]="true"
+            [label]="'AUTH.HEADER_REGISTER' | translate"
+            (click)="navigateToRegister()"
+            [attr.aria-label]="'AUTH.ARIA_REGISTER' | translate"
+            styleClass="register-btn">
+          </p-button>
+        }
         
       </div>
     </ng-template>

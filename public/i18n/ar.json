@@ -35,7 +35,13 @@
     "LOGIN_BUTTON": "دخول",
     "REGISTER_BUTTON": "إنشاء حساب",
     "ALREADY_HAVE_ACCOUNT": "لديك حساب بالفعل؟",
-    "DONT_HAVE_ACCOUNT": "ليس لديك حساب؟"
+    "DONT_HAVE_ACCOUNT": "ليس لديك حساب؟",
+    "HEADER_LOGIN": "تسجيل الدخول",
+    "HEADER_REGISTER": "إنشاء حساب",
+    "HEADER_LOGOUT": "تسجيل الخروج",
+    "ARIA_LOGIN": "تسجيل الدخول إلى حسابك",
+    "ARIA_REGISTER": "إنشاء حساب جديد",
+    "ARIA_LOGOUT": "تسجيل الخروج من حسابك"
   },
   "PRODUCTS": {
     "ADD_TO_CART": "أضف إلى السلة",

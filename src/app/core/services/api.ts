@@ -130,14 +130,8 @@ export class ApiService {
       });
     }
 
-    // Add authentication token (custom 'token' header, NOT Authorization Bearer)
-    const requiresAuth = options?.requiresAuth !== false; // Default to true
-    if (requiresAuth) {
-      const token = this.storage.getToken();
-      if (token) {
-        headers = headers.set(HEADERS.TOKEN, token);
-      }
-    }
+    // Authentication is now handled automatically by authHeaderInterceptor
+    // This ensures all API requests get proper authentication headers
 
     let params = new HttpParams();
 
@@ -226,33 +220,8 @@ export class ApiService {
     return throwError(() => apiError);
   }
 
-  /**
-   * Check if user is authenticated (has valid token)
-   */
-  isAuthenticated(): boolean {
-    return this.storage.isAuthenticated();
-  }
-
-  /**
-   * Get current authentication token
-   */
-  getAuthToken(): string | null {
-    return this.storage.getToken();
-  }
-
-  /**
-   * Set authentication token
-   */
-  setAuthToken(token: string): void {
-    this.storage.setToken(token);
-  }
-
-  /**
-   * Clear authentication token
-   */
-  clearAuthToken(): void {
-    this.storage.removeToken();
-  }
+  // Authentication methods removed - now handled by AuthService and authHeaderInterceptor
+  // This keeps the API service focused on HTTP operations only
 
   /**
    * Build query parameters for collection endpoints

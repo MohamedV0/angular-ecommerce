@@ -6,6 +6,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { MenuItem, PrimeIcons } from 'primeng/api';
 import { Subscription, combineLatest } from 'rxjs';
 import { I18nService } from '../../services/i18n';
+import { AuthService } from '../../../features/auth/services/auth';
 
 @Component({
   selector: 'app-header',
@@ -16,6 +17,7 @@ import { I18nService } from '../../services/i18n';
 export class Header implements OnInit, OnDestroy {
   protected readonly i18nService = inject(I18nService);
   private readonly translateService = inject(TranslateService);
+  protected readonly authService = inject(AuthService);
   private menuSubscription?: Subscription;
   
   menuItems: MenuItem[] = [];
@@ -66,5 +68,40 @@ export class Header implements OnInit, OnDestroy {
 
   getCurrentLanguage(): string {
     return this.i18nService.getCurrentLanguageCode();
+  }
+
+  /**
+   * Check if user is authenticated
+   */
+  isAuthenticated(): boolean {
+    return this.authService.isAuthenticated();
+  }
+
+  /**
+   * Get current user name for display
+   */
+  getCurrentUserName(): string | null {
+    return this.authService.getCurrentUserName();
+  }
+
+  /**
+   * Handle user logout
+   */
+  logout(): void {
+    this.authService.logout();
+  }
+
+  /**
+   * Navigate to login page
+   */
+  navigateToLogin(): void {
+    this.authService.navigateToLogin();
+  }
+
+  /**
+   * Navigate to register page
+   */
+  navigateToRegister(): void {
+    this.authService.navigateToRegister();
   }
 }
