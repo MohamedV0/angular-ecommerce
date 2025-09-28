@@ -1,0 +1,184 @@
+<!-- Product List Page -->
+<div class="product-list-page">
+  
+  <!-- Page Header -->
+  <div class="page-header bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-700">
+    <div class="max-w-7xl mx-auto px-4 py-6">
+      
+      <!-- Title and Count -->
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
+            Products
+          </h1>
+          @if (!loading() && hasProducts()) {
+            <p class="text-gray-600 dark:text-gray-400 mt-1">
+              {{ totalProducts() | number }} products found
+              @if (searchQuery()) {
+                <span class="ml-1">for "{{ searchQuery() }}"</span>
+              }
+            </p>
+          }
+        </div>
+        
+        <!-- Sort Dropdown -->
+        <div class="flex items-center gap-2">
+          <label for="sort" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+            Sort by:
+          </label>
+          <p-select
+            id="sort"
+            [options]="sortOptions"
+            [ngModel]="sortBy()"
+            (ngModelChange)="onSortChange($event)"
+            optionLabel="label"
+            optionValue="value"
+            [style]="{ minWidth: '200px' }"
+            styleClass="sort-dropdown">
+          </p-select>
+        </div>
+      </div>
+      
+      <!-- Search Bar -->
+      <div class="search-section">
+        <div class="flex gap-2 max-w-md">
+          <div class="flex-1">
+            <span class="p-input-icon-left w-full">
+              <i class="pi pi-search"></i>
+              <input 
+                pInputText
+                [formControl]="searchControl"
+                placeholder="Search products..."
+                class="w-full"
+                (keyup.enter)="onSearch()"
+              />
+            </span>
+          </div>
+          <p-button
+            icon="pi pi-search"
+            severity="primary"
+            (click)="onSearch()"
+            [disabled]="loading()"
+            styleClass="search-btn">
+          </p-button>
+          @if (searchQuery()) {
+            <p-button
+              icon="pi pi-times"
+              severity="secondary"
+              [outlined]="true"
+              (click)="clearSearch()"
+              [disabled]="loading()"
+              styleClass="clear-search-btn">
+            </p-button>
+          }
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content bg-gray-50 dark:bg-gray-800 min-h-screen py-8">
+    <div class="max-w-7xl mx-auto px-4">
+      
+      <!-- Loading State -->
+      @if (loading()) {
+        <div class="products-grid">
+          @for (item of generateSkeletonItems(); track item) {
+            <p-card class="product-skeleton-card">
+              <p-skeleton height="200px" class="mb-4"></p-skeleton>
+              <p-skeleton width="80%" height="1rem" class="mb-3"></p-skeleton>
+              <p-skeleton width="60%" height="1rem" class="mb-3"></p-skeleton>
+              <div class="flex justify-between items-center">
+                <p-skeleton width="40%" height="1.25rem"></p-skeleton>
+                <p-skeleton width="20%" height="1rem"></p-skeleton>
+              </div>
+              <p-skeleton height="2.5rem" class="mt-4"></p-skeleton>
+            </p-card>
+          }
+        </div>
+      }
+      
+      <!-- Error State -->
+      @else if (error()) {
+        <div class="error-state text-center py-16">
+          <p-message
+            severity="error"
+            [text]="error()"
+            class="max-w-md mx-auto mb-6">
+          </p-message>
+          <p-button
+            label="Try Again"
+            icon="pi pi-refresh"
+            (click)="retryLoading()"
+            severity="secondary">
+          </p-button>
+        </div>
+      }
+      
+      <!-- Empty State -->
+      @else if (!hasProducts() && !loading()) {
+        <div class="empty-state text-center py-16">
+          <div class="max-w-md mx-auto">
+            <i class="pi pi-search text-6xl text-gray-400 dark:text-gray-600 mb-6"></i>
+            <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
+              @if (searchQuery()) {
+                No products found
+              } @else {
+                No products available
+              }
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-6">
+              @if (searchQuery()) {
+                Try adjusting your search terms or clear the search to see all products.
+              } @else {
+                Products will appear here when they become available.
+              }
+            </p>
+            @if (searchQuery()) {
+              <p-button
+                label="Clear Search"
+                icon="pi pi-times"
+                (click)="clearSearch()"
+                severity="secondary"
+                [outlined]="true">
+              </p-button>
+            }
+          </div>
+        </div>
+      }
+      
+      <!-- Products Grid -->
+      @else if (hasProducts()) {
+        <div class="products-content">
+          
+          <!-- Products Grid -->
+          <div class="products-grid">
+            @for (product of products(); track product._id) {
+              <app-product-card [product]="product"></app-product-card>
+            }
+          </div>
+          
+          <!-- Pagination -->
+          @if (totalPages() > 1) {
+            <div class="pagination-section mt-12">
+              <p-paginator
+                [rows]="itemsPerPage()"
+                [totalRecords]="totalProducts()"
+                [first]="(currentPage() - 1) * itemsPerPage()"
+                (onPageChange)="onPageChange($event)"
+                [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+                [showJumpToPageDropdown]="totalPages() > 5"
+                styleClass="product-paginator">
+              </p-paginator>
+            </div>
+          }
+          
+        </div>
+      }
+      
+    </div>
+  </div>
+  
+</div>

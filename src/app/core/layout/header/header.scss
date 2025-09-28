@@ -2,15 +2,15 @@
 
 /* Container styling using standard CSS (not overriding PrimeNG) */
 .header-container {
-  background: linear-gradient(135deg, theme('colors.emerald.600') 0%, theme('colors.emerald.700') 100%);
+  background: var(--p-green-600);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Brand title styling */
 .brand-title {
   color: white;
-  font-size: theme('fontSize.xl');
-  font-weight: theme('fontWeight.bold');
+  font-size: 1.25rem; /* xl */
+  font-weight: 700; /* bold */
   margin: 0;
 }
 

@@ -21,7 +21,10 @@
       }
       
       <!-- Wishlist Button -->
-      <button class="wishlist-btn absolute top-2 right-2 w-8 h-8 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-md transition-all duration-200 hover:scale-110">
+      <button 
+        class="wishlist-btn absolute top-2 right-2 w-8 h-8 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-md transition-all duration-200 hover:scale-110"
+        (click)="addToWishlist()"
+        [attr.aria-label]="'Add ' + product().title + ' to wishlist'">
         <i class="pi pi-heart text-gray-600 hover:text-red-500 text-sm"></i>
       </button>
     </div>
@@ -31,11 +34,9 @@
   <div class="product-info p-4">
     
     <!-- Brand/Category -->
-    @if (product().brand || product().category) {
-      <p class="text-xs text-primary-600 dark:text-primary-400 font-medium mb-1 uppercase tracking-wide">
-        {{ product().brand || product().category }}
-      </p>
-    }
+    <p class="text-xs text-primary-600 dark:text-primary-400 font-medium mb-1 uppercase tracking-wide">
+      {{ product().brand.name || product().category.name }}
+    </p>
     
     <!-- Product Title -->
     <h3 class="product-title text-sm font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2 leading-tight">
@@ -89,6 +90,7 @@
       <p-button 
         label="Add to Cart"
         icon="pi pi-shopping-cart"
+        (click)="addToCart()"
         severity="primary"
         size="small"
         class="flex-1"
@@ -96,10 +98,12 @@
       </p-button>
       <p-button 
         icon="pi pi-eye"
+        (click)="viewProductDetails()"
         severity="secondary"
         [outlined]="true"
         size="small"
-        class="aspect-square">
+        class="aspect-square"
+        [ariaLabel]="'View details for ' + product().title">
       </p-button>
     </div>
   </ng-template>

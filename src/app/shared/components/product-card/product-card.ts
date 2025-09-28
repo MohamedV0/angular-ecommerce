@@ -1,32 +1,24 @@
-import { Component, input } from '@angular/core';
+import { Component, input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { BadgeModule } from 'primeng/badge';
 import { RatingModule } from 'primeng/rating';
 
-export interface Product {
-  id: string;
-  title: string;
-  brand?: string;
-  category?: string;
-  price: number;
-  priceAfterDiscount?: number;
-  imageCover: string;
-  ratingsAverage?: number;
-  ratingsQuantity?: number;
-  sold?: number;
-  quantity?: number;
-}
+// Import from products domain - the real API-matching model  
+import { Product } from '../../../features/products/models/product.model';
 
 @Component({
   selector: 'app-product-card',
-  imports: [CommonModule, FormsModule, CardModule, ButtonModule, BadgeModule, RatingModule],
+  imports: [CommonModule, FormsModule, RouterModule, CardModule, ButtonModule, BadgeModule, RatingModule],
   templateUrl: './product-card.html',
   styleUrl: './product-card.scss'
 })
 export class ProductCard {
+  private readonly router = inject(Router);
+  
   product = input.required<Product>();
 
   /**
@@ -56,5 +48,29 @@ export class ProductCard {
     
     const discount = Math.round((1 - (prod.priceAfterDiscount! / prod.price)) * 100);
     return `-${discount}%`;
+  }
+
+  /**
+   * Navigate to product details page
+   */
+  viewProductDetails(): void {
+    const prod = this.product();
+    this.router.navigate(['/products', prod._id]);
+  }
+
+  /**
+   * Add product to cart (placeholder)
+   */
+  addToCart(): void {
+    // TODO: Implement add to cart functionality
+    console.log('Add to cart:', this.product().title);
+  }
+
+  /**
+   * Add product to wishlist (placeholder)
+   */
+  addToWishlist(): void {
+    // TODO: Implement add to wishlist functionality
+    console.log('Add to wishlist:', this.product().title);
   }
 }

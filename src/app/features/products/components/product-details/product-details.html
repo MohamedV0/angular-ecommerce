@@ -1,0 +1,324 @@
+<!-- Product Details Page -->
+<div class="product-details-page">
+  
+  <!-- Loading State -->
+  @if (loading() && !product()) {
+    <div class="loading-container max-w-7xl mx-auto px-4 py-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        
+        <!-- Image Gallery Skeleton -->
+        <div class="gallery-skeleton">
+          <p-skeleton height="400px" class="mb-4"></p-skeleton>
+          <div class="flex gap-2">
+            @for (item of [1,2,3,4]; track item) {
+              <p-skeleton width="80px" height="60px"></p-skeleton>
+            }
+          </div>
+        </div>
+        
+        <!-- Product Info Skeleton -->
+        <div class="info-skeleton space-y-4">
+          <p-skeleton width="60%" height="1rem"></p-skeleton>
+          <p-skeleton width="80%" height="2rem"></p-skeleton>
+          <p-skeleton width="40%" height="1.5rem"></p-skeleton>
+          <p-skeleton width="100%" height="4rem"></p-skeleton>
+          <div class="flex gap-4">
+            <p-skeleton width="120px" height="3rem"></p-skeleton>
+            <p-skeleton width="200px" height="3rem"></p-skeleton>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  }
+  
+  <!-- Error State -->
+  @else if (error()) {
+    <div class="error-container max-w-2xl mx-auto px-4 py-16 text-center">
+      <i class="pi pi-exclamation-triangle text-6xl text-red-500 mb-6"></i>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Product Not Found</h2>
+      <p-message
+        severity="error"
+        [text]="error()"
+        class="mb-6 max-w-md mx-auto">
+      </p-message>
+      <div class="flex gap-4 justify-center">
+        <p-button
+          label="Try Again"
+          icon="pi pi-refresh"
+          (click)="retryLoading()"
+          severity="secondary">
+        </p-button>
+        <p-button
+          label="Back to Products"
+          icon="pi pi-arrow-left"
+          routerLink="/products"
+          severity="primary"
+          [outlined]="true">
+        </p-button>
+      </div>
+    </div>
+  }
+  
+  <!-- Product Content -->
+  @else if (product()) {
+    <div class="product-content">
+      
+      <!-- Breadcrumb Navigation -->
+      <div class="breadcrumb-section bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+          <p-breadcrumb [model]="breadcrumbItems()" [home]="{icon: 'pi pi-home', routerLink: '/'}">
+          </p-breadcrumb>
+        </div>
+      </div>
+      
+      <!-- Main Product Section -->
+      <div class="main-section bg-white dark:bg-gray-900 py-8">
+        <div class="max-w-7xl mx-auto px-4">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            
+            <!-- Product Image Gallery -->
+            <div class="gallery-section">
+              @if (galleryImages().length > 0) {
+                <p-galleria
+                  [value]="galleryImages()"
+                  [responsiveOptions]="[
+                    {breakpoint: '1024px', numVisible: 5},
+                    {breakpoint: '768px', numVisible: 3},
+                    {breakpoint: '560px', numVisible: 1}
+                  ]"
+                  [numVisible]="4"
+                  [showThumbnails]="galleryImages().length > 1"
+                  [showIndicators]="true"
+                  [showIndicatorsOnItem]="true"
+                  [indicatorsPosition]="'bottom'"
+                  [thumbnailsPosition]="'bottom'"
+                  styleClass="product-gallery">
+                  
+                  <ng-template #item let-image>
+                    <img 
+                      [src]="image.itemImageSrc" 
+                      [alt]="image.alt"
+                      class="gallery-main-image" />
+                  </ng-template>
+                  
+                  <ng-template #thumbnail let-image>
+                    <img 
+                      [src]="image.thumbnailImageSrc" 
+                      [alt]="image.alt"
+                      class="gallery-thumbnail" />
+                  </ng-template>
+                  
+                </p-galleria>
+              }
+            </div>
+            
+            <!-- Product Information -->
+            <div class="product-info">
+              
+              <!-- Category and Brand -->
+              <div class="product-meta mb-4">
+                <span 
+                  class="category-tag cursor-pointer"
+                  (click)="navigateToCategory()">
+                  {{ product()!.category.name }}
+                </span>
+                <span 
+                  class="brand-tag cursor-pointer ml-2"
+                  (click)="navigateToBrand()">
+                  {{ product()!.brand.name }}
+                </span>
+              </div>
+              
+              <!-- Product Title -->
+              <h1 class="product-title text-3xl font-bold text-gray-900 dark:text-white mb-4">
+                {{ product()!.title }}
+              </h1>
+              
+              <!-- Rating and Reviews -->
+              @if (product()!.ratingsAverage > 0) {
+                <div class="rating-section mb-6">
+                  <div class="flex items-center gap-3">
+                    <p-rating
+                      [ngModel]="product()!.ratingsAverage"
+                      [readonly]="true"
+                      [stars]="5">
+                    </p-rating>
+                    <span class="rating-text text-sm text-gray-600 dark:text-gray-400">
+                      {{ getRatingDisplay() }} reviews
+                    </span>
+                  </div>
+                </div>
+              }
+              
+              <!-- Price Section -->
+              <div class="price-section mb-6">
+                <div class="flex items-center gap-4 mb-2">
+                  <span class="current-price text-3xl font-bold text-green-600 dark:text-green-400">
+                    {{ formatPrice(currentPrice()) }}
+                  </span>
+                  @if (isOnSale()) {
+                    <span class="original-price text-xl text-gray-500 line-through">
+                      {{ formatPrice(product()!.price) }}
+                    </span>
+                    <p-badge 
+                      [value]="'-' + discountPercentage() + '%'"
+                      severity="success"
+                      size="large">
+                    </p-badge>
+                  }
+                </div>
+                
+                <!-- Stock Status -->
+                <div class="stock-status">
+                  @if (isInStock()) {
+                    <span class="text-green-600 dark:text-green-400 text-sm font-medium">
+                      <i class="pi pi-check mr-1"></i>
+                      In Stock ({{ product()!.quantity }} available)
+                    </span>
+                  } @else {
+                    <span class="text-red-500 text-sm font-medium">
+                      <i class="pi pi-times mr-1"></i>
+                      Out of Stock
+                    </span>
+                  }
+                </div>
+              </div>
+              
+              <!-- Product Description -->
+              <div class="description-section mb-8">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                  Description
+                </h3>
+                <div class="description-content text-gray-600 dark:text-gray-300 leading-relaxed">
+                  {{ product()!.description }}
+                </div>
+              </div>
+              
+              <!-- Quantity and Add to Cart -->
+              @if (isInStock()) {
+                <div class="purchase-section">
+                  
+                  <!-- Quantity Selector -->
+                  <div class="quantity-section mb-6">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Quantity
+                    </label>
+                    <div class="quantity-controls flex items-center gap-3">
+                      <p-button
+                        icon="pi pi-minus"
+                        [disabled]="quantity() <= 1"
+                        (click)="decreaseQuantity()"
+                        severity="secondary"
+                        [outlined]="true"
+                        size="small"
+                        styleClass="quantity-btn">
+                      </p-button>
+                      
+                      <span class="quantity-display text-lg font-semibold bg-gray-50 dark:bg-gray-800 px-4 py-2 rounded-lg min-w-[3rem] text-center">
+                        {{ quantity() }}
+                      </span>
+                      
+                      <p-button
+                        icon="pi pi-plus"
+                        [disabled]="quantity() >= maxQuantity()"
+                        (click)="increaseQuantity()"
+                        severity="secondary"
+                        [outlined]="true"
+                        size="small"
+                        styleClass="quantity-btn">
+                      </p-button>
+                    </div>
+                  </div>
+                  
+                  <!-- Action Buttons -->
+                  <div class="action-buttons flex flex-col sm:flex-row gap-4">
+                    <p-button
+                      label="Add to Cart"
+                      icon="pi pi-shopping-cart"
+                      [disabled]="!canAddToCart()"
+                      (click)="addToCart()"
+                      severity="primary"
+                      size="large"
+                      styleClass="flex-1 add-to-cart-btn">
+                    </p-button>
+                    
+                    <p-button
+                      icon="pi pi-heart"
+                      (click)="addToWishlist()"
+                      severity="secondary"
+                      [outlined]="true"
+                      size="large"
+                      styleClass="wishlist-btn"
+                      [ariaLabel]="'Add to wishlist'">
+                    </p-button>
+                  </div>
+                  
+                </div>
+              }
+              
+              <!-- Product Stats -->
+              @if (product()!.sold > 0) {
+                <p-divider class="my-6"></p-divider>
+                <div class="product-stats text-sm text-gray-500 dark:text-gray-400">
+                  <i class="pi pi-shopping-bag mr-2"></i>
+                  {{ product()!.sold | number }} sold
+                </div>
+              }
+              
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      
+      <!-- Related Products Section -->
+      @if (relatedProducts().length > 0 || relatedLoading()) {
+        <div class="related-products-section bg-gray-50 dark:bg-gray-800 py-12">
+          <div class="max-w-7xl mx-auto px-4">
+            
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+              Related Products
+            </h2>
+            
+            @if (relatedLoading()) {
+              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                @for (item of [1,2,3,4]; track item) {
+                  <p-card class="product-skeleton-card">
+                    <p-skeleton height="200px" class="mb-4"></p-skeleton>
+                    <p-skeleton width="80%" height="1rem" class="mb-3"></p-skeleton>
+                    <p-skeleton width="60%" height="1rem"></p-skeleton>
+                  </p-card>
+                }
+              </div>
+            } @else {
+              <p-carousel
+                [value]="relatedProducts()"
+                [numVisible]="4"
+                [numScroll]="1"
+                [responsiveOptions]="[
+                  {breakpoint: '1024px', numVisible: 3, numScroll: 1},
+                  {breakpoint: '768px', numVisible: 2, numScroll: 1},
+                  {breakpoint: '560px', numVisible: 1, numScroll: 1}
+                ]"
+                [circular]="true"
+                [autoplayInterval]="5000"
+                styleClass="related-products-carousel">
+                
+                <ng-template #item let-product>
+                  <div class="carousel-item-wrapper px-2">
+                    <app-product-card [product]="product"></app-product-card>
+                  </div>
+                </ng-template>
+                
+              </p-carousel>
+            }
+            
+          </div>
+        </div>
+      }
+      
+    </div>
+  }
+  
+</div>
