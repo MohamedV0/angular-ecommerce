@@ -1,56 +1,62 @@
-<!-- Product Card - Following FreshCart Design -->
-<p-card class="product-card h-full cursor-pointer transition-all duration-300 hover:shadow-lg hover:scale-105" 
-        styleClass="border-gray-200 dark:border-gray-700 h-full">
+<!-- Enhanced Product Card - Pure PrimeNG + Tailwind CSS -->
+<div class="group relative overflow-hidden rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer h-full flex flex-col"
+     (click)="viewProductDetails()"
+     [ariaLabel]="'View details for ' + product().title">
   
-  <!-- Product Image -->
-  <ng-template #header>
-    <div class="product-image-container relative overflow-hidden">
-      <img 
-        [src]="product().imageCover" 
-        [alt]="product().title"
-        class="w-full h-48 object-cover transition-transform duration-300 hover:scale-110"
-        loading="lazy">
-      
-      <!-- Discount Badge -->
-      @if (hasDiscount()) {
-        <p-badge 
-          [value]="getDiscountPercentage()"
-          severity="danger"
-          class="absolute top-2 left-2">
-        </p-badge>
-      }
-      
-      <!-- Wishlist Button -->
-      <button 
-        class="wishlist-btn absolute top-2 right-2 w-8 h-8 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-md transition-all duration-200 hover:scale-110"
-        (click)="addToWishlist()"
-        [attr.aria-label]="'Add ' + product().title + ' to wishlist'">
-        <i class="pi pi-heart text-gray-600 hover:text-red-500 text-sm"></i>
-      </button>
-    </div>
-  </ng-template>
+  <!-- Product Image Container -->
+  <div class="relative overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600">
+    <img 
+      [src]="product().imageCover" 
+      [alt]="product().title"
+      class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
+      loading="lazy">
+    
+    <!-- Discount Badge -->
+    @if (hasDiscount()) {
+      <p-badge 
+        [value]="getDiscountPercentage()"
+        severity="danger"
+        styleClass="!absolute !top-3 !left-3 !text-xs !font-bold !px-2 !py-1">
+      </p-badge>
+    }
+    
+    <!-- Wishlist Button -->
+    <p-button
+      icon="pi pi-heart"
+      (click)="onWishlistClick($event)"
+      [rounded]="true"
+      [outlined]="true"
+      severity="secondary"
+      size="small"
+      styleClass="!absolute !top-3 !right-3 !w-8 !h-8 !bg-white/90 hover:!bg-white !border-0 !shadow-md hover:!shadow-lg !transition-all !duration-200 hover:!scale-110"
+      [ariaLabel]="'Add ' + product().title + ' to wishlist'">
+    </p-button>
+  </div>
   
   <!-- Product Info -->
-  <div class="product-info p-4">
+  <div class="p-4 flex-1 flex flex-col">
     
-    <!-- Brand/Category -->
-    <p class="text-xs text-primary-600 dark:text-primary-400 font-medium mb-1 uppercase tracking-wide">
-      {{ product().brand.name || product().category.name }}
-    </p>
+    <!-- Centered Brand Badge -->
+    <div class="flex justify-center mb-3">
+      <p-badge 
+        [value]="product().brand.name" 
+        styleClass="!text-xs !font-bold !uppercase !tracking-wide !px-3 !py-1.5 !bg-blue-50 !text-blue-700 dark:!bg-blue-900/30 dark:!text-blue-300 !border-0 !rounded-full !shadow-sm">
+      </p-badge>
+    </div>
     
     <!-- Product Title -->
-    <h3 class="product-title text-sm font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2 leading-tight">
+    <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2 leading-tight min-h-[2.5rem]">
       {{ product().title }}
     </h3>
     
     <!-- Rating -->
-    @if (product().ratingsAverage) {
+    @if (product().ratingsAverage > 0) {
       <div class="flex items-center gap-2 mb-3">
         <p-rating 
           [ngModel]="product().ratingsAverage" 
           [readonly]="true"
           [stars]="5"
-          class="text-xs">
+          styleClass="!text-xs">
         </p-rating>
         <span class="text-xs text-gray-500 dark:text-gray-400">
           ({{ product().ratingsQuantity || 0 }})
@@ -59,8 +65,8 @@
     }
     
     <!-- Price Section -->
-    <div class="price-section mb-4">
-      <div class="flex items-center gap-2">
+    <div class="mb-4 mt-auto">
+      <div class="flex items-center gap-2 mb-1">
         <!-- Current/Discounted Price -->
         <span class="text-lg font-bold text-green-600 dark:text-green-400">
           {{ getCurrentPrice() | number:'1.0-0' }} EGP
@@ -68,44 +74,38 @@
         
         <!-- Original Price (if discounted) -->
         @if (hasDiscount()) {
-          <span class="text-sm text-gray-500 line-through">
+          <span class="text-sm text-gray-500 dark:text-gray-400 line-through decoration-2">
             {{ product().price | number:'1.0-0' }} EGP
           </span>
         }
       </div>
       
-      <!-- Sold Count -->
-      @if (product().sold) {
-        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-          {{ product().sold }} sold
+      <!-- Stock Status -->
+      @if (product().quantity > 0) {
+        <p class="text-xs text-green-600 dark:text-green-400 font-medium">
+          <i class="pi pi-check-circle mr-1"></i>
+          In Stock
+        </p>
+      } @else {
+        <p class="text-xs text-red-500 font-medium">
+          <i class="pi pi-times-circle mr-1"></i>
+          Out of Stock
         </p>
       }
     </div>
-    
   </div>
   
-  <!-- Action Buttons -->
-  <ng-template #footer>
-    <div class="product-actions flex gap-2">
-      <p-button 
-        label="Add to Cart"
-        icon="pi pi-shopping-cart"
-        (click)="addToCart()"
-        severity="primary"
-        size="small"
-        class="flex-1"
-        styleClass="text-xs py-2">
-      </p-button>
-      <p-button 
-        icon="pi pi-eye"
-        (click)="viewProductDetails()"
-        severity="secondary"
-        [outlined]="true"
-        size="small"
-        class="aspect-square"
-        [ariaLabel]="'View details for ' + product().title">
-      </p-button>
-    </div>
-  </ng-template>
+  <!-- Action Buttons Footer -->
+  <div class="p-4 pt-0">
+    <p-button 
+      label="Add to Cart"
+      icon="pi pi-shopping-cart"
+      (click)="onAddToCartClick($event)"
+      severity="success"
+      size="small"
+      [disabled]="product().quantity === 0"
+      styleClass="w-full !py-2 !text-xs !font-semibold">
+    </p-button>
+  </div>
   
-</p-card>
+</div>

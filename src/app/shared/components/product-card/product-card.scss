@@ -1,96 +1,6 @@
-// Product Card Styles - Following FreshCart Design
-.product-card {
-  transition: all 0.3s ease;
-  border-radius: 12px;
-  overflow: hidden;
-  
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-  }
-  
-  .product-image-container {
-    position: relative;
-    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-    
-    img {
-      transition: transform 0.3s ease;
-    }
-    
-    &:hover img {
-      transform: scale(1.05);
-    }
-    
-    .wishlist-btn {
-      transition: all 0.2s ease;
-      backdrop-filter: blur(8px);
-      
-      &:hover {
-        background: white;
-        transform: scale(1.1);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      }
-    }
-  }
-  
-  .product-info {
-    .product-title {
-      height: 2.5rem;
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      line-height: 1.3;
-    }
-    
-    .price-section {
-      .text-green-600 {
-        color: #059669;
-      }
-      
-      .line-through {
-        position: relative;
-        
-        &::after {
-          content: '';
-          position: absolute;
-          top: 50%;
-          left: 0;
-          right: 0;
-          height: 1px;
-          background-color: currentColor;
-        }
-      }
-    }
-  }
-  
-  .product-actions {
-    padding: 0;
-    
-    .p-button {
-      border-radius: 8px;
-      font-weight: 500;
-      
-      &.p-button-primary {
-        background: linear-gradient(135deg, #22c55e, #16a34a);
-        border: none;
-        
-        &:hover {
-          background: linear-gradient(135deg, #16a34a, #15803d);
-          transform: translateY(-1px);
-        }
-      }
-      
-      &.p-button-secondary {
-        &:hover {
-          transform: translateY(-1px);
-        }
-      }
-    }
-  }
-}
+// Enhanced Product Card - Minimal styles for Pure PrimeNG + Tailwind CSS
 
-// Line clamp utility
+// Line clamp utility for product titles (Tailwind 4 compatible)
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -98,74 +8,12 @@
   overflow: hidden;
 }
 
-// Rating component styling
-:host ::ng-deep {
-  .p-rating {
-    .p-rating-item {
-      .p-rating-icon {
-        font-size: 0.875rem;
-        color: #fbbf24;
-        
-        &.pi-star-fill {
-          color: #f59e0b;
-        }
-      }
-    }
-  }
+// Rating component standard golden stars override
+:host ::ng-deep p-rating {
+  --p-rating-icon-color: #d1d5db; // gray-300 for inactive stars  
+  --p-rating-icon-hover-color: #FFC107; // Material Design amber (industry standard)
+  --p-rating-icon-active-color: #FFC107; // Material Design amber (industry standard)
 }
 
-// Dark mode adjustments
-.dark {
-  .product-card {
-    .product-image-container {
-      background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
-    }
-    
-    .wishlist-btn {
-      background: rgba(55, 65, 81, 0.8);
-      
-      &:hover {
-        background: #374151;
-      }
-    }
-  }
-}
-
-// RTL Support
-[dir="rtl"] {
-  .product-card {
-    .wishlist-btn {
-      right: auto;
-      left: 0.5rem;
-    }
-    
-    .product-actions {
-      flex-direction: row-reverse;
-    }
-  }
-}
-
-// Mobile optimizations
-@media (max-width: 640px) {
-  .product-card {
-    .product-image-container img {
-      height: 160px;
-    }
-    
-    .product-info {
-      padding: 1rem;
-      
-      .product-title {
-        font-size: 0.875rem;
-        height: 2.25rem;
-      }
-    }
-    
-    .product-actions {
-      .p-button {
-        font-size: 0.75rem;
-        padding: 0.5rem 0.75rem;
-      }
-    }
-  }
-}
+// Ensure proper aspect ratios and transitions are handled by Tailwind
+// All other styling is handled by PrimeNG components and Tailwind classes

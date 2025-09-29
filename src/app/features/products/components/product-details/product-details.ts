@@ -15,6 +15,7 @@ import { MessageModule } from 'primeng/message';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { CarouselModule } from 'primeng/carousel';
 import { CardModule } from 'primeng/card';
+import { ChipModule } from 'primeng/chip';
 
 // Feature Imports
 import { ProductsService } from '../../services/products';
@@ -48,6 +49,7 @@ interface GalleryImage {
     BreadcrumbModule,
     CarouselModule,
     CardModule,
+    ChipModule,
     // Shared
     ProductCard
   ],

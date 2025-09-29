@@ -67,7 +67,7 @@ export class ProductSearchComponent implements OnInit, OnDestroy {
   readonly error = signal<string>('');
   readonly totalProducts = signal(0);
   readonly currentPage = signal(1);
-  readonly itemsPerPage = signal(20);
+  readonly itemsPerPage = signal(30);
 
   // Search state
   readonly searchQuery = signal('');
@@ -89,6 +89,9 @@ export class ProductSearchComponent implements OnInit, OnDestroy {
   // Sort options
   readonly sortBy = signal('relevance');
   readonly sortOptions = [...SEARCH_SORT_OPTIONS];
+
+  // Pagination options
+  readonly rowsPerPageOptions = signal([15, 30, 50, 100]);
 
   // Filter options (will be populated from API)
   readonly categoryOptions = signal<{label: string, value: string}[]>([]);
@@ -149,6 +152,12 @@ export class ProductSearchComponent implements OnInit, OnDestroy {
       }
       if (params['sort']) {
         this.sortBy.set(params['sort']);
+      }
+      if (params['limit']) {
+        const limit = +params['limit'];
+        if (this.rowsPerPageOptions().includes(limit)) {
+          this.itemsPerPage.set(limit);
+        }
       }
       // TODO: Load other filters from params
     });
@@ -407,7 +416,19 @@ export class ProductSearchComponent implements OnInit, OnDestroy {
    */
   onPageChange(event: any): void {
     const newPage = event.page + 1;
-    this.currentPage.set(newPage);
+    const newRows = event.rows;
+    
+    // Update page if changed
+    if (newPage !== this.currentPage()) {
+      this.currentPage.set(newPage);
+    }
+    
+    // Update rows per page if changed
+    if (newRows !== this.itemsPerPage()) {
+      this.itemsPerPage.set(newRows);
+      this.currentPage.set(1); // Reset to first page when changing page size
+    }
+    
     this.updateRoute();
     this.performSearch();
   }
@@ -427,6 +448,9 @@ export class ProductSearchComponent implements OnInit, OnDestroy {
     if (this.sortBy() !== 'relevance') {
       queryParams.sort = this.sortBy();
     }
+    if (this.itemsPerPage() !== 30) { // Only add if different from default
+      queryParams.limit = this.itemsPerPage();
+    }
     // TODO: Add filter params
 
     this.router.navigate([], {
@@ -440,6 +464,6 @@ export class ProductSearchComponent implements OnInit, OnDestroy {
    * Generate skeleton items
    */
   generateSkeletonItems(): number[] {
-    return Array(8).fill(0).map((_, i) => i);
+    return Array(12).fill(0).map((_, i) => i);
   }
 }

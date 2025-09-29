@@ -2,17 +2,17 @@ import { Component, input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { BadgeModule } from 'primeng/badge';
 import { RatingModule } from 'primeng/rating';
+import { ChipModule } from 'primeng/chip';
 
 // Import from products domain - the real API-matching model  
 import { Product } from '../../../features/products/models/product.model';
 
 @Component({
   selector: 'app-product-card',
-  imports: [CommonModule, FormsModule, RouterModule, CardModule, ButtonModule, BadgeModule, RatingModule],
+  imports: [CommonModule, FormsModule, RouterModule, ButtonModule, BadgeModule, RatingModule, ChipModule],
   templateUrl: './product-card.html',
   styleUrl: './product-card.scss'
 })
@@ -56,6 +56,22 @@ export class ProductCard {
   viewProductDetails(): void {
     const prod = this.product();
     this.router.navigate(['/products', prod._id]);
+  }
+
+  /**
+   * Add product to cart with event prevention
+   */
+  onAddToCartClick(event: Event): void {
+    event.stopPropagation(); // Prevent card click
+    this.addToCart();
+  }
+
+  /**
+   * Add product to wishlist with event prevention
+   */
+  onWishlistClick(event: Event): void {
+    event.stopPropagation(); // Prevent card click
+    this.addToWishlist();
   }
 
   /**

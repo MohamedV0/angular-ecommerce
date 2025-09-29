@@ -1,12 +1,12 @@
 <!-- Product Search Page -->
-<div class="product-search-page">
+<div class="min-h-screen bg-surface-ground">
   
   <!-- Search Header -->
-  <div class="search-header bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-700">
+  <div class="sticky top-0 z-[100] bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-700 backdrop-blur-sm">
     <div class="max-w-7xl mx-auto px-4 py-6">
       
       <!-- Main Search Bar -->
-      <div class="search-bar-section mb-6">
+      <div class="mb-6">
         <div class="flex items-center gap-4">
           
           <!-- Search Input with Autocomplete -->
@@ -20,10 +20,10 @@
               [dropdown]="true"
               [showEmptyMessage]="true"
               emptyMessage="No suggestions found"
-              styleClass="w-full search-autocomplete">
+              styleClass="w-full">
               
               <ng-template #item let-suggestion>
-                <div class="suggestion-item flex items-center gap-2">
+                <div class="flex items-center gap-2 p-3 transition-colors hover:bg-primary-50">
                   <i class="pi pi-search text-gray-400"></i>
                   <span>{{ suggestion }}</span>
                 </div>
@@ -57,7 +57,7 @@
         
         <!-- Recent Searches -->
         @if (recentSearches().length > 0 && !searchQuery()) {
-          <div class="recent-searches mt-4">
+          <div class="mt-4">
             <div class="flex items-center gap-2 mb-2">
               <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Recent searches:</span>
               <p-button
@@ -184,13 +184,13 @@
   </div>
 
   <!-- Main Content -->
-  <div class="main-content bg-gray-50 dark:bg-gray-800 min-h-screen py-8">
+  <div class="bg-gray-50 dark:bg-gray-800 min-h-screen py-8">
     <div class="max-w-7xl mx-auto px-4">
       
       <!-- Welcome State (No Search) -->
       @if (!searchQuery()) {
-        <div class="welcome-state text-center py-16">
-          <i class="pi pi-search text-6xl text-gray-400 dark:text-gray-600 mb-6"></i>
+        <div class="text-center py-16">
+          <i class="pi pi-search text-6xl text-gray-400 dark:text-gray-600 mb-6 opacity-60 animate-pulse"></i>
           <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
             Search Products
           </h2>
@@ -203,9 +203,9 @@
       
       <!-- Loading State -->
       @else if (loading()) {
-        <div class="products-grid">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
           @for (item of generateSkeletonItems(); track item) {
-            <p-card class="product-skeleton-card">
+            <p-card class="h-96">
               <p-skeleton height="200px" class="mb-4"></p-skeleton>
               <p-skeleton width="80%" height="1rem" class="mb-3"></p-skeleton>
               <p-skeleton width="60%" height="1rem" class="mb-3"></p-skeleton>
@@ -221,11 +221,11 @@
       
       <!-- Error State -->
       @else if (error()) {
-        <div class="error-state text-center py-16">
+        <div class="text-center py-16">
           <p-message
             severity="error"
             [text]="error()"
-            class="max-w-md mx-auto mb-6">
+            styleClass="max-w-md mx-auto mb-6 inline-block">
           </p-message>
           <p-button
             label="Try Again"
@@ -238,15 +238,15 @@
       
       <!-- No Results State -->
       @else if (!hasProducts()) {
-        <div class="no-results text-center py-16">
-          <i class="pi pi-search text-6xl text-gray-400 dark:text-gray-600 mb-6"></i>
+        <div class="text-center py-16">
+          <i class="pi pi-search text-6xl text-gray-400 dark:text-gray-600 mb-6 opacity-50"></i>
           <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
             No products found
           </h3>
           <div class="max-w-md mx-auto text-gray-600 dark:text-gray-400 mb-6">
             <p class="mb-4">We couldn't find any products matching "{{ searchQuery() }}"</p>
             <p>Try:</p>
-            <ul class="text-left list-disc list-inside space-y-1">
+            <ul class="text-left list-disc list-inside space-y-1 text-gray-500 dark:text-gray-400">
               <li>Checking your spelling</li>
               <li>Using more general terms</li>
               <li>Removing some filters</li>
@@ -267,10 +267,10 @@
       
       <!-- Search Results -->
       @else {
-        <div class="search-results">
+        <div class="animate-in fade-in duration-500">
           
           <!-- Products Grid -->
-          <div class="products-grid">
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
             @for (product of products(); track product._id) {
               <app-product-card [product]="product"></app-product-card>
             }
@@ -278,7 +278,7 @@
           
           <!-- Pagination -->
           @if (totalPages() > 1) {
-            <div class="pagination-section mt-12">
+            <div class="flex justify-center mt-12">
               <p-paginator
                 [rows]="itemsPerPage()"
                 [totalRecords]="totalProducts()"
@@ -286,7 +286,11 @@
                 (onPageChange)="onPageChange($event)"
                 [showCurrentPageReport]="true"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} results"
-                [showJumpToPageDropdown]="totalPages() > 5">
+                [showJumpToPageDropdown]="totalPages() > 5"
+                [showFirstLastIcon]="true"
+                [rowsPerPageOptions]="rowsPerPageOptions()"
+                styleClass="surface-card border-round"
+                ariaLabel="Search results pagination navigation">
               </p-paginator>
             </div>
           }
@@ -304,7 +308,7 @@
     position="right"
     [modal]="true"
     [showCloseIcon]="true"
-    styleClass="filters-sidebar w-full md:w-96">
+    styleClass="w-full md:w-96">
     
     <ng-template #header>
       <div class="flex items-center justify-between w-full">
@@ -322,11 +326,11 @@
     </ng-template>
     
     <!-- Filter Content -->
-    <div class="filters-content space-y-6 py-4">
+    <div class="space-y-6 py-4 px-6">
       
       <!-- Price Range -->
-      <div class="filter-section">
-        <h4 class="font-medium text-gray-900 dark:text-white mb-3">Price Range (EGP)</h4>
+      <div>
+        <h4 class="font-medium text-gray-900 dark:text-white mb-3 text-base">Price Range (EGP)</h4>
         <div class="px-2">
           <p-slider
             [(ngModel)]="filters().priceRange"
@@ -345,11 +349,11 @@
       </div>
       
       <!-- Rating Filter -->
-      <div class="filter-section">
-        <h4 class="font-medium text-gray-900 dark:text-white mb-3">Minimum Rating</h4>
+      <div>
+        <h4 class="font-medium text-gray-900 dark:text-white mb-3 text-base">Minimum Rating</h4>
         <div class="space-y-2">
           @for (rating of [4, 3, 2, 1]; track rating) {
-            <label class="flex items-center gap-2 cursor-pointer">
+            <label class="flex items-center gap-2 cursor-pointer py-2 px-0 rounded-md transition-all hover:bg-surface-50 hover:px-2">
               <p-checkbox
                 [value]="rating"
                 [ngModel]="filters().rating >= rating"
@@ -368,10 +372,10 @@
       </div>
       
       <!-- Availability -->
-      <div class="filter-section">
-        <h4 class="font-medium text-gray-900 dark:text-white mb-3">Availability</h4>
+      <div>
+        <h4 class="font-medium text-gray-900 dark:text-white mb-3 text-base">Availability</h4>
         <div class="space-y-2">
-          <label class="flex items-center gap-2 cursor-pointer">
+          <label class="flex items-center gap-2 cursor-pointer py-2 px-0 rounded-md transition-all hover:bg-surface-50 hover:px-2">
             <p-checkbox
               [ngModel]="filters().inStock"
               (ngModelChange)="onInStockChange($event)"
@@ -379,7 +383,7 @@
             </p-checkbox>
             <span class="text-sm">In Stock</span>
           </label>
-          <label class="flex items-center gap-2 cursor-pointer">
+          <label class="flex items-center gap-2 cursor-pointer py-2 px-0 rounded-md transition-all hover:bg-surface-50 hover:px-2">
             <p-checkbox
               [ngModel]="filters().onSale"
               (ngModelChange)="onSaleChange($event)"

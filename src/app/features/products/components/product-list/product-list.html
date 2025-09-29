@@ -1,138 +1,156 @@
-<!-- Product List Page -->
-<div class="product-list-page">
+<!-- Enhanced Product List Page - Pure PrimeNG + Tailwind CSS -->
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
   
-  <!-- Page Header -->
-  <div class="page-header bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-700">
+  <!-- Compact Page Header -->
+  <div class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 py-6">
       
-      <!-- Title and Count -->
-      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-        <div>
-          <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
-            Products
-          </h1>
-          @if (!loading() && hasProducts()) {
-            <p class="text-gray-600 dark:text-gray-400 mt-1">
-              {{ totalProducts() | number }} products found
-              @if (searchQuery()) {
-                <span class="ml-1">for "{{ searchQuery() }}"</span>
-              }
-            </p>
-          }
+      <!-- Title and Controls Row -->
+      <div class="flex flex-col lg:flex-row lg:items-center gap-6">
+        
+        <!-- Left: Title and Icon -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+            <i class="pi pi-shopping-bag text-white text-lg"></i>
+          </div>
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Products</h1>
+            @if (!loading() && hasProducts()) {
+              <p class="text-sm text-gray-500 dark:text-gray-400">
+                {{ totalProducts() | number }} products found
+                @if (searchQuery()) {
+                  <span class="ml-1">for "{{ searchQuery() }}"</span>
+                }
+              </p>
+            }
+          </div>
         </div>
         
-        <!-- Sort Dropdown -->
-        <div class="flex items-center gap-2">
-          <label for="sort" class="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Sort by:
-          </label>
-          <p-select
-            id="sort"
-            [options]="sortOptions"
-            [ngModel]="sortBy()"
-            (ngModelChange)="onSortChange($event)"
-            optionLabel="label"
-            optionValue="value"
-            [style]="{ minWidth: '200px' }"
-            styleClass="sort-dropdown">
-          </p-select>
-        </div>
-      </div>
-      
-      <!-- Search Bar -->
-      <div class="search-section">
-        <div class="flex gap-2 max-w-md">
+        <!-- Right: Search and Sort Controls -->
+        <div class="flex flex-1 lg:flex-none flex-col sm:flex-row gap-3 lg:min-w-[600px]">
+          
+          <!-- Search with IconField -->
           <div class="flex-1">
-            <span class="p-input-icon-left w-full">
-              <i class="pi pi-search"></i>
+            <p-iconfield iconPosition="left" class="w-full">
+              <p-inputicon class="pi pi-search"></p-inputicon>
               <input 
                 pInputText
                 [formControl]="searchControl"
-                placeholder="Search products..."
+                placeholder="Search for products, brands, categories..."
                 class="w-full"
                 (keyup.enter)="onSearch()"
               />
-            </span>
+            </p-iconfield>
           </div>
-          <p-button
-            icon="pi pi-search"
-            severity="primary"
-            (click)="onSearch()"
-            [disabled]="loading()"
-            styleClass="search-btn">
-          </p-button>
-          @if (searchQuery()) {
+          
+          <!-- Action Buttons -->
+          <div class="flex gap-2">
             <p-button
-              icon="pi pi-times"
-              severity="secondary"
-              [outlined]="true"
-              (click)="clearSearch()"
-              [disabled]="loading()"
-              styleClass="clear-search-btn">
+              label="Search"
+              icon="pi pi-search"
+              (click)="onSearch()"
+              [disabled]="loading()">
             </p-button>
-          }
+            
+            @if (searchQuery()) {
+              <p-button
+                icon="pi pi-times"
+                severity="secondary"
+                [outlined]="true"
+                (click)="clearSearch()"
+                [disabled]="loading()"
+                [ariaLabel]="'Clear search'">
+              </p-button>
+            }
+          </div>
+          
+          <!-- Sort Dropdown -->
+          <div class="min-w-[200px]">
+            <p-select
+              [options]="sortOptions"
+              [ngModel]="sortBy()"
+              (ngModelChange)="onSortChange($event)"
+              optionLabel="label"
+              optionValue="value"
+              placeholder="Sort by..."
+              class="w-full">
+            </p-select>
+          </div>
+          
         </div>
+        
       </div>
       
     </div>
   </div>
 
-  <!-- Main Content -->
-  <div class="main-content bg-gray-50 dark:bg-gray-800 min-h-screen py-8">
+  <!-- Main Content Area -->
+  <div class="py-8">
     <div class="max-w-7xl mx-auto px-4">
       
-      <!-- Loading State -->
+      <!-- Loading State with Skeleton Grid -->
       @if (loading()) {
-        <div class="products-grid">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
           @for (item of generateSkeletonItems(); track item) {
-            <p-card class="product-skeleton-card">
-              <p-skeleton height="200px" class="mb-4"></p-skeleton>
-              <p-skeleton width="80%" height="1rem" class="mb-3"></p-skeleton>
-              <p-skeleton width="60%" height="1rem" class="mb-3"></p-skeleton>
-              <div class="flex justify-between items-center">
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700 h-96">
+              <p-skeleton height="12rem" styleClass="mb-4 rounded-lg"></p-skeleton>
+              <p-skeleton width="70%" height="1rem" styleClass="mb-3"></p-skeleton>
+              <p-skeleton width="90%" height="0.875rem" styleClass="mb-3"></p-skeleton>
+              <div class="flex justify-between items-center mb-4">
                 <p-skeleton width="40%" height="1.25rem"></p-skeleton>
-                <p-skeleton width="20%" height="1rem"></p-skeleton>
+                <p-skeleton width="25%" height="0.875rem"></p-skeleton>
               </div>
-              <p-skeleton height="2.5rem" class="mt-4"></p-skeleton>
-            </p-card>
+              <p-skeleton height="2.5rem" styleClass="rounded-lg"></p-skeleton>
+            </div>
           }
         </div>
       }
       
       <!-- Error State -->
       @else if (error()) {
-        <div class="error-state text-center py-16">
-          <p-message
-            severity="error"
-            [text]="error()"
-            class="max-w-md mx-auto mb-6">
-          </p-message>
-          <p-button
-            label="Try Again"
-            icon="pi pi-refresh"
-            (click)="retryLoading()"
-            severity="secondary">
-          </p-button>
+        <div class="text-center py-20">
+          <div class="max-w-md mx-auto">
+            <div class="w-16 h-16 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-6">
+              <i class="pi pi-exclamation-triangle text-2xl text-red-600 dark:text-red-400"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              Something went wrong
+            </h3>
+            <p-message
+              severity="error"
+              [text]="error()"
+              styleClass="mb-6 text-left">
+            </p-message>
+            <p-button
+              label="Try Again"
+              icon="pi pi-refresh"
+              (click)="retryLoading()"
+              severity="primary"
+              [outlined]="true">
+            </p-button>
+          </div>
         </div>
       }
       
       <!-- Empty State -->
       @else if (!hasProducts() && !loading()) {
-        <div class="empty-state text-center py-16">
+        <div class="text-center py-20">
           <div class="max-w-md mx-auto">
-            <i class="pi pi-search text-6xl text-gray-400 dark:text-gray-600 mb-6"></i>
-            <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
+            <div class="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-full flex items-center justify-center mx-auto mb-8">
+              <i class="pi pi-search text-3xl text-gray-400 dark:text-gray-500"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
               @if (searchQuery()) {
                 No products found
               } @else {
                 No products available
               }
             </h3>
-            <p class="text-gray-600 dark:text-gray-400 mb-6">
+            <p class="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
               @if (searchQuery()) {
-                Try adjusting your search terms or clear the search to see all products.
+                We couldn't find any products matching your search. Try different keywords or browse our categories.
               } @else {
-                Products will appear here when they become available.
+                Our product catalog is currently empty. Check back soon for new arrivals!
               }
             </p>
             @if (searchQuery()) {
@@ -140,7 +158,7 @@
                 label="Clear Search"
                 icon="pi pi-times"
                 (click)="clearSearch()"
-                severity="secondary"
+                severity="primary"
                 [outlined]="true">
               </p-button>
             }
@@ -150,10 +168,10 @@
       
       <!-- Products Grid -->
       @else if (hasProducts()) {
-        <div class="products-content">
+        <div class="space-y-8">
           
           <!-- Products Grid -->
-          <div class="products-grid">
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
             @for (product of products(); track product._id) {
               <app-product-card [product]="product"></app-product-card>
             }
@@ -161,17 +179,22 @@
           
           <!-- Pagination -->
           @if (totalPages() > 1) {
-            <div class="pagination-section mt-12">
-              <p-paginator
-                [rows]="itemsPerPage()"
-                [totalRecords]="totalProducts()"
-                [first]="(currentPage() - 1) * itemsPerPage()"
-                (onPageChange)="onPageChange($event)"
-                [showCurrentPageReport]="true"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-                [showJumpToPageDropdown]="totalPages() > 5"
-                styleClass="product-paginator">
-              </p-paginator>
+            <div class="mt-12 border-t border-gray-200 dark:border-gray-700 pt-8">
+              <div class="flex flex-col items-center gap-4">
+                <p-paginator
+                  [rows]="itemsPerPage()"
+                  [totalRecords]="totalProducts()"
+                  [first]="(currentPage() - 1) * itemsPerPage()"
+                  (onPageChange)="onPageChange($event)"
+                  [showCurrentPageReport]="true"
+                  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+                  [showJumpToPageDropdown]="false"
+                  [showFirstLastIcon]="true"
+                  [showPageLinks]="true"
+                  ariaLabel="Product list pagination navigation"
+                  styleClass="bg-transparent border-0">
+                </p-paginator>
+              </div>
             </div>
           }
           

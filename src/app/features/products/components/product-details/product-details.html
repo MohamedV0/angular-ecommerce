@@ -1,30 +1,40 @@
-<!-- Product Details Page -->
-<div class="product-details-page">
+<!-- Enhanced Product Details Page - Pure PrimeNG + Tailwind CSS -->
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
   
   <!-- Loading State -->
   @if (loading() && !product()) {
-    <div class="loading-container max-w-7xl mx-auto px-4 py-8">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div class="max-w-7xl mx-auto px-4 py-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
         
         <!-- Image Gallery Skeleton -->
-        <div class="gallery-skeleton">
-          <p-skeleton height="400px" class="mb-4"></p-skeleton>
-          <div class="flex gap-2">
-            @for (item of [1,2,3,4]; track item) {
-              <p-skeleton width="80px" height="60px"></p-skeleton>
-            }
+        <div class="space-y-4">
+          <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border border-gray-200 dark:border-gray-700">
+            <p-skeleton height="28rem" styleClass="mb-4 rounded-xl"></p-skeleton>
+            <div class="flex gap-3 justify-center">
+              @for (item of [1,2,3,4]; track item) {
+                <p-skeleton width="5rem" height="4rem" styleClass="rounded-lg"></p-skeleton>
+              }
+            </div>
           </div>
         </div>
         
         <!-- Product Info Skeleton -->
-        <div class="info-skeleton space-y-4">
-          <p-skeleton width="60%" height="1rem"></p-skeleton>
-          <p-skeleton width="80%" height="2rem"></p-skeleton>
-          <p-skeleton width="40%" height="1.5rem"></p-skeleton>
-          <p-skeleton width="100%" height="4rem"></p-skeleton>
-          <div class="flex gap-4">
-            <p-skeleton width="120px" height="3rem"></p-skeleton>
-            <p-skeleton width="200px" height="3rem"></p-skeleton>
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm border border-gray-200 dark:border-gray-700">
+          <div class="space-y-6">
+            <div class="space-y-2">
+              <p-skeleton width="40%" height="1rem"></p-skeleton>
+              <p-skeleton width="85%" height="2.5rem"></p-skeleton>
+            </div>
+            <p-skeleton width="60%" height="1.5rem"></p-skeleton>
+            <div class="space-y-2">
+              <p-skeleton width="70%" height="2rem"></p-skeleton>
+              <p-skeleton width="50%" height="1rem"></p-skeleton>
+            </div>
+            <p-skeleton width="100%" height="6rem"></p-skeleton>
+            <div class="flex flex-col sm:flex-row gap-4">
+              <p-skeleton width="8rem" height="3rem" styleClass="rounded-lg"></p-skeleton>
+              <p-skeleton width="12rem" height="3rem" styleClass="rounded-lg flex-1"></p-skeleton>
+            </div>
           </div>
         </div>
         
@@ -34,119 +44,142 @@
   
   <!-- Error State -->
   @else if (error()) {
-    <div class="error-container max-w-2xl mx-auto px-4 py-16 text-center">
-      <i class="pi pi-exclamation-triangle text-6xl text-red-500 mb-6"></i>
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Product Not Found</h2>
-      <p-message
-        severity="error"
-        [text]="error()"
-        class="mb-6 max-w-md mx-auto">
-      </p-message>
-      <div class="flex gap-4 justify-center">
-        <p-button
-          label="Try Again"
-          icon="pi pi-refresh"
-          (click)="retryLoading()"
-          severity="secondary">
-        </p-button>
-        <p-button
-          label="Back to Products"
-          icon="pi pi-arrow-left"
-          routerLink="/products"
-          severity="primary"
-          [outlined]="true">
-        </p-button>
+    <div class="py-20">
+      <div class="max-w-2xl mx-auto px-4 text-center">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-12 shadow-lg border border-gray-200 dark:border-gray-700">
+          <div class="w-20 h-20 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-8">
+            <i class="pi pi-exclamation-triangle text-3xl text-red-600 dark:text-red-400"></i>
+          </div>
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Product Not Found</h2>
+          <p-message
+            severity="error"
+            [text]="error()"
+            styleClass="mb-8 text-left max-w-md mx-auto">
+          </p-message>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <p-button
+              label="Try Again"
+              icon="pi pi-refresh"
+              (click)="retryLoading()"
+              severity="primary"
+              [outlined]="true">
+            </p-button>
+            <p-button
+              label="Back to Products"
+              icon="pi pi-arrow-left"
+              routerLink="/products/list"
+              severity="primary">
+            </p-button>
+          </div>
+        </div>
       </div>
     </div>
   }
   
   <!-- Product Content -->
   @else if (product()) {
-    <div class="product-content">
+    <div class="space-y-0">
       
       <!-- Breadcrumb Navigation -->
-      <div class="breadcrumb-section bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+      <div class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 py-4">
-          <p-breadcrumb [model]="breadcrumbItems()" [home]="{icon: 'pi pi-home', routerLink: '/'}">
+          <p-breadcrumb 
+            [model]="breadcrumbItems()" 
+            [home]="{icon: 'pi pi-home', routerLink: '/'}"
+            styleClass="bg-transparent border-0 p-0">
           </p-breadcrumb>
         </div>
       </div>
       
       <!-- Main Product Section -->
-      <div class="main-section bg-white dark:bg-gray-900 py-8">
+      <div class="py-12">
         <div class="max-w-7xl mx-auto px-4">
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
             
             <!-- Product Image Gallery -->
-            <div class="gallery-section">
+            <div class="space-y-4">
               @if (galleryImages().length > 0) {
-                <p-galleria
-                  [value]="galleryImages()"
-                  [responsiveOptions]="[
-                    {breakpoint: '1024px', numVisible: 5},
-                    {breakpoint: '768px', numVisible: 3},
-                    {breakpoint: '560px', numVisible: 1}
-                  ]"
-                  [numVisible]="4"
-                  [showThumbnails]="galleryImages().length > 1"
-                  [showIndicators]="true"
-                  [showIndicatorsOnItem]="true"
-                  [indicatorsPosition]="'bottom'"
-                  [thumbnailsPosition]="'bottom'"
-                  styleClass="product-gallery">
-                  
-                  <ng-template #item let-image>
-                    <img 
-                      [src]="image.itemImageSrc" 
-                      [alt]="image.alt"
-                      class="gallery-main-image" />
-                  </ng-template>
-                  
-                  <ng-template #thumbnail let-image>
-                    <img 
-                      [src]="image.thumbnailImageSrc" 
-                      [alt]="image.alt"
-                      class="gallery-thumbnail" />
-                  </ng-template>
-                  
-                </p-galleria>
+                <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+                  <p-galleria
+                    [value]="galleryImages()"
+                    [responsiveOptions]="[
+                      {breakpoint: '1024px', numVisible: 4},
+                      {breakpoint: '768px', numVisible: 3},
+                      {breakpoint: '560px', numVisible: 2}
+                    ]"
+                    [numVisible]="4"
+                    [showThumbnails]="galleryImages().length > 1"
+                    [showIndicators]="true"
+                    [showIndicatorsOnItem]="true"
+                    [indicatorsPosition]="'bottom'"
+                    [thumbnailsPosition]="'bottom'"
+                    [circular]="true"
+                    [autoPlay]="false"
+                    [transitionInterval]="4000"
+                    styleClass="rounded-2xl overflow-hidden">
+                    
+                    <ng-template #item let-image>
+                      <div class="flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600 rounded-xl overflow-hidden">
+                        <img 
+                          [src]="image.itemImageSrc" 
+                          [alt]="image.alt"
+                          class="w-full h-96 lg:h-[28rem] object-cover rounded-xl transition-transform duration-500 hover:scale-105" />
+                      </div>
+                    </ng-template>
+                    
+                    <ng-template #thumbnail let-image>
+                      <div class="p-1">
+                        <img 
+                          [src]="image.thumbnailImageSrc" 
+                          [alt]="image.alt"
+                          class="w-16 h-16 object-cover rounded-lg border-2 border-transparent hover:border-blue-500 transition-all duration-200 cursor-pointer" />
+                      </div>
+                    </ng-template>
+                    
+                  </p-galleria>
+                </div>
               }
             </div>
             
             <!-- Product Information -->
-            <div class="product-info">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-200 dark:border-gray-700 space-y-8">
               
-              <!-- Category and Brand -->
-              <div class="product-meta mb-4">
-                <span 
-                  class="category-tag cursor-pointer"
-                  (click)="navigateToCategory()">
-                  {{ product()!.category.name }}
-                </span>
-                <span 
-                  class="brand-tag cursor-pointer ml-2"
-                  (click)="navigateToBrand()">
-                  {{ product()!.brand.name }}
-                </span>
+              <!-- Category and Brand Tags -->
+              <div class="flex flex-wrap gap-3">
+                <p-chip
+                  [label]="product()!.category.name"
+                  icon="pi pi-tag"
+                  (click)="navigateToCategory()"
+                  styleClass="cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors !bg-blue-50 !text-blue-700 dark:!bg-blue-900/20 dark:!text-blue-300">
+                </p-chip>
+                <p-chip
+                  [label]="product()!.brand.name"
+                  icon="pi pi-star"
+                  (click)="navigateToBrand()"
+                  styleClass="cursor-pointer hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors !bg-purple-50 !text-purple-700 dark:!bg-purple-900/20 dark:!text-purple-300">
+                </p-chip>
               </div>
               
               <!-- Product Title -->
-              <h1 class="product-title text-3xl font-bold text-gray-900 dark:text-white mb-4">
-                {{ product()!.title }}
-              </h1>
+              <div>
+                <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white leading-tight">
+                  {{ product()!.title }}
+                </h1>
+              </div>
               
               <!-- Rating and Reviews -->
               @if (product()!.ratingsAverage > 0) {
-                <div class="rating-section mb-6">
-                  <div class="flex items-center gap-3">
-                    <p-rating
-                      [ngModel]="product()!.ratingsAverage"
-                      [readonly]="true"
-                      [stars]="5">
-                    </p-rating>
-                    <span class="rating-text text-sm text-gray-600 dark:text-gray-400">
-                      {{ getRatingDisplay() }} reviews
-                    </span>
+                <div class="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                  <p-rating
+                    [ngModel]="product()!.ratingsAverage"
+                    [readonly]="true"
+                    [stars]="5"
+                    styleClass="text-lg">
+                  </p-rating>
+                  <div class="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                    <span class="font-medium">{{ product()!.ratingsAverage }}/5</span>
+                    <span>•</span>
+                    <span>{{ getRatingDisplay() }} reviews</span>
                   </div>
                 </div>
               }
