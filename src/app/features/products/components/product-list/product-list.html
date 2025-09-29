@@ -24,16 +24,96 @@
                 @if (categoryFilter().length > 0) {
                   <span class="ml-1">in {{ selectedCategoryName() }}</span>
                 }
+                @if (brandFilter()) {
+                  <span class="ml-1">from {{ selectedBrandName() }}</span>
+                }
               </p>
             }
           </div>
         </div>
         
-        <!-- Right: Search and Sort Controls -->
-        <div class="flex flex-1 lg:flex-none flex-col sm:flex-row gap-3 lg:min-w-[600px]">
+        <!-- Right: Search and Filter Controls - Responsive Layout -->
+        <div class="flex flex-1 lg:flex-none flex-col gap-3 lg:min-w-[600px]">
           
-          <!-- Search Input with Integrated Actions -->
-          <div class="flex gap-2 flex-1">
+          <!-- Mobile: Search Input (Full Width) -->
+          <div class="flex lg:hidden w-full">
+            <div class="flex-1 relative">
+              <p-iconfield iconPosition="left" class="w-full">
+                <p-inputicon class="pi pi-search" />
+                <input 
+                  type="text"
+                  pInputText
+                  [formControl]="searchControl"
+                  placeholder="Search for products, brands, categories..."
+                  class="w-full pr-12"
+                  (keyup.enter)="onSearch()"
+                />
+              </p-iconfield>
+              
+              <!-- Clear Button Inside Input -->
+              @if (searchQuery()) {
+                <p-button
+                  icon="pi pi-times"
+                  severity="secondary"
+                  [text]="true"
+                  size="small"
+                  (click)="clearSearch()"
+                  [disabled]="loading()"
+                  class="!absolute !right-2 !top-1/2 !-translate-y-1/2 !w-7 !h-7 !p-0 !min-w-0 !flex !items-center !justify-center !rounded-full hover:!bg-gray-100 dark:hover:!bg-gray-700"
+                  [ariaLabel]="'Clear search'">
+                </p-button>
+              }
+            </div>
+          </div>
+          
+          <!-- Mobile: Filter Controls (Compact Row) -->
+          <div class="flex lg:hidden gap-2">
+            <!-- Category Filter Dropdown -->
+            <div class="flex-1 min-w-0">
+              <p-select
+                [options]="categories()"
+                [ngModel]="categoryFilter()[0] || null"
+                (ngModelChange)="onCategoryChange($event)"
+                optionLabel="name"
+                optionValue="_id"
+                placeholder="Category"
+                [showClear]="true"
+                [disabled]="categoriesLoading()"
+                class="w-full">
+              </p-select>
+            </div>
+            
+            <!-- Brand Filter Dropdown -->
+            <div class="flex-1 min-w-0">
+              <p-select
+                [options]="brands()"
+                [ngModel]="brandFilter() || null"
+                (ngModelChange)="onBrandChange($event)"
+                optionLabel="name"
+                optionValue="_id"
+                placeholder="Brand"
+                [showClear]="true"
+                [disabled]="brandsLoading()"
+                class="w-full">
+              </p-select>
+            </div>
+            
+            <!-- Sort Dropdown -->
+            <div class="w-20 flex-shrink-0">
+              <p-select
+                [options]="sortOptions"
+                [ngModel]="sortBy()"
+                (ngModelChange)="onSortChange($event)"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Sort"
+                class="w-full">
+              </p-select>
+            </div>
+          </div>
+          
+          <!-- Desktop: All Controls in One Row (Original Layout) -->
+          <div class="hidden lg:flex gap-2 flex-1">
             <div class="flex-1 relative">
               <p-iconfield iconPosition="left" class="w-full">
                 <p-inputicon class="pi pi-search" />
@@ -62,8 +142,8 @@
               }
             </div>
             
-            <!-- Category Filter Dropdown - Mobile Optimized -->
-            <div class="w-40 sm:w-48">
+            <!-- Category Filter Dropdown - Desktop -->
+            <div class="w-48">
               <p-select
                 [options]="categories()"
                 [ngModel]="categoryFilter()[0] || null"
@@ -77,8 +157,23 @@
               </p-select>
             </div>
             
-            <!-- Sort Dropdown - Mobile Optimized -->
-            <div class="w-32 sm:w-40">
+            <!-- Brand Filter Dropdown - Desktop -->
+            <div class="w-48">
+              <p-select
+                [options]="brands()"
+                [ngModel]="brandFilter() || null"
+                (ngModelChange)="onBrandChange($event)"
+                optionLabel="name"
+                optionValue="_id"
+                placeholder="Brand"
+                [showClear]="true"
+                [disabled]="brandsLoading()"
+                class="w-full">
+              </p-select>
+            </div>
+            
+            <!-- Sort Dropdown - Desktop -->
+            <div class="w-40">
               <p-select
                 [options]="sortOptions"
                 [ngModel]="sortBy()"

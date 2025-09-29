@@ -21,6 +21,8 @@ import { ProductCard } from '../../../../shared/components/product-card/product-
 import { PRODUCT_SORT_OPTIONS } from '../../constants/product-sort-options.const';
 import { CategoriesService } from '../../../categories/services/categories';
 import { Category } from '../../../categories/models/category.model';
+import { BrandsService } from '../../../brands/services/brands';
+import { Brand } from '../../../brands/models/brand.model';
 
 /**
  * ProductList Component
@@ -52,6 +54,7 @@ import { Category } from '../../../categories/models/category.model';
 export class ProductListComponent implements OnInit {
   private readonly productsService = inject(ProductsService);
   private readonly categoriesService = inject(CategoriesService);
+  private readonly brandsService = inject(BrandsService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
@@ -67,11 +70,16 @@ export class ProductListComponent implements OnInit {
   readonly searchQuery = signal('');
   readonly sortBy = signal('-createdAt'); // Default to newest first
   readonly categoryFilter = signal<string[]>([]); // Category filter from route
+  readonly brandFilter = signal<string>(''); // Brand filter from route
   readonly searchControl = new FormControl('');
 
   // Categories for dropdown
   readonly categories = signal<Category[]>([]);
   readonly categoriesLoading = signal(false);
+
+  // Brands for dropdown
+  readonly brands = signal<Brand[]>([]);
+  readonly brandsLoading = signal(false);
 
   // Sort options
   readonly sortOptions = [...PRODUCT_SORT_OPTIONS];
@@ -93,8 +101,17 @@ export class ProductListComponent implements OnInit {
     return category?.name || 'selected category';
   });
 
+  // Get selected brand name for display in product count
+  readonly selectedBrandName = computed(() => {
+    if (!this.brandFilter()) return '';
+    const brandId = this.brandFilter();
+    const brand = this.brands().find(b => b._id === brandId);
+    return brand?.name || 'selected brand';
+  });
+
   ngOnInit(): void {
     this.loadCategories();
+    this.loadBrands();
     this.initializeFromRoute();
     this.setupSearchControl();
   }
@@ -136,6 +153,13 @@ export class ProductListComponent implements OnInit {
         this.categoryFilter.set([]);
       }
       
+      // Handle brand filter from route (when coming from brand details)
+      if (params['brand']) {
+        this.brandFilter.set(params['brand']);
+      } else {
+        this.brandFilter.set('');
+      }
+      
       // Load products whenever route params change
       this.loadProducts();
     });
@@ -174,6 +198,24 @@ export class ProductListComponent implements OnInit {
   }
 
   /**
+   * Load brands for dropdown filter
+   */
+  loadBrands(): void {
+    this.brandsLoading.set(true);
+    
+    this.brandsService.getAllBrands({ limit: 100 }).subscribe({
+      next: (response) => {
+        this.brands.set(response.data);
+        this.brandsLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Brands loading error:', error);
+        this.brandsLoading.set(false);
+      }
+    });
+  }
+
+  /**
    * Load products from API
    */
   loadProducts(): void {
@@ -194,6 +236,11 @@ export class ProductListComponent implements OnInit {
     // Add category filter if provided (from route parameter)
     if (this.categoryFilter().length > 0) {
       params['category[in]'] = this.categoryFilter();
+    }
+
+    // Add brand filter if provided (from route parameter)
+    if (this.brandFilter()) {
+      params.brand = this.brandFilter();
     }
 
     this.productsService.getProducts(params).subscribe({
@@ -280,6 +327,18 @@ export class ProductListComponent implements OnInit {
   }
 
   /**
+   * Handle brand filter change
+   * PrimeNG select with [showClear]="true" will emit null when cleared
+   */
+  onBrandChange(event: any): void {
+    const brandValue = event?.value || event || '';
+    this.brandFilter.set(brandValue); // Set brand ID or empty string
+    this.currentPage.set(1); // Reset to first page on filter change
+    this.updateRoute();
+    this.loadProducts();
+  }
+
+  /**
    * Update route with current state
    */
   private updateRoute(): void {
@@ -298,6 +357,9 @@ export class ProductListComponent implements OnInit {
       queryParams['category[in]'] = this.categoryFilter().length === 1 
         ? this.categoryFilter()[0] 
         : this.categoryFilter();
+    }
+    if (this.brandFilter()) {
+      queryParams.brand = this.brandFilter();
     }
 
     this.router.navigate([], {

@@ -30,8 +30,9 @@ export class Header implements OnInit, OnDestroy {
       this.translateService.stream('NAVIGATION.HOME'),
       this.translateService.stream('NAVIGATION.PRODUCTS'),
       this.translateService.stream('NAVIGATION.CATEGORIES'),
+      this.translateService.stream('NAVIGATION.BRANDS'),
       this.translateService.stream('NAVIGATION.CART')
-    ]).subscribe(([home, products, categories, cart]) => {
+    ]).subscribe(([home, products, categories, brands, cart]) => {
       this.menuItems = [
         {
           label: home,
@@ -47,6 +48,11 @@ export class Header implements OnInit, OnDestroy {
           label: categories,
           icon: PrimeIcons.LIST,
           routerLink: '/categories'
+        },
+        {
+          label: brands,
+          icon: PrimeIcons.BOOKMARK,
+          routerLink: '/brands'
         },
         {
           label: cart,
