@@ -1,18 +1,5 @@
 // Enhanced Product List - Pure PrimeNG + Tailwind CSS
-// Let PrimeNG components use their default styling
+// Following Tailwind CSS First rule - no custom CSS needed
 
-// Optional animation for products grid
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(1rem);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.product-enter {
-  animation: fadeInUp 0.3s ease-out;
-}
+// All animations, layout, and styling handled by PrimeNG components and Tailwind classes
+// Use Tailwind utilities: animate-fadeIn, transition-opacity, duration-300, etc.

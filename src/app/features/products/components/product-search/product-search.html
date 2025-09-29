@@ -7,9 +7,9 @@
       
       <!-- Main Search Bar -->
       <div class="mb-6">
-        <div class="flex items-center gap-4">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
           
-          <!-- Search Input with Autocomplete -->
+          <!-- Search Input with Autocomplete - Mobile First -->
           <div class="flex-1 max-w-2xl">
             <p-autoComplete
               [formControl]="searchControl"
@@ -20,7 +20,7 @@
               [dropdown]="true"
               [showEmptyMessage]="true"
               emptyMessage="No suggestions found"
-              styleClass="w-full">
+              class="w-full">
               
               <ng-template #item let-suggestion>
                 <div class="flex items-center gap-2 p-3 transition-colors hover:bg-primary-50">
@@ -32,26 +32,21 @@
             </p-autoComplete>
           </div>
           
-          <!-- Search Button -->
-          <p-button
-            label="Search"
-            icon="pi pi-search"
-            (click)="performSearch()"
-            [disabled]="!searchQuery() || loading()"
-            severity="primary"
-            size="large">
-          </p-button>
-          
-          <!-- Filters Toggle -->
-          <p-button
-            [icon]="showFilters() ? 'pi pi-times' : 'pi pi-filter'"
-            [label]="showFilters() ? 'Hide Filters' : 'Filters'"
-            (click)="toggleFilters()"
-            severity="secondary"
-            [outlined]="true"
-            [badge]="activeFiltersCount() > 0 ? activeFiltersCount().toString() : undefined"
-            badgeClass="p-badge-danger">
-          </p-button>
+          <!-- Mobile-Optimized Action Buttons -->
+          <div class="flex gap-2 sm:gap-3">
+            <!-- Filters Toggle Button -->
+            <p-button
+              [icon]="showFilters() ? 'pi pi-times' : 'pi pi-filter'"
+              [label]="showFilters() ? 'Hide' : 'Filters'"
+              (click)="toggleFilters()"
+              severity="secondary"
+              [outlined]="true"
+              size="small"
+              class="sm:!text-sm"
+              [badge]="activeFiltersCount() > 0 ? activeFiltersCount().toString() : undefined"
+              badgeClass="p-badge-danger">
+            </p-button>
+          </div>
           
         </div>
         
@@ -74,7 +69,7 @@
                   [label]="search"
                   (click)="useRecentSearch(search)"
                   [removable]="false"
-                  styleClass="cursor-pointer hover:bg-primary-50 transition-colors">
+                  class="cursor-pointer hover:bg-primary-50 transition-colors">
                 </p-chip>
               }
             </div>
@@ -203,7 +198,7 @@
       
       <!-- Loading State -->
       @else if (loading()) {
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-6">
           @for (item of generateSkeletonItems(); track item) {
             <p-card class="h-96">
               <p-skeleton height="200px" class="mb-4"></p-skeleton>
@@ -225,7 +220,7 @@
           <p-message
             severity="error"
             [text]="error()"
-            styleClass="max-w-md mx-auto mb-6 inline-block">
+            class="max-w-md mx-auto mb-6 inline-block">
           </p-message>
           <p-button
             label="Try Again"
@@ -270,7 +265,7 @@
         <div class="animate-in fade-in duration-500">
           
           <!-- Products Grid -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+          <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-6">
             @for (product of products(); track product._id) {
               <app-product-card [product]="product"></app-product-card>
             }
@@ -289,7 +284,7 @@
                 [showJumpToPageDropdown]="totalPages() > 5"
                 [showFirstLastIcon]="true"
                 [rowsPerPageOptions]="rowsPerPageOptions()"
-                styleClass="surface-card border-round"
+                class="surface-card border-round"
                 ariaLabel="Search results pagination navigation">
               </p-paginator>
             </div>
@@ -308,7 +303,7 @@
     position="right"
     [modal]="true"
     [showCloseIcon]="true"
-    styleClass="w-full md:w-96">
+    class="w-full md:w-96">
     
     <ng-template #header>
       <div class="flex items-center justify-between w-full">
@@ -339,7 +334,7 @@
             [max]="10000"
             [step]="100"
             (onSlideEnd)="onPriceRangeChange($event)"
-            styleClass="w-full">
+            class="w-full">
           </p-slider>
           <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400 mt-2">
             <span>{{ filters().priceRange.min | currency:'EGP':'symbol':'1.0-0' }}</span>

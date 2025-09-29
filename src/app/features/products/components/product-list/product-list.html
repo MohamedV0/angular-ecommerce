@@ -29,52 +29,48 @@
         <!-- Right: Search and Sort Controls -->
         <div class="flex flex-1 lg:flex-none flex-col sm:flex-row gap-3 lg:min-w-[600px]">
           
-          <!-- Search with IconField -->
-          <div class="flex-1">
-            <p-iconfield iconPosition="left" class="w-full">
-              <p-inputicon class="pi pi-search"></p-inputicon>
-              <input 
-                pInputText
-                [formControl]="searchControl"
-                placeholder="Search for products, brands, categories..."
-                class="w-full"
-                (keyup.enter)="onSearch()"
-              />
-            </p-iconfield>
-          </div>
-          
-          <!-- Action Buttons -->
-          <div class="flex gap-2">
-            <p-button
-              label="Search"
-              icon="pi pi-search"
-              (click)="onSearch()"
-              [disabled]="loading()">
-            </p-button>
+          <!-- Search Input with Integrated Actions -->
+          <div class="flex gap-2 flex-1">
+            <div class="flex-1 relative">
+              <p-iconfield iconPosition="left" class="w-full">
+                <p-inputicon class="pi pi-search" />
+                <input 
+                  type="text"
+                  pInputText
+                  [formControl]="searchControl"
+                  placeholder="Search for products, brands, categories..."
+                  class="w-full pr-12"
+                  (keyup.enter)="onSearch()"
+                />
+              </p-iconfield>
+              
+              <!-- Clear Button Inside Input -->
+              @if (searchQuery()) {
+                <p-button
+                  icon="pi pi-times"
+                  severity="secondary"
+                  [text]="true"
+                  size="small"
+                  (click)="clearSearch()"
+                  [disabled]="loading()"
+                  class="!absolute !right-2 !top-1/2 !-translate-y-1/2 !w-7 !h-7 !p-0 !min-w-0 !flex !items-center !justify-center !rounded-full hover:!bg-gray-100 dark:hover:!bg-gray-700"
+                  [ariaLabel]="'Clear search'">
+                </p-button>
+              }
+            </div>
             
-            @if (searchQuery()) {
-              <p-button
-                icon="pi pi-times"
-                severity="secondary"
-                [outlined]="true"
-                (click)="clearSearch()"
-                [disabled]="loading()"
-                [ariaLabel]="'Clear search'">
-              </p-button>
-            }
-          </div>
-          
-          <!-- Sort Dropdown -->
-          <div class="min-w-[200px]">
-            <p-select
-              [options]="sortOptions"
-              [ngModel]="sortBy()"
-              (ngModelChange)="onSortChange($event)"
-              optionLabel="label"
-              optionValue="value"
-              placeholder="Sort by..."
-              class="w-full">
-            </p-select>
+            <!-- Sort Dropdown - Mobile Optimized -->
+            <div class="w-32 sm:w-40">
+              <p-select
+                [options]="sortOptions"
+                [ngModel]="sortBy()"
+                (ngModelChange)="onSortChange($event)"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Sort"
+                class="w-full">
+              </p-select>
+            </div>
           </div>
           
         </div>
@@ -90,7 +86,7 @@
       
       <!-- Loading State with Skeleton Grid -->
       @if (loading()) {
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
+        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3 sm:gap-4 md:gap-6">
           @for (item of generateSkeletonItems(); track item) {
             <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700 h-96">
               <p-skeleton height="12rem" styleClass="mb-4 rounded-lg"></p-skeleton>
@@ -171,7 +167,7 @@
         <div class="space-y-8">
           
           <!-- Products Grid -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
+          <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3 sm:gap-4 md:gap-6">
             @for (product of products(); track product._id) {
               <app-product-card [product]="product"></app-product-card>
             }
@@ -192,7 +188,7 @@
                   [showFirstLastIcon]="true"
                   [showPageLinks]="true"
                   ariaLabel="Product list pagination navigation"
-                  styleClass="bg-transparent border-0">
+                  class="bg-transparent border-0">
                 </p-paginator>
               </div>
             </div>

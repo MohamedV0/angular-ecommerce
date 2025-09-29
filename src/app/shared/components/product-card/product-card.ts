@@ -1,54 +1,69 @@
-import { Component, input, inject } from '@angular/core';
+import { Component, input, inject, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+
+// PrimeNG Components
 import { ButtonModule } from 'primeng/button';
 import { BadgeModule } from 'primeng/badge';
 import { RatingModule } from 'primeng/rating';
 import { ChipModule } from 'primeng/chip';
 
-// Import from products domain - the real API-matching model  
+// Feature Imports
 import { Product } from '../../../features/products/models/product.model';
 
+/**
+ * ProductCard Component
+ * Reusable product card following PrimeNG + Tailwind + Angular best practices
+ */
 @Component({
   selector: 'app-product-card',
-  imports: [CommonModule, FormsModule, RouterModule, ButtonModule, BadgeModule, RatingModule, ChipModule],
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    RouterModule,
+    // PrimeNG
+    ButtonModule, 
+    BadgeModule, 
+    RatingModule, 
+    ChipModule
+  ],
   templateUrl: './product-card.html',
-  styleUrl: './product-card.scss'
+  styleUrl: './product-card.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProductCard {
   private readonly router = inject(Router);
   
-  product = input.required<Product>();
+  // Input signals
+  readonly product = input.required<Product>();
 
-  /**
-   * Get the current display price (discounted or regular)
-   */
-  getCurrentPrice(): number {
+  // Computed properties - following Angular best practices with signals
+  readonly currentPrice = computed(() => {
     const prod = this.product();
     return prod.priceAfterDiscount && prod.priceAfterDiscount < prod.price 
       ? prod.priceAfterDiscount 
       : prod.price;
-  }
+  });
 
-  /**
-   * Check if the product has a discount
-   */
-  hasDiscount(): boolean {
+  readonly hasDiscount = computed(() => {
     const prod = this.product();
     return !!(prod.priceAfterDiscount && prod.priceAfterDiscount < prod.price);
-  }
+  });
 
-  /**
-   * Calculate and format discount percentage
-   */
-  getDiscountPercentage(): string {
+  readonly discountPercentage = computed(() => {
     const prod = this.product();
     if (!this.hasDiscount()) return '';
     
     const discount = Math.round((1 - (prod.priceAfterDiscount! / prod.price)) * 100);
     return `-${discount}%`;
-  }
+  });
+
+  readonly isInStock = computed(() => this.product().quantity > 0);
+
+  // Template method aliases for computed properties
+  getCurrentPrice = () => this.currentPrice();
+  getDiscountPercentage = () => this.discountPercentage();
 
   /**
    * Navigate to product details page
@@ -75,18 +90,25 @@ export class ProductCard {
   }
 
   /**
-   * Add product to cart (placeholder)
+   * Add product to cart (placeholder implementation)
    */
-  addToCart(): void {
-    // TODO: Implement add to cart functionality
-    console.log('Add to cart:', this.product().title);
+  private addToCart(): void {
+    const prod = this.product();
+    if (!this.isInStock()) {
+      console.warn('Cannot add out of stock product to cart:', prod.title);
+      return;
+    }
+    
+    // TODO: Implement cart service integration
+    console.log('Add to cart:', prod.title);
   }
 
   /**
-   * Add product to wishlist (placeholder)
+   * Add product to wishlist (placeholder implementation)
    */
-  addToWishlist(): void {
-    // TODO: Implement add to wishlist functionality
-    console.log('Add to wishlist:', this.product().title);
+  private addToWishlist(): void {
+    const prod = this.product();
+    // TODO: Implement wishlist service integration
+    console.log('Add to wishlist:', prod.title);
   }
 }

@@ -1,39 +1,37 @@
-<!-- Enhanced Product Details Page - Pure PrimeNG + Tailwind CSS -->
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+<!-- Enhanced Product Details Page - Compact Design with PrimeNG + Tailwind CSS -->
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900">
   
   <!-- Loading State -->
   @if (loading() && !product()) {
-    <div class="max-w-7xl mx-auto px-4 py-8">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+    <div class="max-w-6xl mx-auto px-4 py-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
         <!-- Image Gallery Skeleton -->
-        <div class="space-y-4">
-          <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border border-gray-200 dark:border-gray-700">
-            <p-skeleton height="28rem" styleClass="mb-4 rounded-xl"></p-skeleton>
-            <div class="flex gap-3 justify-center">
-              @for (item of [1,2,3,4]; track item) {
-                <p-skeleton width="5rem" height="4rem" styleClass="rounded-lg"></p-skeleton>
-              }
-            </div>
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700">
+          <p-skeleton height="20rem" class="mb-3 rounded-lg"></p-skeleton>
+          <div class="flex gap-2 justify-center">
+            @for (item of [1,2,3,4]; track item) {
+              <p-skeleton width="4rem" height="3rem" class="rounded"></p-skeleton>
+            }
           </div>
         </div>
         
         <!-- Product Info Skeleton -->
-        <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm border border-gray-200 dark:border-gray-700">
-          <div class="space-y-6">
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+          <div class="space-y-4">
             <div class="space-y-2">
               <p-skeleton width="40%" height="1rem"></p-skeleton>
-              <p-skeleton width="85%" height="2.5rem"></p-skeleton>
+              <p-skeleton width="85%" height="2rem"></p-skeleton>
             </div>
-            <p-skeleton width="60%" height="1.5rem"></p-skeleton>
+            <p-skeleton width="60%" height="1.25rem"></p-skeleton>
             <div class="space-y-2">
-              <p-skeleton width="70%" height="2rem"></p-skeleton>
+              <p-skeleton width="70%" height="1.5rem"></p-skeleton>
               <p-skeleton width="50%" height="1rem"></p-skeleton>
             </div>
-            <p-skeleton width="100%" height="6rem"></p-skeleton>
-            <div class="flex flex-col sm:flex-row gap-4">
-              <p-skeleton width="8rem" height="3rem" styleClass="rounded-lg"></p-skeleton>
-              <p-skeleton width="12rem" height="3rem" styleClass="rounded-lg flex-1"></p-skeleton>
+            <p-skeleton width="100%" height="4rem"></p-skeleton>
+            <div class="flex flex-col sm:flex-row gap-3">
+              <p-skeleton width="6rem" height="2.5rem" class="rounded"></p-skeleton>
+              <p-skeleton width="10rem" height="2.5rem" class="rounded flex-1"></p-skeleton>
             </div>
           </div>
         </div>
@@ -44,19 +42,19 @@
   
   <!-- Error State -->
   @else if (error()) {
-    <div class="py-20">
-      <div class="max-w-2xl mx-auto px-4 text-center">
-        <div class="bg-white dark:bg-gray-800 rounded-2xl p-12 shadow-lg border border-gray-200 dark:border-gray-700">
-          <div class="w-20 h-20 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-8">
-            <i class="pi pi-exclamation-triangle text-3xl text-red-600 dark:text-red-400"></i>
+    <div class="py-12">
+      <div class="max-w-lg mx-auto px-4 text-center">
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-sm border border-gray-200 dark:border-gray-700">
+          <div class="w-16 h-16 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <i class="pi pi-exclamation-triangle text-2xl text-red-600 dark:text-red-400"></i>
           </div>
-          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Product Not Found</h2>
+          <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Product Not Found</h2>
           <p-message
             severity="error"
             [text]="error()"
-            styleClass="mb-8 text-left max-w-md mx-auto">
+            class="mb-6 text-left">
           </p-message>
-          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <div class="flex flex-col sm:flex-row gap-3 justify-center">
             <p-button
               label="Try Again"
               icon="pi pi-refresh"
@@ -78,28 +76,29 @@
   
   <!-- Product Content -->
   @else if (product()) {
-    <div class="space-y-0">
+    <div>
       
       <!-- Breadcrumb Navigation -->
-      <div class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-4 py-4">
+      <div class="border-b border-gray-200 dark:border-gray-700">
+        <div class="max-w-6xl mx-auto px-4 py-4">
           <p-breadcrumb 
             [model]="breadcrumbItems()" 
             [home]="{icon: 'pi pi-home', routerLink: '/'}"
-            styleClass="bg-transparent border-0 p-0">
+            [style]="{'background': 'transparent', 'border': 'none', 'padding': '0'}"
+            class="!bg-transparent">
           </p-breadcrumb>
         </div>
       </div>
       
       <!-- Main Product Section -->
-      <div class="py-12">
-        <div class="max-w-7xl mx-auto px-4">
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+      <div class="py-4">
+        <div class="max-w-6xl mx-auto px-4">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
             
             <!-- Product Image Gallery -->
-            <div class="space-y-4">
+            <div class="flex flex-col">
               @if (galleryImages().length > 0) {
-                <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700 h-full flex flex-col">
                   <p-galleria
                     [value]="galleryImages()"
                     [responsiveOptions]="[
@@ -116,14 +115,14 @@
                     [circular]="true"
                     [autoPlay]="false"
                     [transitionInterval]="4000"
-                    styleClass="rounded-2xl overflow-hidden">
+                    class="rounded-lg overflow-hidden">
                     
                     <ng-template #item let-image>
-                      <div class="flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600 rounded-xl overflow-hidden">
+                      <div class="flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600 rounded-lg overflow-hidden">
                         <img 
                           [src]="image.itemImageSrc" 
                           [alt]="image.alt"
-                          class="w-full h-96 lg:h-[28rem] object-cover rounded-xl transition-transform duration-500 hover:scale-105" />
+                          class="w-full h-72 object-cover rounded-lg transition-transform duration-300 hover:scale-105" />
                       </div>
                     </ng-template>
                     
@@ -132,7 +131,7 @@
                         <img 
                           [src]="image.thumbnailImageSrc" 
                           [alt]="image.alt"
-                          class="w-16 h-16 object-cover rounded-lg border-2 border-transparent hover:border-blue-500 transition-all duration-200 cursor-pointer" />
+                          class="w-12 h-12 object-cover rounded border-2 border-transparent hover:border-blue-500 transition-all duration-200 cursor-pointer" />
                       </div>
                     </ng-template>
                     
@@ -142,41 +141,40 @@
             </div>
             
             <!-- Product Information -->
-            <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-200 dark:border-gray-700 space-y-8">
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700 space-y-4 h-full flex flex-col">
               
               <!-- Category and Brand Tags -->
-              <div class="flex flex-wrap gap-3">
+              <div class="flex flex-wrap gap-2">
                 <p-chip
                   [label]="product()!.category.name"
                   icon="pi pi-tag"
                   (click)="navigateToCategory()"
-                  styleClass="cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors !bg-blue-50 !text-blue-700 dark:!bg-blue-900/20 dark:!text-blue-300">
+                  class="cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors !bg-blue-50 !text-blue-700 dark:!bg-blue-900/20 dark:!text-blue-300">
                 </p-chip>
                 <p-chip
                   [label]="product()!.brand.name"
                   icon="pi pi-star"
                   (click)="navigateToBrand()"
-                  styleClass="cursor-pointer hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors !bg-purple-50 !text-purple-700 dark:!bg-purple-900/20 dark:!text-purple-300">
+                  class="cursor-pointer hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors !bg-purple-50 !text-purple-700 dark:!bg-purple-900/20 dark:!text-purple-300">
                 </p-chip>
               </div>
               
               <!-- Product Title -->
               <div>
-                <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white leading-tight">
+                <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white leading-tight">
                   {{ product()!.title }}
                 </h1>
               </div>
               
               <!-- Rating and Reviews -->
               @if (product()!.ratingsAverage > 0) {
-                <div class="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                <div class="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700/50 rounded">
                   <p-rating
                     [ngModel]="product()!.ratingsAverage"
                     [readonly]="true"
-                    [stars]="5"
-                    styleClass="text-lg">
+                    [stars]="5">
                   </p-rating>
-                  <div class="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                  <div class="flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400">
                     <span class="font-medium">{{ product()!.ratingsAverage }}/5</span>
                     <span>•</span>
                     <span>{{ getRatingDisplay() }} reviews</span>
@@ -185,70 +183,80 @@
               }
               
               <!-- Price Section -->
-              <div class="price-section mb-6">
-                <div class="flex items-center gap-4 mb-2">
-                  <span class="current-price text-3xl font-bold text-green-600 dark:text-green-400">
+              <div class="price-section">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="current-price text-xl font-bold text-green-600 dark:text-green-400">
                     {{ formatPrice(currentPrice()) }}
                   </span>
                   @if (isOnSale()) {
-                    <span class="original-price text-xl text-gray-500 line-through">
+                    <span class="original-price text-base text-gray-500 line-through">
                       {{ formatPrice(product()!.price) }}
                     </span>
                     <p-badge 
                       [value]="'-' + discountPercentage() + '%'"
                       severity="success"
-                      size="large">
+                      size="small">
                     </p-badge>
                   }
                 </div>
                 
-                <!-- Stock Status -->
-                <div class="stock-status">
-                  @if (isInStock()) {
-                    <span class="text-green-600 dark:text-green-400 text-sm font-medium">
-                      <i class="pi pi-check mr-1"></i>
-                      In Stock ({{ product()!.quantity }} available)
-                    </span>
-                  } @else {
-                    <span class="text-red-500 text-sm font-medium">
-                      <i class="pi pi-times mr-1"></i>
-                      Out of Stock
+                <!-- Stock Status and Sales Info -->
+                <div class="stock-status flex items-center justify-between">
+                  <div>
+                    @if (isInStock()) {
+                      <span class="text-green-600 dark:text-green-400 text-xs font-medium">
+                        <i class="pi pi-check mr-1"></i>
+                        In Stock ({{ product()!.quantity }} available)
+                      </span>
+                    } @else {
+                      <span class="text-red-500 text-xs font-medium">
+                        <i class="pi pi-times mr-1"></i>
+                        Out of Stock
+                      </span>
+                    }
+                  </div>
+                  @if (product()!.sold > 0) {
+                    <span class="text-xs text-gray-500 dark:text-gray-400">
+                      <i class="pi pi-shopping-bag mr-1"></i>
+                      {{ product()!.sold | number }} sold
                     </span>
                   }
                 </div>
               </div>
               
               <!-- Product Description -->
-              <div class="description-section mb-8">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+              <div class="description-section">
+                <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-1">
                   Description
                 </h3>
-                <div class="description-content text-gray-600 dark:text-gray-300 leading-relaxed">
+                <div class="description-content text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
                   {{ product()!.description }}
                 </div>
               </div>
               
+              <!-- Spacer to push buttons to bottom -->
+              <div class="flex-1"></div>
+              
               <!-- Quantity and Add to Cart -->
               @if (isInStock()) {
-                <div class="purchase-section">
+                <div class="purchase-section mt-auto">
                   
                   <!-- Quantity Selector -->
-                  <div class="quantity-section mb-6">
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <div class="quantity-section mb-3">
+                    <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Quantity
                     </label>
-                    <div class="quantity-controls flex items-center gap-3">
+                    <div class="quantity-controls flex items-center gap-2">
                       <p-button
                         icon="pi pi-minus"
                         [disabled]="quantity() <= 1"
                         (click)="decreaseQuantity()"
                         severity="secondary"
                         [outlined]="true"
-                        size="small"
-                        styleClass="quantity-btn">
+                        size="small">
                       </p-button>
                       
-                      <span class="quantity-display text-lg font-semibold bg-gray-50 dark:bg-gray-800 px-4 py-2 rounded-lg min-w-[3rem] text-center">
+                      <span class="quantity-display text-sm font-semibold bg-gray-50 dark:bg-gray-800 px-2 py-1 rounded min-w-[2rem] text-center">
                         {{ quantity() }}
                       </span>
                       
@@ -258,22 +266,21 @@
                         (click)="increaseQuantity()"
                         severity="secondary"
                         [outlined]="true"
-                        size="small"
-                        styleClass="quantity-btn">
+                        size="small">
                       </p-button>
                     </div>
                   </div>
                   
                   <!-- Action Buttons -->
-                  <div class="action-buttons flex flex-col sm:flex-row gap-4">
+                  <div class="action-buttons flex flex-col sm:flex-row gap-2">
                     <p-button
                       label="Add to Cart"
                       icon="pi pi-shopping-cart"
                       [disabled]="!canAddToCart()"
                       (click)="addToCart()"
                       severity="primary"
-                      size="large"
-                      styleClass="flex-1 add-to-cart-btn">
+                      size="small"
+                      class="flex-1">
                     </p-button>
                     
                     <p-button
@@ -281,8 +288,7 @@
                       (click)="addToWishlist()"
                       severity="secondary"
                       [outlined]="true"
-                      size="large"
-                      styleClass="wishlist-btn"
+                      size="small"
                       [ariaLabel]="'Add to wishlist'">
                     </p-button>
                   </div>
@@ -290,14 +296,6 @@
                 </div>
               }
               
-              <!-- Product Stats -->
-              @if (product()!.sold > 0) {
-                <p-divider class="my-6"></p-divider>
-                <div class="product-stats text-sm text-gray-500 dark:text-gray-400">
-                  <i class="pi pi-shopping-bag mr-2"></i>
-                  {{ product()!.sold | number }} sold
-                </div>
-              }
               
             </div>
             
@@ -307,20 +305,20 @@
       
       <!-- Related Products Section -->
       @if (relatedProducts().length > 0 || relatedLoading()) {
-        <div class="related-products-section bg-gray-50 dark:bg-gray-800 py-12">
-          <div class="max-w-7xl mx-auto px-4">
+        <div class="related-products-section bg-gray-50 dark:bg-gray-800 py-8">
+          <div class="max-w-6xl mx-auto px-4">
             
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6 text-center">
               Related Products
             </h2>
             
             @if (relatedLoading()) {
-              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 @for (item of [1,2,3,4]; track item) {
                   <p-card class="product-skeleton-card">
-                    <p-skeleton height="200px" class="mb-4"></p-skeleton>
-                    <p-skeleton width="80%" height="1rem" class="mb-3"></p-skeleton>
-                    <p-skeleton width="60%" height="1rem"></p-skeleton>
+                    <p-skeleton height="150px" class="mb-3"></p-skeleton>
+                    <p-skeleton width="80%" height="0.875rem" class="mb-2"></p-skeleton>
+                    <p-skeleton width="60%" height="0.875rem"></p-skeleton>
                   </p-card>
                 }
               </div>
@@ -336,7 +334,7 @@
                 ]"
                 [circular]="true"
                 [autoplayInterval]="5000"
-                styleClass="related-products-carousel">
+                class="related-products-carousel">
                 
                 <ng-template #item let-product>
                   <div class="carousel-item-wrapper px-2">

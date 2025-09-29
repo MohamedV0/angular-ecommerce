@@ -1,19 +1,11 @@
-// Enhanced Product Card - Minimal styles for Pure PrimeNG + Tailwind CSS
+// Enhanced Product Card - Pure PrimeNG + Tailwind CSS
+// Following Tailwind CSS First rule - minimal custom CSS
 
-// Line clamp utility for product titles (Tailwind 4 compatible)
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-// Rating component standard golden stars override
+// Rating component customization (required for PrimeNG component theming)
 :host ::ng-deep p-rating {
   --p-rating-icon-color: #d1d5db; // gray-300 for inactive stars  
   --p-rating-icon-hover-color: #FFC107; // Material Design amber (industry standard)
   --p-rating-icon-active-color: #FFC107; // Material Design amber (industry standard)
 }
 
-// Ensure proper aspect ratios and transitions are handled by Tailwind
-// All other styling is handled by PrimeNG components and Tailwind classes
+// All layout, responsive design, and styling handled by PrimeNG + Tailwind classes
