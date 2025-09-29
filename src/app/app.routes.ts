@@ -16,6 +16,11 @@ export const routes: Routes = [
     path: 'products',
     loadChildren: () => import('./features/products/products.routes').then(m => m.productsRoutes)
   },
+  // Categories feature routes - Pure Categories Domain
+  {
+    path: 'categories',
+    loadChildren: () => import('./features/categories/categories.routes').then(m => m.categoriesRoutes)
+  },
   // Redirect any unknown routes to home
   {
     path: '**',

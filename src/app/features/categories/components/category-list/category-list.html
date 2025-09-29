@@ -1,4 +1,4 @@
-<!-- Enhanced Product List Page - Pure PrimeNG + Tailwind CSS -->
+<!-- Enhanced Category List Page - Pure PrimeNG + Tailwind CSS -->
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
   
   <!-- Compact Page Header -->
@@ -11,26 +11,23 @@
         <!-- Left: Title and Icon -->
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-            <i class="pi pi-shopping-bag text-white text-lg"></i>
+            <i class="pi pi-th-large text-white text-lg"></i>
           </div>
           <div>
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Products</h1>
-            @if (!loading() && hasProducts()) {
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Categories</h1>
+            @if (!loading() && hasCategories()) {
               <p class="text-sm text-gray-500 dark:text-gray-400">
-                {{ totalProducts() | number }} products found
+                {{ totalCategories() | number }} categories found
                 @if (searchQuery()) {
                   <span class="ml-1">for "{{ searchQuery() }}"</span>
-                }
-                @if (categoryFilter().length > 0) {
-                  <span class="ml-1">in {{ selectedCategoryName() }}</span>
                 }
               </p>
             }
           </div>
         </div>
         
-        <!-- Right: Search and Sort Controls -->
-        <div class="flex flex-1 lg:flex-none flex-col sm:flex-row gap-3 lg:min-w-[600px]">
+        <!-- Right: Search Control -->
+        <div class="flex flex-1 lg:flex-none flex-col sm:flex-row gap-3 lg:min-w-[400px]">
           
           <!-- Search Input with Integrated Actions -->
           <div class="flex gap-2 flex-1">
@@ -40,10 +37,11 @@
                 <input 
                   type="text"
                   pInputText
-                  [formControl]="searchControl"
-                  placeholder="Search for products, brands, categories..."
+                  [value]="searchQuery()"
+                  (input)="onSearch($any($event.target).value)"
+                  placeholder="Search categories..."
                   class="w-full pr-12"
-                  (keyup.enter)="onSearch()"
+                  (keyup.enter)="onSearch($any($event.target).value)"
                 />
               </p-iconfield>
               
@@ -61,34 +59,6 @@
                 </p-button>
               }
             </div>
-            
-            <!-- Category Filter Dropdown - Mobile Optimized -->
-            <div class="w-40 sm:w-48">
-              <p-select
-                [options]="categories()"
-                [ngModel]="categoryFilter()[0] || null"
-                (ngModelChange)="onCategoryChange($event)"
-                optionLabel="name"
-                optionValue="_id"
-                placeholder="Category"
-                [showClear]="true"
-                [disabled]="categoriesLoading()"
-                class="w-full">
-              </p-select>
-            </div>
-            
-            <!-- Sort Dropdown - Mobile Optimized -->
-            <div class="w-32 sm:w-40">
-              <p-select
-                [options]="sortOptions"
-                [ngModel]="sortBy()"
-                (ngModelChange)="onSortChange($event)"
-                optionLabel="label"
-                optionValue="value"
-                placeholder="Sort"
-                class="w-full">
-              </p-select>
-            </div>
           </div>
           
         </div>
@@ -104,17 +74,12 @@
       
       <!-- Loading State with Skeleton Grid -->
       @if (loading()) {
-        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3 sm:gap-4 md:gap-6">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
           @for (item of generateSkeletonItems(); track item) {
-            <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700 h-96">
-              <p-skeleton height="12rem" styleClass="mb-4 rounded-lg"></p-skeleton>
-              <p-skeleton width="70%" height="1rem" styleClass="mb-3"></p-skeleton>
-              <p-skeleton width="90%" height="0.875rem" styleClass="mb-3"></p-skeleton>
-              <div class="flex justify-between items-center mb-4">
-                <p-skeleton width="40%" height="1.25rem"></p-skeleton>
-                <p-skeleton width="25%" height="0.875rem"></p-skeleton>
-              </div>
-              <p-skeleton height="2.5rem" styleClass="rounded-lg"></p-skeleton>
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700 h-64">
+              <p-skeleton height="10rem" styleClass="mb-4 rounded-lg"></p-skeleton>
+              <p-skeleton width="80%" height="1rem" styleClass="mb-3"></p-skeleton>
+              <p-skeleton width="60%" height="0.875rem"></p-skeleton>
             </div>
           }
         </div>
@@ -147,7 +112,7 @@
       }
       
       <!-- Empty State -->
-      @else if (!hasProducts() && !loading()) {
+      @else if (!hasCategories() && !loading()) {
         <div class="text-center py-20">
           <div class="max-w-md mx-auto">
             <div class="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-full flex items-center justify-center mx-auto mb-8">
@@ -155,16 +120,16 @@
             </div>
             <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
               @if (searchQuery()) {
-                No products found
+                No categories found
               } @else {
-                No products available
+                No categories available
               }
             </h3>
             <p class="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
               @if (searchQuery()) {
-                We couldn't find any products matching your search. Try different keywords or browse our categories.
+                We couldn't find any categories matching your search. Try different keywords.
               } @else {
-                Our product catalog is currently empty. Check back soon for new arrivals!
+                No categories are currently available. Check back soon!
               }
             </p>
             @if (searchQuery()) {
@@ -180,14 +145,36 @@
         </div>
       }
       
-      <!-- Products Grid -->
-      @else if (hasProducts()) {
+      <!-- Categories Grid -->
+      @else if (hasCategories()) {
         <div class="space-y-8">
           
-          <!-- Products Grid -->
-          <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3 sm:gap-4 md:gap-6">
-            @for (product of products(); track product._id) {
-              <app-product-card [product]="product"></app-product-card>
+          <!-- Categories Grid -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
+            @for (category of categories(); track category._id) {
+              <!-- Category Card -->
+              <div 
+                class="group relative overflow-hidden rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer h-64 flex flex-col"
+                (click)="navigateToCategory(category)"
+                [ariaLabel]="'View ' + category.name + ' category'">
+                
+                <!-- Category Image Container -->
+                <div class="relative overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600 flex-1">
+                  <img 
+                    [src]="category.image" 
+                    [alt]="category.name"
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    loading="lazy">
+                </div>
+                
+                <!-- Category Info -->
+                <div class="p-4">
+                  <h3 class="text-sm sm:text-base font-semibold text-gray-900 dark:text-white text-center line-clamp-2 leading-tight">
+                    {{ category.name }}
+                  </h3>
+                </div>
+                
+              </div>
             }
           </div>
           
@@ -197,15 +184,15 @@
               <div class="flex flex-col items-center gap-4">
                 <p-paginator
                   [rows]="itemsPerPage()"
-                  [totalRecords]="totalProducts()"
+                  [totalRecords]="totalCategories()"
                   [first]="(currentPage() - 1) * itemsPerPage()"
                   (onPageChange)="onPageChange($event)"
                   [showCurrentPageReport]="true"
-                  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+                  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} categories"
                   [showJumpToPageDropdown]="false"
                   [showFirstLastIcon]="true"
                   [showPageLinks]="true"
-                  ariaLabel="Product list pagination navigation"
+                  ariaLabel="Category list pagination navigation"
                   class="bg-transparent border-0">
                 </p-paginator>
               </div>

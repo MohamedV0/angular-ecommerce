@@ -19,6 +19,8 @@ import { ProductsService } from '../../services/products';
 import { Product, ProductQueryParams } from '../../models/product.model';
 import { ProductCard } from '../../../../shared/components/product-card/product-card';
 import { PRODUCT_SORT_OPTIONS } from '../../constants/product-sort-options.const';
+import { CategoriesService } from '../../../categories/services/categories';
+import { Category } from '../../../categories/models/category.model';
 
 /**
  * ProductList Component
@@ -49,6 +51,7 @@ import { PRODUCT_SORT_OPTIONS } from '../../constants/product-sort-options.const
 })
 export class ProductListComponent implements OnInit {
   private readonly productsService = inject(ProductsService);
+  private readonly categoriesService = inject(CategoriesService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
@@ -63,7 +66,12 @@ export class ProductListComponent implements OnInit {
   // Search and filters
   readonly searchQuery = signal('');
   readonly sortBy = signal('-createdAt'); // Default to newest first
+  readonly categoryFilter = signal<string[]>([]); // Category filter from route
   readonly searchControl = new FormControl('');
+
+  // Categories for dropdown
+  readonly categories = signal<Category[]>([]);
+  readonly categoriesLoading = signal(false);
 
   // Sort options
   readonly sortOptions = [...PRODUCT_SORT_OPTIONS];
@@ -76,10 +84,18 @@ export class ProductListComponent implements OnInit {
   readonly hasProducts = computed(() => this.products().length > 0);
   readonly isFirstPage = computed(() => this.currentPage() === 1);
   readonly isLastPage = computed(() => this.currentPage() >= this.totalPages());
+  
+  // Get selected category name for display in product count
+  readonly selectedCategoryName = computed(() => {
+    if (this.categoryFilter().length === 0) return '';
+    const categoryId = this.categoryFilter()[0];
+    const category = this.categories().find(c => c._id === categoryId);
+    return category?.name || 'selected category';
+  });
 
   ngOnInit(): void {
+    this.loadCategories();
     this.initializeFromRoute();
-    this.loadProducts();
     this.setupSearchControl();
   }
 
@@ -88,16 +104,40 @@ export class ProductListComponent implements OnInit {
    */
   private initializeFromRoute(): void {
     this.route.queryParams.subscribe(params => {
+      // Update search query
       if (params['search']) {
         this.searchQuery.set(params['search']);
         this.searchControl.setValue(params['search'], { emitEvent: false });
+      } else {
+        this.searchQuery.set('');
+        this.searchControl.setValue('', { emitEvent: false });
       }
+      
+      // Update page
       if (params['page']) {
         this.currentPage.set(+params['page']);
+      } else {
+        this.currentPage.set(1);
       }
+      
+      // Update sort
       if (params['sort']) {
         this.sortBy.set(params['sort']);
+      } else {
+        this.sortBy.set('-createdAt');
       }
+      
+      // Handle category filter from route (when coming from category details)
+      if (params['category[in]']) {
+        const categoryParam = params['category[in]'];
+        const categories = Array.isArray(categoryParam) ? categoryParam : [categoryParam];
+        this.categoryFilter.set(categories);
+      } else {
+        this.categoryFilter.set([]);
+      }
+      
+      // Load products whenever route params change
+      this.loadProducts();
     });
   }
 
@@ -111,6 +151,24 @@ export class ProductListComponent implements OnInit {
         this.currentPage.set(1); // Reset to first page on search
         this.updateRoute();
         this.loadProducts();
+      }
+    });
+  }
+
+  /**
+   * Load categories for dropdown filter
+   */
+  loadCategories(): void {
+    this.categoriesLoading.set(true);
+    
+    this.categoriesService.getCategories({ limit: 100 }).subscribe({
+      next: (response) => {
+        this.categories.set(response.data);
+        this.categoriesLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Categories loading error:', error);
+        this.categoriesLoading.set(false);
       }
     });
   }
@@ -131,6 +189,11 @@ export class ProductListComponent implements OnInit {
     // Add search query if provided
     if (this.searchQuery()) {
       params.keyword = this.searchQuery();
+    }
+
+    // Add category filter if provided (from route parameter)
+    if (this.categoryFilter().length > 0) {
+      params['category[in]'] = this.categoryFilter();
     }
 
     this.productsService.getProducts(params).subscribe({
@@ -201,6 +264,22 @@ export class ProductListComponent implements OnInit {
   }
 
   /**
+   * Handle category filter change
+   * PrimeNG select with [showClear]="true" will emit null when cleared
+   */
+  onCategoryChange(event: any): void {
+    const categoryValue = event?.value || event || '';
+    if (categoryValue) {
+      this.categoryFilter.set([categoryValue]);
+    } else {
+      this.categoryFilter.set([]); // Clear filter when null/empty
+    }
+    this.currentPage.set(1); // Reset to first page on filter change
+    this.updateRoute();
+    this.loadProducts();
+  }
+
+  /**
    * Update route with current state
    */
   private updateRoute(): void {
@@ -214,6 +293,11 @@ export class ProductListComponent implements OnInit {
     }
     if (this.sortBy() !== '-createdAt') {
       queryParams.sort = this.sortBy();
+    }
+    if (this.categoryFilter().length > 0) {
+      queryParams['category[in]'] = this.categoryFilter().length === 1 
+        ? this.categoryFilter()[0] 
+        : this.categoryFilter();
     }
 
     this.router.navigate([], {
