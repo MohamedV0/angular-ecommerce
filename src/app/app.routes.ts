@@ -36,6 +36,11 @@ export const routes: Routes = [
     path: 'cart',
     loadChildren: () => import('./features/cart/cart.routes').then(m => m.cartRoutes)
   },
+  // Profile feature routes - User Profile, Orders, Addresses, Settings
+  {
+    path: 'profile',
+    loadChildren: () => import('./features/profile/profile.routes').then(m => m.PROFILE_ROUTES)
+  },
   // ⚠️ TEMPORARY: Handle backend's hardcoded Stripe return URLs
   // Backend redirects to these URLs after Stripe payment
   {

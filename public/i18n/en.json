@@ -82,6 +82,60 @@
     "COMING_SOON_MESSAGE": "Checkout functionality is currently under development. We're working hard to bring you a seamless checkout experience.",
     "BACK_TO_CART": "Back to Cart"
   },
+  "PROFILE": {
+    "ORDERS": {
+      "TITLE": "My Orders",
+      "ORDER_ID": "Order",
+      "TOTAL_PRICE": "Total Price",
+      "ORDER_DATE": "Order Date",
+      "STATUS": "Status",
+      "VIEW_DETAILS": "View Details",
+      "NO_ORDERS": "No orders found",
+      "START_SHOPPING": "You haven't placed any orders yet. Start shopping to place your first order!"
+    },
+    "ORDER_DETAILS": {
+      "TITLE": "Order Details",
+      "ORDER_SUMMARY": "Order Summary",
+      "ORDER_DATE": "Order Date",
+      "TOTAL_PRICE": "Total Price",
+      "PAYMENT_METHOD": "Payment Method",
+      "STATUS": "Status",
+      "ITEMS": "Items",
+      "SHIPPING_ADDRESS": "Shipping Address",
+      "CUSTOMER_INFO": "Customer Information",
+      "NOT_FOUND": "Order not found",
+      "INVALID_ORDER_ID": "The order you're looking for does not exist or has been removed."
+    },
+    "ADDRESSES": {
+      "TITLE": "My Addresses",
+      "ADD_NEW_ADDRESS": "Add New Address",
+      "ADDRESS_ADDED_SUCCESS": "Address added successfully",
+      "ADDRESS_DELETED_SUCCESS": "Address deleted successfully",
+      "CONFIRM_DELETE_HEADER": "Delete Address",
+      "CONFIRM_DELETE_MESSAGE": "Are you sure you want to delete '{{name}}' address?",
+      "NO_ADDRESSES": "No addresses found",
+      "ADD_FIRST_ADDRESS": "You haven't added any addresses yet. Add your first address to make checkout faster."
+    },
+    "SETTINGS": {
+      "TITLE": "Account Settings",
+      "PROFILE_INFO": "Profile Information",
+      "CHANGE_PASSWORD": "Change Password",
+      "ACCOUNT_INFO": "Account Information"
+    }
+  },
+  "SHARED": {
+    "QUANTITY": "Quantity",
+    "NAME": "Name",
+    "EMAIL": "Email",
+    "PHONE": "Phone",
+    "CITY": "City",
+    "DETAILS": "Details",
+    "DELIVERED": "Delivered",
+    "PAID": "Paid",
+    "PENDING": "Pending",
+    "BACK_TO_ORDERS": "Back to Orders",
+    "CONTINUE_SHOPPING": "Continue Shopping"
+  },
   "FOOTER": {
     "GET_APP": "Get the FreshCart app",
     "EMAIL_PLACEHOLDER": "Enter your email",

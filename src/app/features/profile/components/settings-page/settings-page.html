@@ -1,0 +1,302 @@
+<!-- Settings Page - Pure PrimeNG + Tailwind CSS -->
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+
+  <!-- Page Header -->
+  <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+    <div class="max-w-4xl mx-auto px-4 py-6">
+      <div class="flex items-center gap-3">
+        <i class="pi pi-cog text-2xl text-primary-500"></i>
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+          Account Settings
+        </h1>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-4xl mx-auto px-4 py-8 space-y-8">
+
+    <!-- Profile Information Card -->
+    <p-card>
+      <ng-template pTemplate="header">
+        <div class="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800">
+          <i class="pi pi-user text-primary-500"></i>
+          <h3 class="font-semibold text-gray-900 dark:text-white">Profile Information</h3>
+        </div>
+      </ng-template>
+      
+      @if (profileError()) {
+        <div class="mb-6">
+          <p-message 
+            severity="error" 
+            [text]="profileError()"
+            [closable]="true"
+            (onClose)="clearProfileError()">
+          </p-message>
+        </div>
+      }
+      
+      <form [formGroup]="profileForm" (ngSubmit)="onSubmitProfileUpdate()" class="space-y-6">
+        
+        <!-- Full Name -->
+        <div class="flex flex-col gap-2">
+          <label for="name" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+            Full Name <span class="text-red-500">*</span>
+          </label>
+          <input 
+            id="name"
+            type="text" 
+            pInputText 
+            formControlName="name"
+            placeholder="Enter your full name"
+            class="w-full"
+            [class.p-invalid]="isFieldInvalid(profileForm, 'name')" />
+          @if (isFieldInvalid(profileForm, 'name')) {
+            <small class="text-red-500">
+              @if (profileForm.get('name')?.errors?.['required']) {
+                Full name is required
+              }
+              @if (profileForm.get('name')?.errors?.['minlength']) {
+                Name must be at least 2 characters
+              }
+            </small>
+          }
+        </div>
+
+        <!-- Email -->
+        <div class="flex flex-col gap-2">
+          <label for="email" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+            Email Address <span class="text-red-500">*</span>
+          </label>
+          <input 
+            id="email"
+            type="email" 
+            pInputText 
+            formControlName="email"
+            placeholder="Enter your email address"
+            class="w-full"
+            [class.p-invalid]="isFieldInvalid(profileForm, 'email')" />
+          @if (isFieldInvalid(profileForm, 'email')) {
+            <small class="text-red-500">
+              @if (profileForm.get('email')?.errors?.['required']) {
+                Email is required
+              }
+              @if (profileForm.get('email')?.errors?.['email']) {
+                Please enter a valid email address
+              }
+            </small>
+          }
+        </div>
+
+        <!-- Phone -->
+        <div class="flex flex-col gap-2">
+          <label for="phone" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+            Phone Number <span class="text-red-500">*</span>
+          </label>
+          <input 
+            id="phone"
+            type="text" 
+            pInputText 
+            formControlName="phone"
+            placeholder="01234567890"
+            class="w-full"
+            [class.p-invalid]="isFieldInvalid(profileForm, 'phone')" />
+          @if (isFieldInvalid(profileForm, 'phone')) {
+            <small class="text-red-500">
+              @if (profileForm.get('phone')?.errors?.['required']) {
+                Phone number is required
+              }
+              @if (profileForm.get('phone')?.errors?.['pattern']) {
+                Please enter a valid Egyptian phone number (11 digits starting with 01)
+              }
+            </small>
+          }
+        </div>
+
+        <!-- Form Actions -->
+        <div class="flex justify-end gap-2 pt-4 border-t border-gray-200 dark:border-gray-700">
+          <p-button 
+            label="Reset" 
+            severity="secondary"
+            [outlined]="true"
+            type="button"
+            (click)="resetProfileForm()"
+            [disabled]="isUpdatingProfile() || !hasProfileChanges()">
+          </p-button>
+          <p-button 
+            label="Update Profile" 
+            severity="primary"
+            icon="pi pi-check"
+            type="submit"
+            [loading]="isUpdatingProfile()"
+            [disabled]="profileForm.invalid || isUpdatingProfile() || !hasProfileChanges()">
+          </p-button>
+        </div>
+        
+      </form>
+    </p-card>
+
+    <!-- Change Password Card -->
+    <p-card>
+      <ng-template pTemplate="header">
+        <div class="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800">
+          <i class="pi pi-lock text-primary-500"></i>
+          <h3 class="font-semibold text-gray-900 dark:text-white">Change Password</h3>
+        </div>
+      </ng-template>
+      
+      @if (passwordError()) {
+        <div class="mb-6">
+          <p-message 
+            severity="error" 
+            [text]="passwordError()"
+            [closable]="true"
+            (onClose)="clearPasswordError()">
+          </p-message>
+        </div>
+      }
+      
+      <form [formGroup]="passwordForm" (ngSubmit)="onSubmitPasswordChange()" class="space-y-6">
+        
+        <!-- Current Password -->
+        <div class="flex flex-col gap-2">
+          <label for="currentPassword" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+            Current Password <span class="text-red-500">*</span>
+          </label>
+          <p-password 
+            id="currentPassword"
+            formControlName="currentPassword"
+            placeholder="Enter your current password"
+            [toggleMask]="true"
+            [feedback]="false"
+            class="w-full"
+            [inputStyle]="{ width: '100%' }"
+            [style]="{ width: '100%' }" />
+          @if (isFieldInvalid(passwordForm, 'currentPassword')) {
+            <small class="text-red-500">
+              Current password is required
+            </small>
+          }
+        </div>
+
+        <!-- New Password -->
+        <div class="flex flex-col gap-2">
+          <label for="password" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+            New Password <span class="text-red-500">*</span>
+          </label>
+          <p-password 
+            id="password"
+            formControlName="password"
+            placeholder="Enter your new password"
+            [toggleMask]="true"
+            [feedback]="true"
+            class="w-full"
+            [inputStyle]="{ width: '100%' }"
+            [style]="{ width: '100%' }" />
+          @if (isFieldInvalid(passwordForm, 'password')) {
+            <small class="text-red-500">
+              @if (passwordForm.get('password')?.errors?.['required']) {
+                New password is required
+              }
+              @if (passwordForm.get('password')?.errors?.['minlength']) {
+                Password must be at least 8 characters
+              }
+              @if (passwordForm.get('password')?.errors?.['pattern']) {
+                Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character
+              }
+            </small>
+          }
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="flex flex-col gap-2">
+          <label for="rePassword" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+            Confirm New Password <span class="text-red-500">*</span>
+          </label>
+          <p-password 
+            id="rePassword"
+            formControlName="rePassword"
+            placeholder="Confirm your new password"
+            [toggleMask]="true"
+            [feedback]="false"
+            class="w-full"
+            [inputStyle]="{ width: '100%' }"
+            [style]="{ width: '100%' }" />
+          @if (isFieldInvalid(passwordForm, 'rePassword')) {
+            <small class="text-red-500">
+              Please confirm your password
+            </small>
+          }
+        </div>
+
+        <!-- Security Note -->
+        <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-700">
+          <div class="flex items-start gap-3">
+            <i class="pi pi-info-circle text-blue-600 mt-1"></i>
+            <div class="text-sm text-blue-700 dark:text-blue-300">
+              <p class="font-medium mb-1">Password Requirements:</p>
+              <ul class="list-disc list-inside space-y-1">
+                <li>At least 8 characters long</li>
+                <li>Contains uppercase and lowercase letters</li>
+                <li>Contains at least one number</li>
+                <li>Contains at least one special character</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="flex justify-end gap-2 pt-4 border-t border-gray-200 dark:border-gray-700">
+          <p-button 
+            label="Cancel" 
+            severity="secondary"
+            [outlined]="true"
+            type="button"
+            (click)="resetPasswordForm()"
+            [disabled]="isChangingPassword()">
+          </p-button>
+          <p-button 
+            label="Change Password" 
+            severity="primary"
+            icon="pi pi-key"
+            type="submit"
+            [loading]="isChangingPassword()"
+            [disabled]="passwordForm.invalid || isChangingPassword()">
+          </p-button>
+        </div>
+        
+      </form>
+    </p-card>
+
+    <!-- Account Information Card -->
+    <p-card>
+      <ng-template pTemplate="header">
+        <div class="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800">
+          <i class="pi pi-info-circle text-primary-500"></i>
+          <h3 class="font-semibold text-gray-900 dark:text-white">Account Information</h3>
+        </div>
+      </ng-template>
+      
+      <div class="space-y-4">
+        <div class="flex justify-between items-center pb-3 border-b border-gray-200 dark:border-gray-700">
+          <span class="text-gray-600 dark:text-gray-400">Account Role</span>
+          <p-tag 
+            [value]="currentUser()?.role || 'user'"
+            severity="info"
+            [rounded]="true">
+          </p-tag>
+        </div>
+        
+        @if (currentUser()?.createdAt) {
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600 dark:text-gray-400">Member Since</span>
+            <span class="font-medium text-gray-900 dark:text-white">
+              {{ currentUser()!.createdAt | date:'longDate' }}
+            </span>
+          </div>
+        }
+      </div>
+    </p-card>
+
+  </div>
+</div>
+

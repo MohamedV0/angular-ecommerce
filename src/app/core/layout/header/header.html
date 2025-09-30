@@ -27,24 +27,23 @@
         
         <!-- Authentication Buttons -->
         @if (isAuthenticated()) {
-          <!-- Authenticated User Actions -->
+          <!-- Authenticated User Dropdown -->
           <p-button 
             [icon]="'pi pi-user'"
             severity="secondary" 
             [text]="true"
             [label]="getCurrentUserName() || 'User'"
+            (click)="userMenu.toggle($event)"
             styleClass="user-name-btn">
           </p-button>
           
-          <p-button 
-            [icon]="'pi pi-sign-out'"
-            severity="secondary" 
-            [text]="true"
-            [label]="'AUTH.HEADER_LOGOUT' | translate"
-            (click)="logout()"
-            [attr.aria-label]="'AUTH.ARIA_LOGOUT' | translate"
-            styleClass="logout-btn">
-          </p-button>
+          <!-- User Dropdown Menu -->
+          <p-menu 
+            #userMenu
+            [model]="userMenuItems()"
+            [popup]="true"
+            styleClass="user-dropdown-menu">
+          </p-menu>
         } @else {
           <!-- Guest User Actions -->
           <p-button 

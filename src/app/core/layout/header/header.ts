@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, OnDestroy, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { MenubarModule } from 'primeng/menubar';
+import { MenuModule } from 'primeng/menu';
 import { ButtonModule } from 'primeng/button';
 import { BadgeModule } from 'primeng/badge';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -12,7 +13,7 @@ import { WishlistStore } from '../../../features/wishlist/store/wishlist.store';
 
 @Component({
   selector: 'app-header',
-  imports: [MenubarModule, ButtonModule, BadgeModule, TranslatePipe],
+  imports: [MenubarModule, MenuModule, ButtonModule, BadgeModule, TranslatePipe],
   templateUrl: './header.html',
   styleUrl: './header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -43,8 +44,9 @@ export class Header implements OnInit, OnDestroy {
     const t = this.translationStrings();
     const cartBadge = this.cartStore.badgeCount(); // 👈 Reactive cart count!
     const wishlistBadge = this.wishlistStore.badgeCount(); // 👈 Reactive wishlist count!
+    const isAuthenticated = this.authService.isAuthenticated();
     
-    return [
+    const items: MenuItem[] = [
       {
         label: t.home,
         icon: PrimeIcons.HOME,
@@ -78,7 +80,41 @@ export class Header implements OnInit, OnDestroy {
         badge: cartBadge // 👈 Updates automatically when cart changes!
       }
     ];
+    
+    // Add Orders as direct link for authenticated users (outside dropdown)
+    if (isAuthenticated) {
+      items.push({
+        label: 'Orders',
+        icon: PrimeIcons.BOX,
+        routerLink: '/profile/orders'
+      });
+    }
+    
+    return items;
   });
+
+  // User dropdown menu items (Addresses, Settings, Logout)
+  // Note: Orders is in main menu, not in dropdown
+  readonly userMenuItems = computed<MenuItem[]>(() => [
+    {
+      label: 'Addresses',
+      icon: PrimeIcons.MAP_MARKER,
+      routerLink: '/profile/addresses'
+    },
+    {
+      label: 'Settings',
+      icon: PrimeIcons.COG,
+      routerLink: '/profile/settings'
+    },
+    {
+      separator: true
+    },
+    {
+      label: 'Logout',
+      icon: PrimeIcons.SIGN_OUT,
+      command: () => this.logout()
+    }
+  ]);
 
   ngOnInit(): void {
     // Watch for authentication changes and update cart & wishlist accordingly
@@ -148,12 +184,5 @@ export class Header implements OnInit, OnDestroy {
    */
   navigateToRegister(): void {
     this.authService.navigateToRegister();
-  }
-
-  /**
-   * Get cart summary for template (if needed elsewhere)
-   */
-  getCartSummary() {
-    return this.cartStore.summary();
   }
 }

@@ -4,9 +4,12 @@
 /**
  * User Interface
  * Based on real authentication response structure
+ * 
+ * ⚠️ IMPORTANT: The _id field is NOT returned by the API in auth responses
+ * User ID must be extracted from the JWT token payload, not from this object
  */
 export interface User {
-  _id?: string;                       // User ID (from database)
+  _id?: string;                       // User ID - NOT in API response, decode JWT token instead!
   name: string;                       // Full name
   email: string;                      // Email address
   phone?: string;                     // Phone number (optional in some responses)

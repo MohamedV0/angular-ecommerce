@@ -82,6 +82,60 @@
     "COMING_SOON_MESSAGE": "وظيفة الدفع قيد التطوير حالياً. نحن نعمل بجد لتوفير تجربة دفع سلسة لك.",
     "BACK_TO_CART": "العودة للسلة"
   },
+  "PROFILE": {
+    "ORDERS": {
+      "TITLE": "طلباتي",
+      "ORDER_ID": "الطلب",
+      "TOTAL_PRICE": "السعر الإجمالي",
+      "ORDER_DATE": "تاريخ الطلب",
+      "STATUS": "الحالة",
+      "VIEW_DETAILS": "عرض التفاصيل",
+      "NO_ORDERS": "لا توجد طلبات",
+      "START_SHOPPING": "لم تقم بتقديم أي طلبات بعد. ابدأ التسوق لتقديم طلبك الأول!"
+    },
+    "ORDER_DETAILS": {
+      "TITLE": "تفاصيل الطلب",
+      "ORDER_SUMMARY": "ملخص الطلب",
+      "ORDER_DATE": "تاريخ الطلب",
+      "TOTAL_PRICE": "السعر الإجمالي",
+      "PAYMENT_METHOD": "طريقة الدفع",
+      "STATUS": "الحالة",
+      "ITEMS": "المنتجات",
+      "SHIPPING_ADDRESS": "عنوان الشحن",
+      "CUSTOMER_INFO": "معلومات العميل",
+      "NOT_FOUND": "الطلب غير موجود",
+      "INVALID_ORDER_ID": "الطلب الذي تبحث عنه غير موجود أو تم حذفه."
+    },
+    "ADDRESSES": {
+      "TITLE": "عناويني",
+      "ADD_NEW_ADDRESS": "إضافة عنوان جديد",
+      "ADDRESS_ADDED_SUCCESS": "تم إضافة العنوان بنجاح",
+      "ADDRESS_DELETED_SUCCESS": "تم حذف العنوان بنجاح",
+      "CONFIRM_DELETE_HEADER": "حذف العنوان",
+      "CONFIRM_DELETE_MESSAGE": "هل أنت متأكد من حذف عنوان '{{name}}'؟",
+      "NO_ADDRESSES": "لا توجد عناوين",
+      "ADD_FIRST_ADDRESS": "لم تقم بإضافة أي عناوين بعد. أضف عنوانك الأول لتسريع عملية الشراء."
+    },
+    "SETTINGS": {
+      "TITLE": "إعدادات الحساب",
+      "PROFILE_INFO": "معلومات الحساب",
+      "CHANGE_PASSWORD": "تغيير كلمة المرور",
+      "ACCOUNT_INFO": "معلومات الحساب"
+    }
+  },
+  "SHARED": {
+    "QUANTITY": "الكمية",
+    "NAME": "الاسم",
+    "EMAIL": "البريد الإلكتروني",
+    "PHONE": "رقم الهاتف",
+    "CITY": "المدينة",
+    "DETAILS": "التفاصيل",
+    "DELIVERED": "تم التوصيل",
+    "PAID": "تم الدفع",
+    "PENDING": "قيد الانتظار",
+    "BACK_TO_ORDERS": "العودة للطلبات",
+    "CONTINUE_SHOPPING": "متابعة التسوق"
+  },
   "FOOTER": {
     "GET_APP": "احصل على تطبيق فريش كارت",
     "EMAIL_PLACEHOLDER": "أدخل بريدك الإلكتروني",

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { STORAGE_KEYS } from '../constants/api-endpoints.const';
 import { User } from '../models/user.model';
+import { getUserIdFromToken } from '../../shared/utils/jwt.utils';
 
 /**
  * Storage Service
@@ -188,11 +189,19 @@ export class StorageService {
   }
 
   /**
-   * Get current user ID from stored user data
+   * Get current user ID by decoding the JWT token
+   * ⚠️ IMPORTANT: User ID is NOT in the API response user data
+   * It MUST be extracted from the JWT token payload
    */
   getCurrentUserId(): string | null {
-    const userData = this.getUserData();
-    return userData?._id || null;
+    const token = this.getToken();
+    
+    if (!token) {
+      return null;
+    }
+    
+    // Always decode JWT token to extract user ID
+    return getUserIdFromToken(token);
   }
 
   /**
