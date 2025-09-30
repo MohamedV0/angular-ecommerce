@@ -6,7 +6,13 @@
     
     <!-- Brand/Logo -->
     <ng-template pTemplate="start">
-      <h1 class="brand-title">{{ 'COMMON.APP_NAME' | translate }}</h1>
+      <a 
+        [routerLink]="['/']" 
+        class="flex items-center gap-2 cursor-pointer no-underline hover:opacity-90 transition-opacity brand-logo"
+        [attr.aria-label]="'Navigate to FreshCart homepage'">
+        <i class="pi pi-shopping-cart text-2xl text-white"></i>
+        <span class="text-xl font-bold text-white">FreshCart</span>
+      </a>
     </ng-template>
     
     <!-- Language Toggle & User Actions -->

@@ -1,4 +1,5 @@
 import { Component, inject, OnInit, OnDestroy, signal, computed, ChangeDetectionStrategy } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuModule } from 'primeng/menu';
 import { ButtonModule } from 'primeng/button';
@@ -13,7 +14,7 @@ import { WishlistStore } from '../../../features/wishlist/store/wishlist.store';
 
 @Component({
   selector: 'app-header',
-  imports: [MenubarModule, MenuModule, ButtonModule, BadgeModule, TranslatePipe],
+  imports: [RouterModule, MenubarModule, MenuModule, ButtonModule, BadgeModule, TranslatePipe],
   templateUrl: './header.html',
   styleUrl: './header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

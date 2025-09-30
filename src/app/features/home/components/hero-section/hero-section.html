@@ -1,0 +1,59 @@
+<!-- Hero Section - PrimeNG Carousel with Tailwind CSS -->
+<section class="bg-gradient-to-r from-green-50 to-blue-50 dark:from-gray-800 dark:to-gray-900 py-12">
+  <div class="max-w-7xl mx-auto px-4">
+    <p-carousel 
+      [value]="heroSlides" 
+      [numVisible]="1" 
+      [numScroll]="1" 
+      [circular]="true" 
+      [autoplayInterval]="4000"
+      [showIndicators]="true"
+      [showNavigators]="true">
+      
+      <ng-template #item let-slide>
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden min-h-[400px] transition-transform duration-300 hover:-translate-y-0.5 mx-2">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center p-8 lg:p-12">
+            
+            <!-- Content Side -->
+            <div class="text-center lg:text-left">
+              <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+                {{ slide.title }}
+              </h1>
+              <p class="text-lg text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+                {{ slide.description }}
+              </p>
+              <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <p-button 
+                  [label]="slide.primaryAction.label"
+                  icon="pi pi-shopping-cart"
+                  severity="primary"
+                  size="large"
+                  class="flex-1 sm:flex-none">
+                </p-button>
+                <p-button 
+                  [label]="slide.secondaryAction.label"
+                  icon="pi pi-arrow-right"
+                  severity="secondary"
+                  [outlined]="true"
+                  size="large"
+                  class="flex-1 sm:flex-none">
+                </p-button>
+              </div>
+            </div>
+            
+            <!-- Image Side -->
+            <div class="flex items-center justify-center">
+              <img 
+                [src]="slide.image" 
+                [alt]="slide.title"
+                class="w-full h-64 lg:h-80 object-cover rounded-lg shadow-md transition-transform duration-300 hover:scale-[1.02]">
+            </div>
+            
+          </div>
+        </div>
+      </ng-template>
+      
+    </p-carousel>
+  </div>
+</section>
+
