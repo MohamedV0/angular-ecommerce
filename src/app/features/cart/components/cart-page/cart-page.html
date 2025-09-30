@@ -185,17 +185,6 @@
                       <span class="font-semibold text-lg text-gray-900 dark:text-white">
                         {{ formatPrice(item.unitPrice) }}
                       </span>
-                      
-                      @if (hasDiscount(item)) {
-                        <span class="text-sm text-gray-500 line-through">
-                          {{ formatPrice(item.product.price) }}
-                        </span>
-                        <p-tag 
-                          [value]="'-' + formatPrice(getItemSavings(item))"
-                          severity="success"
-                          [rounded]="true">
-                        </p-tag>
-                      }
                     </div>
                     
                     <!-- Quantity and Actions -->
@@ -223,7 +212,7 @@
                         [outlined]="true"
                         size="small"
                         [disabled]="isOperating()"
-                        (click)="removeItem(item._id)"
+                        (click)="removeItem(item.product._id)"
                         [ariaLabel]="'Remove item from cart'">
                       </p-button>
                     </div>
@@ -235,11 +224,6 @@
                       <div class="font-semibold text-lg text-gray-900 dark:text-white">
                         {{ formatPrice(item.totalPrice) }}
                       </div>
-                      @if (hasDiscount(item)) {
-                        <div class="text-sm text-green-600 dark:text-green-400">
-                          {{ 'CART.SAVED' | translate }} {{ formatPrice(getItemSavings(item)) }}
-                        </div>
-                      }
                     </div>
                   </div>
                   

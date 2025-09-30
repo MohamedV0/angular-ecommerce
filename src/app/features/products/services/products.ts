@@ -225,9 +225,15 @@ export class ProductsService {
 
   /**
    * Format price for display (EGP)
+   * Delegates to shared utility for consistent formatting
    */
   formatPrice(price: number): string {
-    return `${price.toLocaleString()} EGP`;
+    return new Intl.NumberFormat('en-EG', {
+      style: 'currency',
+      currency: 'EGP',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(price);
   }
 
   /**

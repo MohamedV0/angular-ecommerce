@@ -1,27 +1,25 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable, of, forkJoin } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, switchMap } from 'rxjs/operators';
 
 import { ApiService } from '../../../core/services/api';
 import { StorageService } from '../../../core/services/storage';
 import { AuthService } from '../../auth/services/auth';
 import { extractErrorMessage } from '../../../shared/utils/error.utils';
+import { CartApiResponse, CartProductObject } from '../../../core/models/api-response.model';
 import { 
   CartItem, 
-  CartApiResponse, 
-  CartApiItem, 
   AddToCartRequest, 
   UpdateCartItemRequest, 
   RemoveFromCartRequest,
   CartPersistenceData,
   CartOperationResult
 } from '../models/cart.model';
-import { Product } from '../../products/models/product.model';
 
 /**
  * Cart Service - API operations and persistence
  * Handles cart operations with the backend API and localStorage
- * Based on real API testing with Route E-commerce backend
+ * Updated: 2025-09-30 - Fixed endpoints to match real API behavior
  */
 @Injectable({
   providedIn: 'root'
@@ -35,22 +33,21 @@ export class CartService {
   private readonly CART_ENDPOINTS = {
     GET_CART: '/cart',
     ADD_TO_CART: '/cart',
-    UPDATE_CART_ITEM: '/cart',
-    REMOVE_CART_ITEM: '/cart',
+    UPDATE_CART_ITEM: '/cart',      // PUT /cart/{productId}
+    REMOVE_CART_ITEM: '/cart',      // DELETE /cart/{productId}
     CLEAR_CART: '/cart'
   };
 
   // LocalStorage key for cart persistence
   private readonly CART_STORAGE_KEY = 'freshcart_cart';
-  private readonly MAX_RETRY_ATTEMPTS = 3;
   
   // Cart expiration configuration
-  private readonly CART_MAX_AGE_MS = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+  private readonly CART_MAX_AGE_MS = 24 * 60 * 60 * 1000; // 24 hours
 
   /**
    * Get user's cart from API
    * API: GET /cart
-   * ✅ UPDATED: Returns both cart items and cartId
+   * ✅ Returns full cart with populated product objects
    */
   getCart(): Observable<{ items: CartItem[]; cartId: string | null }> {
     if (!this.authService.isAuthenticated()) {
@@ -61,7 +58,7 @@ export class CartService {
       .pipe(
         map(response => ({
           items: this.transformApiCartToItems(response),
-          cartId: response.data?._id || null
+          cartId: response.data._id
         })),
         catchError(error => {
           console.error('Get cart error:', error);
@@ -73,30 +70,41 @@ export class CartService {
   /**
    * Add product to cart
    * API: POST /cart
+   * Body: { "productId": "..." }
+   * 
+   * ⚠️ IMPORTANT: 
+   * - POST /cart returns product as STRING ID only
+   * - POST always adds quantity = 1 (no quantity parameter supported)
+   * - Solution: Chain POST → GET to get full cart with populated products
    */
   addToCart(request: AddToCartRequest): Observable<CartOperationResult> {
-    // Guest users are handled by CartStore directly
     if (!this.authService.isAuthenticated()) {
       return of({ success: false, message: 'Authentication required' });
     }
 
+    // Chain: POST /cart → GET /cart to get full product objects
     return this.api.post<CartApiResponse>(this.CART_ENDPOINTS.ADD_TO_CART, {
       productId: request.productId
     }).pipe(
-      map(response => ({
-        success: true,
-        message: 'Product added to cart successfully',
-        cartId: response.data?._id || null,
-        cart: {
-          items: this.transformApiCartToItems(response),
-          cartId: response.data?._id || null,
-          isLoading: false,
-          isSyncing: false,
-          error: null,
-          lastUpdated: Date.now(),
-          isAuthenticated: true
-        }
-      })),
+      switchMap(postResponse => {
+        // POST succeeded - now GET the full cart with populated products
+        return this.getCart().pipe(
+          map(({ items, cartId }) => ({
+            success: true,
+            message: 'Product added to cart successfully',
+            cartId,
+            cart: {
+              items,
+              cartId,
+              isLoading: false,
+              isSyncing: false,
+              error: null,
+              lastUpdated: Date.now(),
+              isAuthenticated: true
+            }
+          }))
+        );
+      }),
       catchError(error => {
         console.error('Add to cart error:', error);
         return of({
@@ -109,24 +117,27 @@ export class CartService {
 
   /**
    * Update cart item quantity
-   * API: PUT /cart/{cartItemId}
+   * API: PUT /cart/{productId}
+   * Body: { "count": "2" }
+   * 
+   * ✅ FIXED: Uses productId (NOT cart item ID) and count as string
    */
   updateCartItem(request: UpdateCartItemRequest): Observable<CartOperationResult> {
-    // Guest users are handled by CartStore directly
     if (!this.authService.isAuthenticated()) {
       return of({ success: false, message: 'Authentication required' });
     }
 
-    return this.api.put<CartApiResponse>(`${this.CART_ENDPOINTS.UPDATE_CART_ITEM}/${request.cartItemId}`, {
-      count: request.quantity
-    }).pipe(
+    return this.api.put<CartApiResponse>(
+      `${this.CART_ENDPOINTS.UPDATE_CART_ITEM}/${request.productId}`,
+      { count: request.count }
+    ).pipe(
       map(response => ({
         success: true,
         message: 'Cart updated successfully',
-        cartId: response.data?._id || null,
+        cartId: response.data._id,
         cart: {
           items: this.transformApiCartToItems(response),
-          cartId: response.data?._id || null,
+          cartId: response.data._id,
           isLoading: false,
           isSyncing: false,
           error: null,
@@ -146,38 +157,40 @@ export class CartService {
 
   /**
    * Remove item from cart
-   * API: DELETE /cart/{cartItemId}
+   * API: DELETE /cart/{productId}
+   * 
+   * ✅ FIXED: Uses productId (NOT cart item ID)
    */
   removeFromCart(request: RemoveFromCartRequest): Observable<CartOperationResult> {
-    // Guest users are handled by CartStore directly
     if (!this.authService.isAuthenticated()) {
       return of({ success: false, message: 'Authentication required' });
     }
 
-    return this.api.delete<CartApiResponse>(`${this.CART_ENDPOINTS.REMOVE_CART_ITEM}/${request.cartItemId}`)
-      .pipe(
-        map(response => ({
-          success: true,
-          message: 'Item removed from cart successfully',
-          cartId: response.data?._id || null,
-          cart: {
-            items: this.transformApiCartToItems(response),
-            cartId: response.data?._id || null,
-            isLoading: false,
-            isSyncing: false,
-            error: null,
-            lastUpdated: Date.now(),
-            isAuthenticated: true
-          }
-        })),
-        catchError(error => {
-          console.error('Remove from cart error:', error);
-          return of({
-            success: false,
-            message: extractErrorMessage(error)
-          });
-        })
-      );
+    return this.api.delete<CartApiResponse>(
+      `${this.CART_ENDPOINTS.REMOVE_CART_ITEM}/${request.productId}`
+    ).pipe(
+      map(response => ({
+        success: true,
+        message: 'Item removed from cart successfully',
+        cartId: response.data._id,
+        cart: {
+          items: this.transformApiCartToItems(response),
+          cartId: response.data._id,
+          isLoading: false,
+          isSyncing: false,
+          error: null,
+          lastUpdated: Date.now(),
+          isAuthenticated: true
+        }
+      })),
+      catchError(error => {
+        console.error('Remove from cart error:', error);
+        return of({
+          success: false,
+          message: extractErrorMessage(error)
+        });
+      })
+    );
   }
 
   /**
@@ -185,7 +198,6 @@ export class CartService {
    * API: DELETE /cart
    */
   clearCart(): Observable<CartOperationResult> {
-    // Guest users are handled by CartStore directly
     if (!this.authService.isAuthenticated()) {
       return of({ success: false, message: 'Authentication required' });
     }
@@ -218,41 +230,60 @@ export class CartService {
 
   /**
    * Sync local cart with server (when user logs in)
-   * ✅ Uses forkJoin to sync all items in parallel, then returns final result
-   * Reference: https://rxjs.dev/api/index/function/forkJoin
+   * ✅ OPTIMIZED: All POSTs in parallel, then single GET
+   * 
+   * Before: N items = N*(POST+GET) = 2N API calls
+   * After: N items = N*POST + 1*GET = N+1 API calls (50% reduction)
    */
   syncCartWithServer(localItems: CartItem[]): Observable<CartOperationResult> {
     if (!this.authService.isAuthenticated() || localItems.length === 0) {
       return of({ success: true, message: 'No items to sync' });
     }
 
-    // Create array of sync operations (add each item to server cart)
-    const syncOperations = localItems.map(item =>
-      this.addToCart({
-        productId: item.product._id,
-        quantity: item.quantity
-      })
+    // Create array of POST operations (no GET chains, just POSTs)
+    const postOperations = localItems.map(item =>
+      this.api.post<CartApiResponse>(this.CART_ENDPOINTS.ADD_TO_CART, {
+        productId: item.product._id
+      }).pipe(
+        catchError(error => {
+          console.error(`Failed to sync item ${item.product._id}:`, error);
+          return of(null); // Continue with other items even if one fails
+        })
+      )
     );
     
-    // Use forkJoin to execute all API calls in parallel
-    // forkJoin waits for all observables to complete before emitting
-    return forkJoin(syncOperations).pipe(
-      map(results => {
-        // Check if all operations succeeded
-        const allSucceeded = results.every(r => r.success);
-        const failedCount = results.filter(r => !r.success).length;
+    // Execute all POSTs in parallel, then ONE final GET
+    return forkJoin(postOperations).pipe(
+      switchMap(results => {
+        const successCount = results.filter(r => r !== null).length;
+        const failCount = results.length - successCount;
         
-        if (allSucceeded) {
-          return { 
-            success: true, 
-            message: `Successfully synced ${results.length} items to cart` 
-          };
-        } else {
-          return { 
-            success: false, 
-            message: `Failed to sync ${failedCount} of ${results.length} items` 
-          };
+        if (successCount === 0) {
+          return of({
+            success: false,
+            message: 'Failed to sync all items'
+          });
         }
+        
+        // Get final cart state with full product data
+        return this.getCart().pipe(
+          map(({ items, cartId }) => ({
+            success: failCount === 0,
+            message: failCount === 0 
+              ? `Successfully synced ${successCount} items` 
+              : `Synced ${successCount} items, ${failCount} failed`,
+            cartId,
+            cart: {
+              items,
+              cartId,
+              isLoading: false,
+              isSyncing: false,
+              error: null,
+              lastUpdated: Date.now(),
+              isAuthenticated: true
+            }
+          }))
+        );
       }),
       catchError(error => {
         console.error('Cart sync error:', error);
@@ -267,7 +298,7 @@ export class CartService {
   // ===== PERSISTENCE METHODS =====
 
   /**
-   * Save cart to localStorage
+   * Save cart to localStorage (for guest users or temporary persistence)
    */
   saveCartToStorage(items: CartItem[]): void {
     try {
@@ -298,12 +329,11 @@ export class CartService {
         // Check if cart belongs to current user (if authenticated)
         const currentUserId = this.authService.getCurrentUserId();
         if (currentUserId && cartData.userId && cartData.userId !== currentUserId) {
-          // Cart belongs to different user, clear it
           this.clearCartFromStorage();
           return [];
         }
 
-        // Check if cart is not too old
+        // Check if cart is not too old (24 hours)
         if (Date.now() - cartData.lastUpdated > this.CART_MAX_AGE_MS) {
           this.clearCartFromStorage();
           return [];
@@ -336,36 +366,21 @@ export class CartService {
 
   /**
    * Transform API cart response to internal CartItem[]
+   * 
+   * ✅ Direct transformation - assumes API returns correct format
+   * - product is always CartProductObject (we only process GET/PUT/DELETE responses)
+   * - price is at cart item level, not in product object
+   * - quantity in product is STOCK quantity, not cart quantity
    */
   private transformApiCartToItems(response: CartApiResponse): CartItem[] {
-    if (!response.data?.products) return [];
-
-    return response.data.products.map((apiItem: CartApiItem) => ({
+    return response.data.products.map((apiItem) => ({
       _id: apiItem._id,
-      product: apiItem.product,
-      quantity: apiItem.count,
-      unitPrice: apiItem.price,
+      product: apiItem.product,             // CartProductObject from API
+      quantity: apiItem.count,              // Cart quantity (renamed from 'count')
+      unitPrice: apiItem.price,             // Price from cart item level
       totalPrice: apiItem.price * apiItem.count,
       addedAt: response.data.createdAt,
       updatedAt: response.data.updatedAt
     }));
-  }
-
-  /**
-   * Create cart item from product (for guest users)
-   */
-  createCartItemFromProduct(product: Product, quantity: number = 1): CartItem {
-    const currentPrice = product.priceAfterDiscount || product.price;
-    const now = new Date().toISOString();
-    
-    return {
-      _id: `local_${product._id}_${Date.now()}`, // Temporary ID for local items
-      product,
-      quantity,
-      unitPrice: currentPrice,
-      totalPrice: currentPrice * quantity,
-      addedAt: now,
-      updatedAt: now
-    };
   }
 }

@@ -132,20 +132,26 @@ export class OrderSummaryComponent {
   readonly isProcessing = input<boolean>(false);
 
   /**
-   * Track function for cart items to improve change detection performance
-   * Delegates to shared utility function
+   * Track function for cart items to optimize change detection
+   * Uses shared utility for consistent tracking
    */
-  trackCartItem = trackCartItem;
+  trackCartItem(item: CartItem): string {
+    return trackCartItem(item);
+  }
 
   /**
    * Get product image URL with fallback
-   * Delegates to shared utility function
+   * Uses shared utility for consistent image handling
    */
-  getProductImageUrl = getProductImageUrl;
+  getProductImageUrl(item: CartItem): string {
+    return getProductImageUrl(item);
+  }
 
   /**
    * Format price for display
-   * Delegates to shared utility function
+   * Uses shared utility for consistent formatting
    */
-  formatPrice = formatPrice;
+  formatPrice(price: number): string {
+    return formatPrice(price);
+  }
 }

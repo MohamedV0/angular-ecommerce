@@ -24,7 +24,7 @@ import { CartItem } from '../../models/cart.model';
 import { AuthService } from '../../../auth/services/auth';
 
 // Shared Utilities
-import { formatPrice, getProductImageUrl, trackCartItem, hasDiscount, getItemSavings } from '../../../../shared/utils/cart.utils';
+import { formatPrice, getProductImageUrl, trackCartItem } from '../../../../shared/utils/cart.utils';
 
 /**
  * Shopping Cart Page Component
@@ -97,7 +97,7 @@ export class CartPage {
     // Update quantity if changed
     if (quantity !== item.quantity) {
       this.cartStore.updateCartItem({
-        cartItemId: item._id,
+        productId: item.product._id,
         quantity: quantity
       });
     }
@@ -105,9 +105,10 @@ export class CartPage {
 
   /**
    * Remove item from cart
+   * @param productId - Product ID to remove
    */
-  removeItem(cartItemId: string): void {
-    this.cartStore.removeFromCart(cartItemId);
+  removeItem(productId: string): void {
+    this.cartStore.removeFromCart(productId);
   }
 
   /**
@@ -181,34 +182,28 @@ export class CartPage {
   }
 
   /**
-   * Get discount savings for an item
-   * Delegates to shared utility function
+   * Format currency for display
+   * Uses shared utility for consistent formatting
    */
-  getItemSavings = getItemSavings;
-
-  /**
-   * Check if item has discount
-   * Delegates to shared utility function
-   */
-  hasDiscount = hasDiscount;
-
-  /**
-   * Format currency
-   * Delegates to shared utility function
-   */
-  formatPrice = formatPrice;
+  formatPrice(price: number): string {
+    return formatPrice(price);
+  }
 
   /**
    * Get product image URL with fallback
-   * Delegates to shared utility function
+   * Uses shared utility for consistent image handling
    */
-  getProductImageUrl = getProductImageUrl;
+  getProductImageUrl(item: CartItem): string {
+    return getProductImageUrl(item);
+  }
 
   /**
-   * Track function for cart items to improve change detection performance
-   * Delegates to shared utility function
+   * Track function for cart items to optimize change detection
+   * Uses shared utility for consistent tracking
    */
-  trackCartItem = trackCartItem;
+  trackCartItem(item: CartItem): string {
+    return trackCartItem(item);
+  }
 
   /**
    * Clear cart error

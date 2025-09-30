@@ -19,19 +19,10 @@ import {
   CartSummary
 } from '../models/cart.model';
 import { Product } from '../../products/models/product.model';
-
-/**
- * Utility functions for cart calculations
- * Following NgRx best practices - keep utilities outside the store
- */
-
-function updateItemTotalPrice(item: CartItem): CartItem {
-  return {
-    ...item,
-    totalPrice: item.quantity * item.unitPrice,
-    updatedAt: new Date().toISOString()
-  };
-}
+import { 
+  mapProductToCartProductObject, 
+  updateItemTotalPrice 
+} from '../../../shared/utils/cart.utils';
 
 /**
  * Initial Cart State
@@ -212,7 +203,8 @@ export const CartStore = signalStore(
           
           if (isAuthenticated) {
             // Authenticated user: use API with proper Observable pattern
-            return cartService.addToCart({ productId: product._id, quantity }).pipe(
+            // Note: API always adds quantity = 1, doesn't accept quantity parameter
+            return cartService.addToCart({ productId: product._id }).pipe(
               tapResponse({
                 next: (result) => {
                   if (result?.success && result.cart) {
@@ -248,10 +240,20 @@ export const CartStore = signalStore(
                       : item
                   );
                 } else {
-                  // Add new item
-                const newItem = cartService.createCartItemFromProduct(product, quantity);
-                updatedItems = [...currentItems, newItem];
-              }
+                  // Add new item - create CartItem from Product for guest user
+                  const now = new Date().toISOString();
+                  const currentPrice = product.priceAfterDiscount || product.price;
+                  const newItem: CartItem = {
+                    _id: `local_${product._id}_${Date.now()}`,
+                    product: mapProductToCartProductObject(product),
+                    quantity,
+                    unitPrice: currentPrice,
+                    totalPrice: currentPrice * quantity,
+                    addedAt: now,
+                    updatedAt: now
+                  };
+                  updatedItems = [...currentItems, newItem];
+                }
               
               patchState(store, {
                 items: updatedItems,
@@ -277,16 +279,21 @@ export const CartStore = signalStore(
     
     /**
      * Update cart item quantity - Reactive method using rxMethod
+     * @param productId - Product ID (works for both authenticated and guest users)
+     * @param quantity - New quantity
      */
-    updateCartItem: rxMethod<{ cartItemId: string; quantity: number }>(
+    updateCartItem: rxMethod<{ productId: string; quantity: number }>(
       pipe(
         tap(() => patchState(store, { isLoading: true, error: null })),
-        switchMap(({ cartItemId, quantity }) => {
+        switchMap(({ productId, quantity }) => {
           const isAuthenticated = store.isAuthenticated();
           
           if (isAuthenticated) {
-            // Authenticated user: use API with proper Observable pattern
-            return cartService.updateCartItem({ cartItemId, quantity }).pipe(
+            // Authenticated user: use API with productId and count as string
+            return cartService.updateCartItem({ 
+              productId, 
+              count: quantity.toString() 
+            }).pipe(
               tapResponse({
                 next: (result) => {
                   if (result?.success && result.cart) {
@@ -305,18 +312,18 @@ export const CartStore = signalStore(
             );
           } else {
             // Guest user: handle locally with reactive pattern
-            return of({ cartItemId, quantity }).pipe(
-              tap(({ cartItemId, quantity }) => {
+            return of({ productId, quantity }).pipe(
+              tap(({ productId, quantity }) => {
                 const currentItems = store.items();
                 let updatedItems: CartItem[];
                 
                 if (quantity <= 0) {
                   // Remove item if quantity is 0 or less
-                  updatedItems = currentItems.filter(item => item._id !== cartItemId);
+                  updatedItems = currentItems.filter(item => item.product._id !== productId);
                 } else {
-                  // Update quantity
+                  // Update quantity - find by productId
                   updatedItems = currentItems.map(item => 
-                    item._id === cartItemId
+                    item.product._id === productId
                       ? updateItemTotalPrice({ ...item, quantity })
                       : item
                   );
@@ -345,16 +352,17 @@ export const CartStore = signalStore(
     
     /**
      * Remove item from cart - Reactive method using rxMethod
+     * @param productId - Product ID to remove (works for both authenticated and guest users)
      */
     removeFromCart: rxMethod<string>(
       pipe(
         tap(() => patchState(store, { isLoading: true, error: null })),
-        switchMap((cartItemId) => {
+        switchMap((productId) => {
           const isAuthenticated = store.isAuthenticated();
           
           if (isAuthenticated) {
-            // Authenticated user: use API with proper Observable pattern
-            return cartService.removeFromCart({ cartItemId }).pipe(
+            // Authenticated user: use API with productId
+            return cartService.removeFromCart({ productId }).pipe(
               tapResponse({
                 next: (result) => {
                   if (result?.success && result.cart) {
@@ -373,10 +381,10 @@ export const CartStore = signalStore(
             );
           } else {
             // Guest user: handle locally with reactive pattern
-            return of(cartItemId).pipe(
-              tap((cartItemId) => {
+            return of(productId).pipe(
+              tap((productId) => {
                 const currentItems = store.items();
-                const updatedItems = currentItems.filter(item => item._id !== cartItemId);
+                const updatedItems = currentItems.filter(item => item.product._id !== productId);
                 
                 patchState(store, {
                   items: updatedItems,
@@ -486,54 +494,48 @@ export const CartStore = signalStore(
     
     /**
      * Sync cart with server - Reactive method
+     * ✅ OPTIMIZED: Flattened observable chain for better readability
      */
     syncCartWithServer: rxMethod<void>(
       pipe(
         tap(() => patchState(store, { isSyncing: true, error: null })),
         switchMap(() => {
           const localItems = store.items();
-          return cartService.syncCartWithServer(localItems).pipe(
-            switchMap((result) => {
-              if (result?.success) {
-                // ✅ COMPLETED: Sync successful - clear local storage
-                cartService.clearCartFromStorage();
-                
-                // ✅ FIXED: Chain with cart reload to get final server state
-                return cartService.getCart().pipe(
-                  tapResponse({
-                    next: ({ items, cartId }) => {
-                      patchState(store, {
-                        items,
-                        cartId,
-                        lastUpdated: Date.now(),
-                        isSyncing: false,
-                        error: null
-                      });
-                    },
-                    error: (error) => patchState(store, {
-                      error: 'Sync succeeded but failed to reload cart',
-                      isSyncing: false
-                    })
-                  })
-                );
-              } else {
-                patchState(store, {
-                  error: result?.message || 'Failed to sync cart',
-                  isSyncing: false
-                });
-                return of(null);
-              }
-            }),
-            tapResponse({
-              next: () => {}, // Success handled in switchMap above
-              error: (error: Error) => {
-                patchState(store, {
-                  error: error.message || 'Failed to sync cart',
-                  isSyncing: false
-                });
-              }
-            })
-          );
+          return cartService.syncCartWithServer(localItems);
+        }),
+        switchMap((result) => {
+          if (!result?.success) {
+            // Sync failed - update error state
+            patchState(store, {
+              error: result?.message || 'Failed to sync cart',
+              isSyncing: false
+            });
+            return of(null);
+          }
+          
+          // Sync succeeded - clear local storage and reload cart
+          cartService.clearCartFromStorage();
+          return cartService.getCart();
+        }),
+        tapResponse({
+          next: (cartData) => {
+            if (cartData) {
+              const { items, cartId } = cartData;
+              patchState(store, {
+                items,
+                cartId,
+                lastUpdated: Date.now(),
+                isSyncing: false,
+                error: null
+              });
+            }
+          },
+          error: (error: Error) => {
+            patchState(store, {
+              error: error.message || 'Failed to sync cart with server',
+              isSyncing: false
+            });
+          }
         })
       )
     ),

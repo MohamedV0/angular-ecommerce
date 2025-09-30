@@ -1,13 +1,38 @@
 import { CartItem } from '../../features/cart/models/cart.model';
+import { CartProductObject } from '../../core/models/api-response.model';
+import { Product } from '../../features/products/models/product.model';
 
 /**
  * Cart Utility Functions
- * Shared utilities for cart and checkout components to eliminate duplication
+ * Updated: 2025-09-30 - Works with CartProductObject (not full Product)
+ * 
+ * ⚠️ IMPORTANT: CartProductObject from API doesn't include:
+ * - price (use item.unitPrice instead)
+ * - priceAfterDiscount (discount info not available in cart API)
+ * - images array (use imageCover only)
  */
 
 /**
+ * Map full Product to CartProductObject
+ * Used when adding products to cart for guest users (localStorage)
+ * Extracts only the fields that Cart API returns
+ */
+export function mapProductToCartProductObject(product: Product): CartProductObject {
+  return {
+    _id: product._id,
+    title: product.title,
+    imageCover: product.imageCover,
+    quantity: product.quantity,
+    ratingsAverage: product.ratingsAverage,
+    subcategory: product.subcategory,
+    category: product.category,
+    brand: product.brand,
+    id: product.id || product._id
+  };
+}
+
+/**
  * Format price with Egyptian Pound currency
- * Consolidates duplicated formatPrice() from cart-page, order-summary, etc.
  */
 export function formatPrice(price: number): string {
   return new Intl.NumberFormat('en-EG', {
@@ -19,53 +44,18 @@ export function formatPrice(price: number): string {
 }
 
 /**
- * Get product image URL with fallback
- * Consolidates duplicated getProductImageUrl() from cart-page and order-summary
+ * Get product image URL
+ * ✅ UPDATED: CartProductObject only has imageCover (no images array)
  */
 export function getProductImageUrl(item: CartItem): string {
-  return item.product.imageCover || 
-         (item.product.images && item.product.images[0]) || 
-         '/assets/images/product-placeholder.jpg';
+  return item.product.imageCover || '/assets/images/product-placeholder.jpg';
 }
 
 /**
  * Track function for cart items (for ngFor optimization)
- * Consolidates duplicated trackCartItem() from cart-page and order-summary
  */
 export function trackCartItem(item: CartItem): string {
   return item._id;
-}
-
-/**
- * Track function for cart items by index and item
- * Alternative tracking function for complex scenarios
- */
-export function trackCartItemByIndex(index: number, item: CartItem): string {
-  return `${index}_${item._id}`;
-}
-
-/**
- * Calculate total price for a cart item
- */
-export function calculateItemTotal(item: CartItem): number {
-  return item.quantity * item.unitPrice;
-}
-
-/**
- * Check if cart item has discount
- */
-export function hasDiscount(item: CartItem): boolean {
-  return !!(item.product.priceAfterDiscount && 
-         item.product.priceAfterDiscount < item.product.price);
-}
-
-/**
- * Get discount amount for an item
- */
-export function getItemSavings(item: CartItem): number {
-  const originalPrice = item.product.price;
-  const discountedPrice = item.product.priceAfterDiscount || item.product.price;
-  return (originalPrice - discountedPrice) * item.quantity;
 }
 
 /**
@@ -80,4 +70,16 @@ export function formatDate(date: Date | string): string {
     hour: '2-digit',
     minute: '2-digit'
   }).format(dateObj);
+}
+
+/**
+ * Update cart item with recalculated total price
+ * Helper for ensuring totalPrice is always in sync with quantity * unitPrice
+ */
+export function updateItemTotalPrice(item: CartItem): CartItem {
+  return {
+    ...item,
+    totalPrice: item.quantity * item.unitPrice,
+    updatedAt: new Date().toISOString()
+  };
 }

@@ -85,3 +85,69 @@ export interface ProductQueryParams extends CollectionQueryParams {
   'category[in]'?: string[];         // Category IDs filter (array)
 }
 
+/**
+ * Cart Response Format
+ * Based on real API testing (2025-09-30)
+ * 
+ * ✅ Implementation Strategy:
+ * - POST /cart returns product as string ID → We immediately follow with GET /cart
+ * - This interface represents GET/PUT/DELETE responses with full product objects
+ * - We never directly consume POST responses, so product is always CartProductObject
+ */
+export interface CartApiResponse {
+  status: string;                     // "success"
+  message?: string;                   // Present in some responses
+  numOfCartItems: number;             // Total items count
+  cartId: string;                     // Cart ID
+  data: {
+    _id: string;
+    cartOwner: string;
+    products: Array<{
+      count: number;
+      _id: string;
+      product: CartProductObject;     // Always full object (we use GET, not POST response)
+      price: number;
+    }>;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+    totalCartPrice: number;
+  };
+}
+
+/**
+ * Cart Product Object Structure (returned by GET/PUT/DELETE endpoints)
+ * Based on real API testing: GET /cart returns this structure
+ * Updated: 2025-09-30 - Matches actual API response
+ * 
+ * ⚠️ NOTE: This is a SUBSET of the full Product interface
+ * - Price is stored at cart item level, NOT in product
+ * - Missing: price, priceAfterDiscount, description, slug, images[], sold, createdAt, updatedAt, ratingsQuantity
+ */
+export interface CartProductObject {
+  _id: string;
+  title: string;
+  imageCover: string;
+  quantity: number;                   // Available stock quantity (NOT cart quantity)
+  ratingsAverage: number;
+  subcategory: Array<{
+    _id: string;
+    name: string;
+    slug: string;
+    category: string;
+  }>;
+  category: {
+    _id: string;
+    name: string;
+    slug: string;
+    image: string;
+  };
+  brand: {
+    _id: string;
+    name: string;
+    slug: string;
+    image: string;
+  };
+  id: string;                         // Duplicate of _id (API quirk)
+}
+
