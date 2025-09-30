@@ -31,6 +31,13 @@ export const routes: Routes = [
     path: 'cart',
     loadChildren: () => import('./features/cart/cart.routes').then(m => m.cartRoutes)
   },
+  // ⚠️ TEMPORARY: Handle backend's hardcoded Stripe return URLs
+  // Backend redirects to these URLs after Stripe payment
+  {
+    path: 'allorders',
+    redirectTo: '/cart/success',  // Redirect to our Angular success page
+    pathMatch: 'full'
+  },
   // Redirect any unknown routes to home
   {
     path: '**',

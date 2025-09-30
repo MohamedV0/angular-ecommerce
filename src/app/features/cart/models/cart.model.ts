@@ -20,9 +20,11 @@ export interface CartItem {
 /**
  * Cart State Interface - Complete cart state
  * ✅ totalItems and totalPrice are now computed signals (not stored in state)
+ * ✅ ADDED: cartId for checkout operations
  */
 export interface CartState {
   items: CartItem[];                    // Cart items
+  cartId: string | null;                // Cart ID from API (required for checkout)
   isLoading: boolean;                   // Loading state for operations
   isSyncing: boolean;                   // Syncing with server
   error: string | null;                 // Error message if any
@@ -55,13 +57,13 @@ export interface RemoveFromCartRequest {
 
 /**
  * Cart API Response - Based on real API structure
+ * ✅ FIXED: Matches actual API response from Postman collection
  */
 export interface CartApiResponse {
-  message: string;                      // Success message
+  status: string;                       // "success"
   numOfCartItems: number;               // Total items in cart
-  cartId: string;                       // Cart ID from server
   data: {
-    _id: string;                        // Cart document ID
+    _id: string;                        // ⚠️ IMPORTANT: This is the cartId for checkout!
     cartOwner: string;                  // User ID who owns cart
     products: CartApiItem[];            // Cart items from API
     createdAt: string;                  // Cart creation date
@@ -102,21 +104,13 @@ export interface CartPersistenceData {
 
 /**
  * Cart Operation Result
+ * ✅ UPDATED: Include cartId for checkout operations
  */
 export interface CartOperationResult {
   success: boolean;                     // Whether operation succeeded
   message?: string;                     // Success/error message
   item?: CartItem;                      // Updated/added item
   cart?: CartState;                     // Updated cart state
+  cartId?: string | null;               // Cart ID from API response
 }
 
-/**
- * Cart Configuration
- */
-export interface CartConfig {
-  maxQuantityPerItem: number;           // Max quantity allowed per item
-  maxItemsInCart: number;               // Max different items in cart
-  autoSync: boolean;                    // Auto sync with server when authenticated
-  persistenceEnabled: boolean;          // Enable localStorage persistence
-  syncIntervalMs: number;               // Sync interval in milliseconds
-}

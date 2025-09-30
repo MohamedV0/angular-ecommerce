@@ -1,10 +1,11 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable, of, throwError, timer, forkJoin } from 'rxjs';
-import { map, catchError, tap, switchMap } from 'rxjs/operators';
+import { Observable, of, forkJoin } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 import { ApiService } from '../../../core/services/api';
 import { StorageService } from '../../../core/services/storage';
 import { AuthService } from '../../auth/services/auth';
+import { extractErrorMessage } from '../../../shared/utils/error.utils';
 import { 
   CartItem, 
   CartApiResponse, 
@@ -42,22 +43,29 @@ export class CartService {
   // LocalStorage key for cart persistence
   private readonly CART_STORAGE_KEY = 'freshcart_cart';
   private readonly MAX_RETRY_ATTEMPTS = 3;
+  
+  // Cart expiration configuration
+  private readonly CART_MAX_AGE_MS = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
   /**
    * Get user's cart from API
    * API: GET /cart
+   * ✅ UPDATED: Returns both cart items and cartId
    */
-  getCart(): Observable<CartItem[]> {
+  getCart(): Observable<{ items: CartItem[]; cartId: string | null }> {
     if (!this.authService.isAuthenticated()) {
-      return of([]);
+      return of({ items: [], cartId: null });
     }
 
     return this.api.get<CartApiResponse>(this.CART_ENDPOINTS.GET_CART)
       .pipe(
-        map(response => this.transformApiCartToItems(response)),
+        map(response => ({
+          items: this.transformApiCartToItems(response),
+          cartId: response.data?._id || null
+        })),
         catchError(error => {
           console.error('Get cart error:', error);
-          return of([]);
+          return of({ items: [], cartId: null });
         })
       );
   }
@@ -77,11 +85,11 @@ export class CartService {
     }).pipe(
       map(response => ({
         success: true,
-        message: response.message || 'Product added to cart successfully',
+        message: 'Product added to cart successfully',
+        cartId: response.data?._id || null,
         cart: {
           items: this.transformApiCartToItems(response),
-          totalItems: response.numOfCartItems,
-          totalPrice: response.data.totalCartPrice,
+          cartId: response.data?._id || null,
           isLoading: false,
           isSyncing: false,
           error: null,
@@ -93,7 +101,7 @@ export class CartService {
         console.error('Add to cart error:', error);
         return of({
           success: false,
-          message: this.extractErrorMessage(error)
+          message: extractErrorMessage(error)
         });
       })
     );
@@ -115,10 +123,10 @@ export class CartService {
       map(response => ({
         success: true,
         message: 'Cart updated successfully',
+        cartId: response.data?._id || null,
         cart: {
           items: this.transformApiCartToItems(response),
-          totalItems: response.numOfCartItems,
-          totalPrice: response.data.totalCartPrice,
+          cartId: response.data?._id || null,
           isLoading: false,
           isSyncing: false,
           error: null,
@@ -130,7 +138,7 @@ export class CartService {
         console.error('Update cart item error:', error);
         return of({
           success: false,
-          message: this.extractErrorMessage(error)
+          message: extractErrorMessage(error)
         });
       })
     );
@@ -151,10 +159,10 @@ export class CartService {
         map(response => ({
           success: true,
           message: 'Item removed from cart successfully',
+          cartId: response.data?._id || null,
           cart: {
             items: this.transformApiCartToItems(response),
-            totalItems: response.numOfCartItems,
-            totalPrice: response.data.totalCartPrice,
+            cartId: response.data?._id || null,
             isLoading: false,
             isSyncing: false,
             error: null,
@@ -166,7 +174,7 @@ export class CartService {
           console.error('Remove from cart error:', error);
           return of({
             success: false,
-            message: this.extractErrorMessage(error)
+            message: extractErrorMessage(error)
           });
         })
       );
@@ -186,11 +194,11 @@ export class CartService {
       .pipe(
         map(response => ({
           success: true,
-          message: response.message || 'Cart cleared successfully',
+          message: 'Cart cleared successfully',
+          cartId: null,
           cart: {
             items: [],
-            totalItems: 0,
-            totalPrice: 0,
+            cartId: null,
             isLoading: false,
             isSyncing: false,
             error: null,
@@ -202,7 +210,7 @@ export class CartService {
           console.error('Clear cart error:', error);
           return of({
             success: false,
-            message: this.extractErrorMessage(error)
+            message: extractErrorMessage(error)
           });
         })
       );
@@ -225,42 +233,33 @@ export class CartService {
         quantity: item.quantity
       })
     );
-
-    // Execute all operations in parallel using forkJoin
+    
+    // Use forkJoin to execute all API calls in parallel
     // forkJoin waits for all observables to complete before emitting
-    return timer(0).pipe(
-      switchMap(() => {
-        if (syncOperations.length === 0) {
-          return of({ success: true, message: 'No items to sync' });
-        }
+    return forkJoin(syncOperations).pipe(
+      map(results => {
+        // Check if all operations succeeded
+        const allSucceeded = results.every(r => r.success);
+        const failedCount = results.filter(r => !r.success).length;
         
-        // Use forkJoin to execute all API calls in parallel
-        return forkJoin(syncOperations).pipe(
-          map(results => {
-            // Check if all operations succeeded
-            const allSucceeded = results.every(r => r.success);
-            const failedCount = results.filter(r => !r.success).length;
-            
-            if (allSucceeded) {
-              return { 
-                success: true, 
-                message: `Successfully synced ${results.length} items to cart` 
-              };
-            } else {
-              return { 
-                success: false, 
-                message: `Failed to sync ${failedCount} of ${results.length} items` 
-              };
-            }
-          }),
-          catchError(error => {
-            console.error('Cart sync error:', error);
-            return of({ 
-              success: false, 
-              message: 'Failed to sync cart with server' 
-            });
-          })
-        );
+        if (allSucceeded) {
+          return { 
+            success: true, 
+            message: `Successfully synced ${results.length} items to cart` 
+          };
+        } else {
+          return { 
+            success: false, 
+            message: `Failed to sync ${failedCount} of ${results.length} items` 
+          };
+        }
+      }),
+      catchError(error => {
+        console.error('Cart sync error:', error);
+        return of({ 
+          success: false, 
+          message: 'Failed to sync cart with server' 
+        });
       })
     );
   }
@@ -304,9 +303,8 @@ export class CartService {
           return [];
         }
 
-        // Check if cart is not too old (24 hours)
-        const maxAge = 24 * 60 * 60 * 1000; // 24 hours
-        if (Date.now() - cartData.lastUpdated > maxAge) {
+        // Check if cart is not too old
+        if (Date.now() - cartData.lastUpdated > this.CART_MAX_AGE_MS) {
           this.clearCartFromStorage();
           return [];
         }
@@ -337,13 +335,6 @@ export class CartService {
   // ===== PRIVATE HELPER METHODS =====
 
   /**
-   * Extract error message from API error response
-   */
-  private extractErrorMessage(error: any): string {
-    return error?.error?.message || error?.message || 'Operation failed';
-  }
-
-  /**
    * Transform API cart response to internal CartItem[]
    */
   private transformApiCartToItems(response: CartApiResponse): CartItem[] {
@@ -359,17 +350,6 @@ export class CartService {
       updatedAt: response.data.updatedAt
     }));
   }
-
-  /**
-   * ❌ REMOVED: Guest cart operations are handled entirely by CartStore
-   * CartService only handles API operations for authenticated users
-   * This follows the single responsibility principle
-   */
-
-  /**
-   * ❌ REMOVED: syncItemsSequentially - was dead code
-   * Sync logic is handled by syncCartWithServer which processes items sequentially
-   */
 
   /**
    * Create cart item from product (for guest users)

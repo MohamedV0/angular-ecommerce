@@ -36,9 +36,11 @@ function updateItemTotalPrice(item: CartItem): CartItem {
 /**
  * Initial Cart State
  * ✅ totalItems and totalPrice removed - now computed from items[]
+ * ✅ ADDED: cartId initialization
  */
 const initialCartState: CartState = {
   items: [],
+  cartId: null,
   isLoading: false,
   isSyncing: false,
   error: null,
@@ -137,9 +139,10 @@ export const CartStore = signalStore(
           // Load from API for authenticated users - reactive pattern
           patchState(store, { isLoading: true, error: null });
           cartService.getCart().subscribe({
-            next: (items) => {
+            next: ({ items, cartId }) => {
               patchState(store, {
                 items,
+                cartId,
                 lastUpdated: Date.now(),
                 isLoading: false,
                 error: null
@@ -177,9 +180,10 @@ export const CartStore = signalStore(
         tap(() => patchState(store, { isLoading: true, error: null })),
         switchMap(() => cartService.getCart().pipe(
           tapResponse({
-            next: (items) => {
+            next: ({ items, cartId }) => {
               patchState(store, {
                 items,
+                cartId,
                 lastUpdated: Date.now(),
                 isLoading: false,
                 error: null
@@ -429,6 +433,7 @@ export const CartStore = signalStore(
               tap(() => {
                 patchState(store, {
                   items: [],
+                  cartId: null,
                   lastUpdated: Date.now(),
                   error: null
                 });
@@ -463,6 +468,7 @@ export const CartStore = signalStore(
         // User just logged out - clear cart and load from localStorage
         patchState(store, {
           items: [],
+          cartId: null,
           error: null,
           lastUpdated: Date.now()
         });
@@ -472,6 +478,7 @@ export const CartStore = signalStore(
         
         patchState(store, {
           items,
+          cartId: null,  // Guest carts don't have server cartId
           lastUpdated: Date.now()
         });
       }
@@ -494,9 +501,10 @@ export const CartStore = signalStore(
                 // ✅ FIXED: Chain with cart reload to get final server state
                 return cartService.getCart().pipe(
                   tapResponse({
-                    next: (items) => {
+                    next: ({ items, cartId }) => {
                       patchState(store, {
                         items,
+                        cartId,
                         lastUpdated: Date.now(),
                         isSyncing: false,
                         error: null
