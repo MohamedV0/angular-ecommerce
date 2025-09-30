@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 
+// PrimeNG
+import { ToastModule } from 'primeng/toast';
+
 // Layout Components
 import { Header } from '../header/header';
 import { Footer } from '../footer/footer';
@@ -11,6 +14,7 @@ import { Footer } from '../footer/footer';
   imports: [
     CommonModule,
     RouterOutlet,
+    ToastModule,
     Header,
     Footer
   ],

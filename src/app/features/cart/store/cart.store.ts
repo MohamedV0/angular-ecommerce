@@ -10,6 +10,7 @@ import {
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
 import { pipe, switchMap, tap, of } from 'rxjs';
+import { MessageService } from 'primeng/api';
 
 import { CartService } from '../services/cart.service';
 import { AuthService } from '../../auth/services/auth';
@@ -168,7 +169,7 @@ export const CartStore = signalStore(
   }),
   
   // 4️⃣ Methods - Following exact documentation patterns
-  withMethods((store, cartService = inject(CartService), authService = inject(AuthService)) => ({
+  withMethods((store, cartService = inject(CartService), authService = inject(AuthService), messageService = inject(MessageService)) => ({
     
     
     /**
@@ -228,15 +229,41 @@ export const CartStore = signalStore(
                 next: (result) => {
                   if (result?.success && result.cart) {
                     patchState(store, { ...result.cart });
+                    
+                    // ✅ Show success toast notification
+                    messageService.add({
+                      severity: 'success',
+                      summary: 'Added to Cart',
+                      detail: `${product.title} has been added to your cart`,
+                      life: 3000
+                    });
                   } else {
                     patchState(store, {
                       error: result?.message || 'Failed to add product to cart'
                     });
+                    
+                    // Show error toast
+                    messageService.add({
+                      severity: 'error',
+                      summary: 'Error',
+                      detail: result?.message || 'Failed to add product to cart',
+                      life: 3000
+                    });
                   }
                 },
-                error: (error) => patchState(store, {
-                  error: error instanceof Error ? error.message : 'Failed to add product to cart'
-                }),
+                error: (error) => {
+                  patchState(store, {
+                    error: error instanceof Error ? error.message : 'Failed to add product to cart'
+                  });
+                  
+                  // Show error toast
+                  messageService.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: error instanceof Error ? error.message : 'Failed to add product to cart',
+                    life: 3000
+                  });
+                },
                 finalize: () => {
                   // Remove product from loading array (immutable filter)
                   patchState(store, { 
@@ -287,12 +314,30 @@ export const CartStore = signalStore(
                 
                 // Save to localStorage
                 cartService.saveCartToStorage(updatedItems);
+                
+                // ✅ Show success toast notification for guest user
+                messageService.add({
+                  severity: 'success',
+                  summary: 'Added to Cart',
+                  detail: `${product.title} has been added to your cart`,
+                  life: 3000
+                });
               }),
               tapResponse({
                 next: () => {}, // Success handled in tap above
-                error: (error) => patchState(store, {
-                  error: error instanceof Error ? error.message : 'Failed to add product to cart'
-                }),
+                error: (error) => {
+                  patchState(store, {
+                    error: error instanceof Error ? error.message : 'Failed to add product to cart'
+                  });
+                  
+                  // Show error toast
+                  messageService.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: error instanceof Error ? error.message : 'Failed to add product to cart',
+                    life: 3000
+                  });
+                },
                 finalize: () => {
                   // Remove product from loading array (immutable filter)
                   patchState(store, { 

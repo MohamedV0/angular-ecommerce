@@ -5,6 +5,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { providePrimeNG } from 'primeng/config';
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
+import { MessageService } from 'primeng/api';
 import Aura from '@primeuix/themes/aura';
 
 import { authHeaderInterceptor } from './core/interceptors/auth-header-interceptor';
@@ -18,6 +19,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withInterceptors([authHeaderInterceptor])),
     provideAnimationsAsync(), // Required by PrimeNG (deprecated in v20.2, but still needed until v23)
+    MessageService, // ✅ Global MessageService for Toast notifications
     providePrimeNG({
       theme: {
         preset: Aura, // Modern Aura theme
