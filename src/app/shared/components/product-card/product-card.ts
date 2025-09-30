@@ -12,6 +12,7 @@ import { ChipModule } from 'primeng/chip';
 // Feature Imports
 import { Product } from '../../../features/products/models/product.model';
 import { CartStore } from '../../../features/cart/store/cart.store';
+import { WishlistStore } from '../../../features/wishlist/store/wishlist.store';
 
 /**
  * ProductCard Component
@@ -36,6 +37,7 @@ import { CartStore } from '../../../features/cart/store/cart.store';
 export class ProductCard {
   private readonly router = inject(Router);
   private readonly cartStore = inject(CartStore);
+  private readonly wishlistStore = inject(WishlistStore);
   
   // Input signals
   readonly product = input.required<Product>();
@@ -84,6 +86,21 @@ export class ProductCard {
     return this.isInStock() && !this.isAddingToCart();
   });
 
+  // Wishlist-related computed properties
+  readonly isInWishlist = computed(() => {
+    const productId = this.product()._id;
+    return this.wishlistStore.isProductInWishlist()(productId);
+  });
+
+  readonly isTogglingWishlist = computed(() => {
+    const productId = this.product()._id;
+    return this.wishlistStore.isProductLoading()(productId);
+  });
+
+  readonly wishlistIconClass = computed(() => {
+    return this.isInWishlist() ? 'pi pi-heart-fill' : 'pi pi-heart';
+  });
+
   /**
    * Navigate to product details page
    */
@@ -126,11 +143,13 @@ export class ProductCard {
   }
 
   /**
-   * Add product to wishlist (placeholder implementation)
+   * Toggle product wishlist status (add/remove)
+   * Uses WishlistStore toggle method
    */
   private addToWishlist(): void {
     const prod = this.product();
-    // TODO: Implement wishlist service integration
-    console.log('Add to wishlist:', prod.title);
+    
+    // Toggle wishlist status (add if not in wishlist, remove if in wishlist)
+    this.wishlistStore.toggleWishlist(prod);
   }
 }

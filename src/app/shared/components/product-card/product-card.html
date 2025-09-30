@@ -22,14 +22,17 @@
     
     <!-- Wishlist Button -->
     <p-button
-      icon="pi pi-heart"
+      [icon]="wishlistIconClass()"
       (click)="onWishlistClick($event)"
       [rounded]="true"
       [text]="true"
-      severity="secondary"
+      [loading]="isTogglingWishlist()"
+      [severity]="isInWishlist() ? 'danger' : 'secondary'"
       size="small"
-      class="!absolute !top-3 !right-3 !w-8 !h-8 !drop-shadow-md hover:!drop-shadow-lg !transition-all !duration-200 hover:!scale-110 hover:!bg-white/20"
-      [ariaLabel]="'Add ' + product().title + ' to wishlist'">
+      class="!absolute !top-3 !right-3 !w-8 !h-8 !rounded-full !drop-shadow-md hover:!drop-shadow-lg !transition-all !duration-200 hover:!scale-110"
+      [class.!bg-white/90]="isInWishlist()"
+      [class.hover:!bg-white/20]="!isInWishlist()"
+      [ariaLabel]="isInWishlist() ? 'Remove ' + product().title + ' from wishlist' : 'Add ' + product().title + ' to wishlist'">
     </p-button>
   </div>
   

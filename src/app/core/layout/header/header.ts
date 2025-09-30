@@ -8,6 +8,7 @@ import { Subscription, combineLatest } from 'rxjs';
 import { I18nService } from '../../services/i18n';
 import { AuthService } from '../../../features/auth/services/auth';
 import { CartStore } from '../../../features/cart/store/cart.store';
+import { WishlistStore } from '../../../features/wishlist/store/wishlist.store';
 
 @Component({
   selector: 'app-header',
@@ -21,6 +22,7 @@ export class Header implements OnInit, OnDestroy {
   private readonly translateService = inject(TranslateService);
   protected readonly authService = inject(AuthService);
   protected readonly cartStore = inject(CartStore);
+  protected readonly wishlistStore = inject(WishlistStore);
   private translationSubscription?: Subscription;
   private authSubscription?: Subscription;
   
@@ -31,14 +33,16 @@ export class Header implements OnInit, OnDestroy {
     products: '',
     categories: '',
     brands: '',
-    cart: ''
+    cart: '',
+    wishlist: ''
   });
   
   // ✅ BEST PRACTICE: Computed signal for menu items
-  // This automatically updates when cart badge OR translations change
+  // This automatically updates when cart badge OR wishlist badge OR translations change
   readonly menuItems = computed<MenuItem[]>(() => {
     const t = this.translationStrings();
     const cartBadge = this.cartStore.badgeCount(); // 👈 Reactive cart count!
+    const wishlistBadge = this.wishlistStore.badgeCount(); // 👈 Reactive wishlist count!
     
     return [
       {
@@ -62,6 +66,12 @@ export class Header implements OnInit, OnDestroy {
         routerLink: '/brands'
       },
       {
+        label: t.wishlist,
+        icon: PrimeIcons.HEART,
+        routerLink: '/wishlist',
+        badge: wishlistBadge // 👈 Updates automatically when wishlist changes!
+      },
+      {
         label: t.cart,
         icon: PrimeIcons.SHOPPING_CART,
         routerLink: '/cart',
@@ -71,9 +81,10 @@ export class Header implements OnInit, OnDestroy {
   });
 
   ngOnInit(): void {
-    // Watch for authentication changes and update cart accordingly
+    // Watch for authentication changes and update cart & wishlist accordingly
     this.authSubscription = this.authService.isAuthenticated$.subscribe(isAuthenticated => {
       this.cartStore.onAuthenticationChange(isAuthenticated);
+      this.wishlistStore.onAuthenticationChange(isAuthenticated);
     });
     
     // ✅ Keep translation observable - it works fine and changes rarely
@@ -83,10 +94,11 @@ export class Header implements OnInit, OnDestroy {
       this.translateService.stream('NAVIGATION.PRODUCTS'),
       this.translateService.stream('NAVIGATION.CATEGORIES'),
       this.translateService.stream('NAVIGATION.BRANDS'),
-      this.translateService.stream('NAVIGATION.CART')
-    ]).subscribe(([home, products, categories, brands, cart]) => {
+      this.translateService.stream('NAVIGATION.CART'),
+      this.translateService.stream('NAVIGATION.WISHLIST')
+    ]).subscribe(([home, products, categories, brands, cart, wishlist]) => {
       // Update translation signal - menuItems computed will auto-update
-      this.translationStrings.set({ home, products, categories, brands, cart });
+      this.translationStrings.set({ home, products, categories, brands, cart, wishlist });
     });
   }
 

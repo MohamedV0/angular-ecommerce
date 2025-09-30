@@ -1,0 +1,96 @@
+<!-- Wishlist Page - Compact Design using Product Card Component -->
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+
+  <!-- Page Header -->
+  <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+    <div class="max-w-7xl mx-auto px-4 py-6">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <i class="pi pi-heart text-2xl text-red-500"></i>
+          <h1 class="text-2xl font-bold text-gray-900 dark:text-white">My Wishlist</h1>
+          @if (!isEmpty()) {
+            <p-badge [value]="wishlistSummary().totalItems" severity="danger" size="large"></p-badge>
+          }
+        </div>
+        <p-button 
+          label="Continue Shopping"
+          severity="secondary"
+          [outlined]="true"
+          icon="pi pi-arrow-left"
+          (click)="continueShopping()"
+          size="small">
+        </p-button>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 py-8">
+
+    <!-- Error Message -->
+    @if (error()) {
+      <div class="mb-6">
+        <p-message 
+          severity="error" 
+          [text]="error() || ''"
+          [closable]="true"
+          (onClose)="clearError()">
+        </p-message>
+      </div>
+    }
+
+    <!-- Loading State -->
+    @if (showLoadingState()) {
+      <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3 sm:gap-4 md:gap-6">
+        @for (i of [1,2,3,4,5,6,7,8,9,10,11,12]; track i) {
+          <div class="bg-white dark:bg-gray-800 rounded-xl p-4 space-y-4 h-96">
+            <p-skeleton width="100%" height="12rem" Class="mb-4 rounded-lg"></p-skeleton>
+            <p-skeleton width="100%" height="20px"></p-skeleton>
+            <p-skeleton width="60%" height="16px"></p-skeleton>
+            <p-skeleton width="80%" height="16px"></p-skeleton>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Empty State -->
+    @else if (showEmptyState()) {
+      <div class="flex flex-col items-center justify-center py-16 text-center">
+        <div class="bg-red-50 dark:bg-red-900/20 rounded-full p-8 mb-6">
+          <i class="pi pi-heart text-6xl text-red-400"></i>
+        </div>
+        <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
+          Your Wishlist is Empty
+        </h2>
+        <p class="text-gray-600 dark:text-gray-400 mb-8 max-w-md">
+          Save your favorite items to your wishlist and shop them later!
+        </p>
+        <p-button 
+          label="Start Shopping"
+          severity="primary"
+          icon="pi pi-shopping-bag"
+          (click)="continueShopping()"
+          size="large">
+        </p-button>
+      </div>
+    }
+
+    <!-- Wishlist Content - Product Grid using Product Card Component -->
+    @else if (!isEmpty()) {
+      <div class="mb-6">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+          {{ wishlistSummary().itemsCount }}
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3 sm:gap-4 md:gap-6">
+        @for (product of wishlistItems(); track trackByProductId($index, product)) {
+          <app-product-card [product]="product" />
+        }
+      </div>
+    }
+
+  </div>
+</div>
+
+<!-- Toast Container for Notifications -->
+<p-toast position="top-right"></p-toast>
