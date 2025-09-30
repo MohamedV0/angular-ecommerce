@@ -14,7 +14,7 @@
     <!-- Discount Badge -->
     @if (hasDiscount()) {
       <p-badge 
-        [value]="getDiscountPercentage()"
+        [value]="discountPercentage()"
         severity="danger"
         class="!absolute !top-3 !left-3 !text-xs !font-bold !px-2 !py-1">
       </p-badge>
@@ -72,7 +72,7 @@
       <div class="flex items-center gap-2 mb-1">
         <!-- Current/Discounted Price -->
         <span class="text-base sm:text-lg font-bold text-green-600 dark:text-green-400">
-          {{ getCurrentPrice() | number:'1.0-0' }} EGP
+          {{ currentPrice() | number:'1.0-0' }} EGP
         </span>
         
         <!-- Original Price (if discounted) -->
@@ -100,15 +100,39 @@
   
   <!-- Action Buttons Footer -->
   <div class="p-4 pt-0 flex justify-center">
-    <p-button 
-      label="Add to Cart"
-      icon="pi pi-shopping-cart"
-      (click)="onAddToCartClick($event)"
-      severity="success"
-      size="small"
-      [disabled]="product().quantity === 0"
-      class="!py-1.5 sm:!py-2 !text-xs !font-semibold">
-    </p-button>
+    <!-- Add to Cart Button (Not in cart) -->
+    @if (!isInCart()) {
+      <p-button 
+        label="Add to Cart"
+        icon="pi pi-shopping-cart"
+        (click)="onAddToCartClick($event)"
+        severity="success"
+        size="small"
+        [loading]="isAddingToCart()"
+        [disabled]="!canAddToCart()"
+        class="!py-1.5 sm:!py-2 !text-xs !font-semibold">
+      </p-button>
+    } @else {
+      <!-- In Cart - Show quantity and view cart option -->
+      <div class="flex items-center gap-2">
+        <p-chip 
+          [label]="'In Cart (' + cartQuantity() + ')'"
+          icon="pi pi-check"
+          class="!bg-green-50 !text-green-700 dark:!bg-green-900/30 dark:!text-green-300 !text-xs !font-semibold">
+        </p-chip>
+        <p-button 
+          icon="pi pi-plus"
+          (click)="onAddToCartClick($event)"
+          severity="success"
+          size="small"
+          [loading]="isAddingToCart()"
+          [disabled]="!canAddToCart()"
+          [text]="true"
+          class="!w-6 !h-6 !p-0"
+          [ariaLabel]="'Add another ' + product().title + ' to cart'">
+        </p-button>
+      </div>
+    }
   </div>
   
 </div>

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { MenubarModule } from 'primeng/menubar';
 import { ButtonModule } from 'primeng/button';
 import { BadgeModule } from 'primeng/badge';
@@ -7,65 +7,92 @@ import { MenuItem, PrimeIcons } from 'primeng/api';
 import { Subscription, combineLatest } from 'rxjs';
 import { I18nService } from '../../services/i18n';
 import { AuthService } from '../../../features/auth/services/auth';
+import { CartStore } from '../../../features/cart/store/cart.store';
 
 @Component({
   selector: 'app-header',
   imports: [MenubarModule, ButtonModule, BadgeModule, TranslatePipe],
   templateUrl: './header.html',
-  styleUrl: './header.scss' // ✅ External SCSS file following best practices
+  styleUrl: './header.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Header implements OnInit, OnDestroy {
   protected readonly i18nService = inject(I18nService);
   private readonly translateService = inject(TranslateService);
   protected readonly authService = inject(AuthService);
-  private menuSubscription?: Subscription;
+  protected readonly cartStore = inject(CartStore);
+  private translationSubscription?: Subscription;
+  private authSubscription?: Subscription;
   
-  menuItems: MenuItem[] = [];
+  // ✅ MINIMAL CHANGE: Only the parts that need reactivity
+  // Store translations in a signal for reactive menu items
+  private readonly translationStrings = signal({
+    home: '',
+    products: '',
+    categories: '',
+    brands: '',
+    cart: ''
+  });
+  
+  // ✅ BEST PRACTICE: Computed signal for menu items
+  // This automatically updates when cart badge OR translations change
+  readonly menuItems = computed<MenuItem[]>(() => {
+    const t = this.translationStrings();
+    const cartBadge = this.cartStore.badgeCount(); // 👈 Reactive cart count!
+    
+    return [
+      {
+        label: t.home,
+        icon: PrimeIcons.HOME,
+        routerLink: '/'
+      },
+      {
+        label: t.products,
+        icon: PrimeIcons.SHOPPING_BAG,
+        routerLink: '/products'
+      },
+      {
+        label: t.categories,
+        icon: PrimeIcons.LIST,
+        routerLink: '/categories'
+      },
+      {
+        label: t.brands,
+        icon: PrimeIcons.BOOKMARK,
+        routerLink: '/brands'
+      },
+      {
+        label: t.cart,
+        icon: PrimeIcons.SHOPPING_CART,
+        routerLink: '/cart',
+        badge: cartBadge // 👈 Updates automatically when cart changes!
+      }
+    ];
+  });
 
   ngOnInit(): void {
-    // ✅ OFFICIAL BEST PRACTICE: Use stream() method for reactive translations
-    // This handles both initial loading AND language changes automatically
-    // Reference: https://ngx-translate.org/v15/reference/translate-service-api
-    this.menuSubscription = combineLatest([
+    // Watch for authentication changes and update cart accordingly
+    this.authSubscription = this.authService.isAuthenticated$.subscribe(isAuthenticated => {
+      this.cartStore.onAuthenticationChange(isAuthenticated);
+    });
+    
+    // ✅ Keep translation observable - it works fine and changes rarely
+    // Only update the signal when translations change
+    this.translationSubscription = combineLatest([
       this.translateService.stream('NAVIGATION.HOME'),
       this.translateService.stream('NAVIGATION.PRODUCTS'),
       this.translateService.stream('NAVIGATION.CATEGORIES'),
       this.translateService.stream('NAVIGATION.BRANDS'),
       this.translateService.stream('NAVIGATION.CART')
     ]).subscribe(([home, products, categories, brands, cart]) => {
-      this.menuItems = [
-        {
-          label: home,
-          icon: PrimeIcons.HOME,
-          routerLink: '/'
-        },
-        {
-          label: products,
-          icon: PrimeIcons.SHOPPING_BAG,
-          routerLink: '/products'
-        },
-        {
-          label: categories,
-          icon: PrimeIcons.LIST,
-          routerLink: '/categories'
-        },
-        {
-          label: brands,
-          icon: PrimeIcons.BOOKMARK,
-          routerLink: '/brands'
-        },
-        {
-          label: cart,
-          icon: PrimeIcons.SHOPPING_CART,
-          routerLink: '/cart',
-          badge: '0' // Will be dynamic based on cart items
-        }
-      ];
+      // Update translation signal - menuItems computed will auto-update
+      this.translationStrings.set({ home, products, categories, brands, cart });
     });
   }
 
   ngOnDestroy(): void {
-    this.menuSubscription?.unsubscribe();
+    this.translationSubscription?.unsubscribe();
+    this.authSubscription?.unsubscribe();
   }
 
   toggleLanguage(): void {
@@ -109,5 +136,12 @@ export class Header implements OnInit, OnDestroy {
    */
   navigateToRegister(): void {
     this.authService.navigateToRegister();
+  }
+
+  /**
+   * Get cart summary for template (if needed elsewhere)
+   */
+  getCartSummary() {
+    return this.cartStore.summary();
   }
 }

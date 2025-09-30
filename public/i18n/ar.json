@@ -56,14 +56,31 @@
     "RATING": "التقييم"
   },
   "CART": {
+    "TITLE": "سلة التسوق",
     "SHOPPING_CART": "سلة التسوق",
     "ITEM": "المنتج",
+    "ITEMS": "المنتجات",
     "QUANTITY": "الكمية",
     "TOTAL": "المجموع",
     "SUBTOTAL": "المجموع الفرعي",
+    "ORDER_SUMMARY": "ملخص الطلب",
     "CHECKOUT": "إتمام الشراء",
+    "PROCEED_TO_CHECKOUT": "المتابعة للدفع",
     "EMPTY_CART": "سلتك فارغة",
-    "CONTINUE_SHOPPING": "متابعة التسوق"
+    "EMPTY_TITLE": "سلة التسوق فارغة",
+    "EMPTY_MESSAGE": "يبدو أنك لم تقم بإضافة أي منتجات إلى سلتك بعد. ابدأ التسوق واعثر على منتجات رائعة!",
+    "START_SHOPPING": "ابدأ التسوق",
+    "CONTINUE_SHOPPING": "متابعة التسوق",
+    "CLEAR_CART": "إفراغ السلة",
+    "SAVED": "توفير",
+    "REMOVE": "إزالة"
+  },
+  "CHECKOUT": {
+    "TITLE": "إتمام الشراء",
+    "SUBTITLE": "أكمل عملية الشراء",
+    "COMING_SOON_TITLE": "قريباً!",
+    "COMING_SOON_MESSAGE": "وظيفة الدفع قيد التطوير حالياً. نحن نعمل بجد لتوفير تجربة دفع سلسة لك.",
+    "BACK_TO_CART": "العودة للسلة"
   },
   "FOOTER": {
     "GET_APP": "احصل على تطبيق فريش كارت",

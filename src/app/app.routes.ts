@@ -26,6 +26,11 @@ export const routes: Routes = [
     path: 'brands',
     loadChildren: () => import('./features/brands/brands.routes').then(m => m.brandsRoutes)
   },
+  // Cart feature routes - Shopping Cart
+  {
+    path: 'cart',
+    loadChildren: () => import('./features/cart/cart.routes').then(m => m.cartRoutes)
+  },
   // Redirect any unknown routes to home
   {
     path: '**',

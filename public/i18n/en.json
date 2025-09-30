@@ -56,14 +56,31 @@
     "RATING": "Rating"
   },
   "CART": {
+    "TITLE": "Shopping Cart",
     "SHOPPING_CART": "Shopping Cart",
     "ITEM": "Item",
+    "ITEMS": "Items",
     "QUANTITY": "Quantity",
     "TOTAL": "Total",
     "SUBTOTAL": "Subtotal",
+    "ORDER_SUMMARY": "Order Summary",
     "CHECKOUT": "Proceed to Checkout",
+    "PROCEED_TO_CHECKOUT": "Proceed to Checkout",
     "EMPTY_CART": "Your cart is empty",
-    "CONTINUE_SHOPPING": "Continue Shopping"
+    "EMPTY_TITLE": "Your cart is empty",
+    "EMPTY_MESSAGE": "Looks like you haven't added anything to your cart yet. Start shopping to find amazing products!",
+    "START_SHOPPING": "Start Shopping",
+    "CONTINUE_SHOPPING": "Continue Shopping",
+    "CLEAR_CART": "Clear Cart",
+    "SAVED": "Saved",
+    "REMOVE": "Remove"
+  },
+  "CHECKOUT": {
+    "TITLE": "Checkout",
+    "SUBTITLE": "Complete your purchase",
+    "COMING_SOON_TITLE": "Coming Soon!",
+    "COMING_SOON_MESSAGE": "Checkout functionality is currently under development. We're working hard to bring you a seamless checkout experience.",
+    "BACK_TO_CART": "Back to Cart"
   },
   "FOOTER": {
     "GET_APP": "Get the FreshCart app",

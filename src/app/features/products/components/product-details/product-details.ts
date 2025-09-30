@@ -21,6 +21,7 @@ import { ChipModule } from 'primeng/chip';
 import { ProductsService } from '../../services/products';
 import { Product, ProductDetails } from '../../models/product.model';
 import { ProductCard } from '../../../../shared/components/product-card/product-card';
+import { CartStore } from '../../../cart/store/cart.store';
 
 interface GalleryImage {
   itemImageSrc: string;
@@ -60,6 +61,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly productsService = inject(ProductsService);
+  private readonly cartStore = inject(CartStore);
   private readonly destroy$ = new Subject<void>();
 
   // Component state
@@ -135,8 +137,23 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   });
 
   readonly canAddToCart = computed(() => {
-    return this.isInStock() && this.quantity() > 0 && this.quantity() <= this.maxQuantity();
+    return this.isInStock() && this.quantity() > 0 && this.quantity() <= this.maxQuantity() && !this.cartStore.isLoading();
   });
+
+  // Cart-related computed properties
+  readonly isInCart = computed(() => {
+    const product = this.product();
+    if (!product) return false;
+    return this.cartStore.isProductInCart()(product._id);
+  });
+
+  readonly cartQuantity = computed(() => {
+    const product = this.product();
+    if (!product) return 0;
+    return this.cartStore.getProductQuantity()(product._id);
+  });
+
+  readonly isAddingToCart = computed(() => this.cartStore.isLoading());
 
   ngOnInit(): void {
     this.route.paramMap
@@ -215,16 +232,16 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Add to cart
+   * Add to cart using CartStore
    */
   addToCart(): void {
     const prod = this.product();
     if (!prod || !this.canAddToCart()) return;
 
-    // TODO: Implement add to cart functionality
-    console.log('Adding to cart:', {
-      product: prod._id,
-      quantity: this.quantity()
+    // Use CartStore to add product to cart
+    this.cartStore.addToCart({ 
+      product: prod, 
+      quantity: this.quantity() 
     });
   }
 

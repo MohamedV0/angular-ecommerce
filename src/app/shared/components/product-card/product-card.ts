@@ -11,6 +11,7 @@ import { ChipModule } from 'primeng/chip';
 
 // Feature Imports
 import { Product } from '../../../features/products/models/product.model';
+import { CartStore } from '../../../features/cart/store/cart.store';
 
 /**
  * ProductCard Component
@@ -34,6 +35,7 @@ import { Product } from '../../../features/products/models/product.model';
 })
 export class ProductCard {
   private readonly router = inject(Router);
+  private readonly cartStore = inject(CartStore);
   
   // Input signals
   readonly product = input.required<Product>();
@@ -61,9 +63,22 @@ export class ProductCard {
 
   readonly isInStock = computed(() => this.product().quantity > 0);
 
-  // Template method aliases for computed properties
-  getCurrentPrice = () => this.currentPrice();
-  getDiscountPercentage = () => this.discountPercentage();
+  // Cart-related computed properties
+  readonly isInCart = computed(() => {
+    const productId = this.product()._id;
+    return this.cartStore.isProductInCart()(productId);
+  });
+
+  readonly cartQuantity = computed(() => {
+    const productId = this.product()._id;
+    return this.cartStore.getProductQuantity()(productId);
+  });
+
+  readonly isAddingToCart = computed(() => this.cartStore.isLoading());
+
+  readonly canAddToCart = computed(() => {
+    return this.isInStock() && !this.isAddingToCart();
+  });
 
   /**
    * Navigate to product details page
@@ -90,17 +105,20 @@ export class ProductCard {
   }
 
   /**
-   * Add product to cart (placeholder implementation)
+   * Add product to cart using CartStore
    */
   private addToCart(): void {
     const prod = this.product();
-    if (!this.isInStock()) {
-      console.warn('Cannot add out of stock product to cart:', prod.title);
+    if (!this.canAddToCart()) {
+      console.warn('Cannot add product to cart:', prod.title);
       return;
     }
     
-    // TODO: Implement cart service integration
-    console.log('Add to cart:', prod.title);
+    // Use CartStore to add product to cart
+    this.cartStore.addToCart({ 
+      product: prod, 
+      quantity: 1 
+    });
   }
 
   /**
