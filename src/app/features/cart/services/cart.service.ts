@@ -6,8 +6,9 @@ import { ApiService } from '../../../core/services/api';
 import { StorageService } from '../../../core/services/storage';
 import { AuthService } from '../../auth/services/auth';
 import { extractErrorMessage } from '../../../shared/utils/error.utils';
-import { CartApiResponse, CartProductObject } from '../../../core/models/api-response.model';
 import { 
+  CartApiResponse,
+  CartProductObject,
   CartItem, 
   AddToCartRequest, 
   UpdateCartItemRequest, 

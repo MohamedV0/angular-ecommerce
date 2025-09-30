@@ -1,5 +1,4 @@
-import { CartItem } from '../../features/cart/models/cart.model';
-import { CartProductObject } from '../../core/models/api-response.model';
+import { CartItem, CartProductObject } from '../../features/cart/models/cart.model';
 import { Product } from '../../features/products/models/product.model';
 
 /**

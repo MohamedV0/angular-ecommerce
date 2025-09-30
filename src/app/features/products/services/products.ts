@@ -8,8 +8,7 @@ import { CollectionResponse, SingleItemResponse } from '../../../core/models/api
 import { 
   Product, 
   ProductQueryParams, 
-  ProductDetails,
-  ProductSearchResult 
+  ProductDetails
 } from '../models/product.model';
 
 /**

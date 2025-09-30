@@ -26,14 +26,6 @@ export interface BrandQueryParams {
   sort?: string;                        // Sort field (e.g., "name", "-createdAt")
 }
 
-/**
- * Brand Details Interface
- * Extended brand information with products
- */
-export interface BrandDetails extends Brand {
-  productsCount?: number;               // Number of products in this brand
-  description?: string;                 // Brand description (if available)
-}
 
 /**
  * Brand Reference Interface

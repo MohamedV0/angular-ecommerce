@@ -1,6 +1,9 @@
 // Product Models - Based on Real Route E-commerce API Response
 // Updated: 2025-01-27 - Pure Products Domain (Categories/Brands imported from their domains)
 
+import { BrandReference } from '../../brands/models/brand.model';
+import { CategoryReference } from '../../categories/models/category.model';
+
 /**
  * Product Interface - Matches API Response Structure
  * Based on real API response: GET /api/v1/products/{id}
@@ -27,28 +30,6 @@ export interface Product {
 }
 
 /**
- * Category Reference (embedded in Product) - Will import from categories domain
- * Note: These are simplified references for product use
- */
-export interface CategoryReference {
-  _id: string;
-  name: string;
-  slug: string;
-  image: string;
-}
-
-/**
- * Brand Reference (embedded in Product) - Will import from brands domain
- * Note: These are simplified references for product use
- */
-export interface BrandReference {
-  _id: string;
-  name: string;
-  slug: string;
-  image: string;
-}
-
-/**
  * Subcategory Reference (embedded in Product)
  */
 export interface SubcategoryReference {
@@ -72,23 +53,6 @@ export interface ProductQueryParams {
   'price[lte]'?: number;               // Price less than or equal
   brand?: string;                       // Brand ID filter
   'category[in]'?: string[];           // Category IDs filter (array)
-}
-
-/**
- * Product Card Display Interface
- * Simplified version for UI display components
- */
-export interface ProductCardData {
-  id: string;
-  title: string;
-  price: number;
-  priceAfterDiscount?: number;
-  image: string;
-  rating: number;
-  ratingCount: number;
-  brand?: string;
-  category?: string;
-  isInWishlist?: boolean;
 }
 
 /**
@@ -119,14 +83,3 @@ export interface ProductFilters {
   onSale: boolean;                      // Only show discounted items
 }
 
-/**
- * Product Search Result Interface
- * For search functionality
- */
-export interface ProductSearchResult {
-  query: string;
-  products: Product[];
-  totalResults: number;
-  filters: ProductFilters;
-  sortBy: string;
-}

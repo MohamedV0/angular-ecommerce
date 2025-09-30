@@ -48,16 +48,16 @@ export interface SubCategoryQueryParams {
 }
 
 /**
- * Category Card Display Interface
- * Simplified version for UI display components
+ * Category Reference Interface
+ * Used when category is nested in product objects
  */
-export interface CategoryCardData {
-  id: string;
-  name: string;
-  slug: string;
-  image: string;
-  productCount?: number;                // Optional: number of products in category
+export interface CategoryReference {
+  _id: string;                          // Category ID
+  name: string;                         // Category name
+  slug: string;                         // URL slug
+  image: string;                        // Category image URL
 }
+
 
 /**
  * Category Details Extended Interface
