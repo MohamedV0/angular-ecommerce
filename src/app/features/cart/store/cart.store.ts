@@ -28,11 +28,13 @@ import {
  * Initial Cart State
  * ✅ totalItems and totalPrice removed - now computed from items[]
  * ✅ ADDED: cartId initialization
+ * ✅ ADDED: loadingProductIds for per-product loading state (using array for immutability)
  */
 const initialCartState: CartState = {
   items: [],
   cartId: null,
   isLoading: false,
+  loadingProductIds: [],
   isSyncing: false,
   error: null,
   lastUpdated: Date.now(),
@@ -89,6 +91,12 @@ export const CartStore = signalStore(
     getProductQuantity: computed(() => (productId: string): number => {
       const item = state.items().find(item => item.product._id === productId);
       return item?.quantity || 0;
+    }),
+    
+    // Check if specific product is currently loading (being added/updated)
+    // ✅ Uses array.includes() - O(n) but negligible for typical use cases
+    isProductLoading: computed(() => (productId: string): boolean => {
+      return state.loadingProductIds().includes(productId);
     }),
     
     // Cart badge display (for header)
@@ -194,10 +202,21 @@ export const CartStore = signalStore(
     /**
      * Add product to cart - Reactive method using rxMethod
      * Following NgRx best practices with tapResponse
+     * ✅ Uses per-product loading state for better UX
+     * ✅ Uses immutable array operations (NgRx best practice)
      */
     addToCart: rxMethod<{ product: Product; quantity?: number }>(
       pipe(
-        tap(() => patchState(store, { isLoading: true, error: null })),
+        tap(({ product }) => {
+          // Add product to loading array (immutable spread)
+          const currentLoadingIds = store.loadingProductIds();
+          if (!currentLoadingIds.includes(product._id)) {
+            patchState(store, { 
+              loadingProductIds: [...currentLoadingIds, product._id],
+              error: null 
+            });
+          }
+        }),
         switchMap(({ product, quantity = 1 }) => {
           const isAuthenticated = store.isAuthenticated();
           
@@ -218,7 +237,12 @@ export const CartStore = signalStore(
                 error: (error) => patchState(store, {
                   error: error instanceof Error ? error.message : 'Failed to add product to cart'
                 }),
-                finalize: () => patchState(store, { isLoading: false })
+                finalize: () => {
+                  // Remove product from loading array (immutable filter)
+                  patchState(store, { 
+                    loadingProductIds: store.loadingProductIds().filter(id => id !== product._id)
+                  });
+                }
               })
             );
           } else {
@@ -269,7 +293,12 @@ export const CartStore = signalStore(
                 error: (error) => patchState(store, {
                   error: error instanceof Error ? error.message : 'Failed to add product to cart'
                 }),
-                finalize: () => patchState(store, { isLoading: false })
+                finalize: () => {
+                  // Remove product from loading array (immutable filter)
+                  patchState(store, { 
+                    loadingProductIds: store.loadingProductIds().filter(id => id !== product._id)
+                  });
+                }
               })
             );
           }

@@ -74,7 +74,11 @@ export class ProductCard {
     return this.cartStore.getProductQuantity()(productId);
   });
 
-  readonly isAddingToCart = computed(() => this.cartStore.isLoading());
+  // ✅ FIXED: Use per-product loading state instead of global
+  readonly isAddingToCart = computed(() => {
+    const productId = this.product()._id;
+    return this.cartStore.isProductLoading()(productId);
+  });
 
   readonly canAddToCart = computed(() => {
     return this.isInStock() && !this.isAddingToCart();

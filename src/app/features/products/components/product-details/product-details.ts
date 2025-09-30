@@ -137,7 +137,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   });
 
   readonly canAddToCart = computed(() => {
-    return this.isInStock() && this.quantity() > 0 && this.quantity() <= this.maxQuantity() && !this.cartStore.isLoading();
+    return this.isInStock() && this.quantity() > 0 && this.quantity() <= this.maxQuantity() && !this.isAddingToCart();
   });
 
   // Cart-related computed properties
@@ -153,7 +153,12 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     return this.cartStore.getProductQuantity()(product._id);
   });
 
-  readonly isAddingToCart = computed(() => this.cartStore.isLoading());
+  // ✅ FIXED: Use per-product loading state instead of global
+  readonly isAddingToCart = computed(() => {
+    const product = this.product();
+    if (!product) return false;
+    return this.cartStore.isProductLoading()(product._id);
+  });
 
   ngOnInit(): void {
     this.route.paramMap

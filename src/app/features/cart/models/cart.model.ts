@@ -88,7 +88,8 @@ export interface CartItem {
 export interface CartState {
   items: CartItem[];                    // Cart items
   cartId: string | null;                // Cart ID from API (required for checkout)
-  isLoading: boolean;                   // Loading state for operations
+  isLoading: boolean;                   // Loading state for operations (page-level operations)
+  loadingProductIds: string[];          // ✅ Product IDs currently being added/updated (per-product loading)
   isSyncing: boolean;                   // Syncing local cart with server
   error: string | null;                 // Error message if any
   lastUpdated: number;                  // Timestamp of last update
