@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withInMemoryScrolling, withViewTransitions } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
@@ -22,7 +22,16 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
+    provideRouter(
+      routes,
+      // ✅ Industry Standard: Automatic scroll restoration on navigation
+      withInMemoryScrolling({
+        scrollPositionRestoration: 'top',    // Always scroll to top on route change
+        anchorScrolling: 'enabled'            // Enable anchor fragment scrolling
+      }),
+      // ✅ Modern Angular: Smooth View Transitions API (Chrome 111+)
+      withViewTransitions()
+    ),
     provideHttpClient(withInterceptors([authHeaderInterceptor])),
     provideAnimationsAsync(), // Required by PrimeNG (deprecated in v20.2, but still needed until v23)
     MessageService, // ✅ Global MessageService for Toast notifications
