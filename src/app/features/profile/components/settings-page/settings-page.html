@@ -1,12 +1,12 @@
 <!-- Settings Page - Pure PrimeNG + Tailwind CSS -->
-<div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+<div class="min-h-screen">
 
   <!-- Page Header -->
-  <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+  <div class="border-b border-surface shadow-sm">
     <div class="max-w-4xl mx-auto px-4 py-6">
       <div class="flex items-center gap-3">
-        <i class="pi pi-cog text-2xl text-primary-500"></i>
-        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+        <i class="pi pi-cog text-2xl text-primary"></i>
+        <h1 class="text-2xl font-bold text-color">
           Account Settings
         </h1>
       </div>
@@ -18,9 +18,9 @@
     <!-- Profile Information Card -->
     <p-card>
       <ng-template pTemplate="header">
-        <div class="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800">
-          <i class="pi pi-user text-primary-500"></i>
-          <h3 class="font-semibold text-gray-900 dark:text-white">Profile Information</h3>
+        <div class="flex items-center gap-3 p-4 bg-emphasis">
+          <i class="pi pi-user text-primary"></i>
+          <h3 class="font-semibold text-color">Profile Information</h3>
         </div>
       </ng-template>
       
@@ -39,7 +39,7 @@
         
         <!-- Full Name -->
         <div class="flex flex-col gap-2">
-          <label for="name" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label for="name" class="text-sm font-medium text-color">
             Full Name <span class="text-red-500">*</span>
           </label>
           <input 
@@ -64,7 +64,7 @@
 
         <!-- Email -->
         <div class="flex flex-col gap-2">
-          <label for="email" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label for="email" class="text-sm font-medium text-color">
             Email Address <span class="text-red-500">*</span>
           </label>
           <input 
@@ -89,7 +89,7 @@
 
         <!-- Phone -->
         <div class="flex flex-col gap-2">
-          <label for="phone" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label for="phone" class="text-sm font-medium text-color">
             Phone Number <span class="text-red-500">*</span>
           </label>
           <input 
@@ -113,7 +113,7 @@
         </div>
 
         <!-- Form Actions -->
-        <div class="flex justify-end gap-2 pt-4 border-t border-gray-200 dark:border-gray-700">
+        <div class="flex justify-end gap-2 pt-4 border-t border-surface">
           <p-button 
             label="Reset" 
             severity="secondary"
@@ -138,9 +138,9 @@
     <!-- Change Password Card -->
     <p-card>
       <ng-template pTemplate="header">
-        <div class="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800">
-          <i class="pi pi-lock text-primary-500"></i>
-          <h3 class="font-semibold text-gray-900 dark:text-white">Change Password</h3>
+        <div class="flex items-center gap-3 p-4 bg-emphasis">
+          <i class="pi pi-lock text-primary"></i>
+          <h3 class="font-semibold text-color">Change Password</h3>
         </div>
       </ng-template>
       
@@ -159,7 +159,7 @@
         
         <!-- Current Password -->
         <div class="flex flex-col gap-2">
-          <label for="currentPassword" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label for="currentPassword" class="text-sm font-medium text-color">
             Current Password <span class="text-red-500">*</span>
           </label>
           <p-password 
@@ -180,7 +180,7 @@
 
         <!-- New Password -->
         <div class="flex flex-col gap-2">
-          <label for="password" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label for="password" class="text-sm font-medium text-color">
             New Password <span class="text-red-500">*</span>
           </label>
           <p-password 
@@ -209,7 +209,7 @@
 
         <!-- Confirm Password -->
         <div class="flex flex-col gap-2">
-          <label for="rePassword" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label for="rePassword" class="text-sm font-medium text-color">
             Confirm New Password <span class="text-red-500">*</span>
           </label>
           <p-password 
@@ -229,10 +229,10 @@
         </div>
 
         <!-- Security Note -->
-        <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-700">
+        <div class="p-4 bg-emphasis rounded-lg border border-surface">
           <div class="flex items-start gap-3">
-            <i class="pi pi-info-circle text-blue-600 mt-1"></i>
-            <div class="text-sm text-blue-700 dark:text-blue-300">
+            <i class="pi pi-info-circle text-primary mt-1"></i>
+            <div class="text-sm text-muted-color">
               <p class="font-medium mb-1">Password Requirements:</p>
               <ul class="list-disc list-inside space-y-1">
                 <li>At least 8 characters long</li>
@@ -245,7 +245,7 @@
         </div>
 
         <!-- Form Actions -->
-        <div class="flex justify-end gap-2 pt-4 border-t border-gray-200 dark:border-gray-700">
+        <div class="flex justify-end gap-2 pt-4 border-t border-surface">
           <p-button 
             label="Cancel" 
             severity="secondary"
@@ -270,26 +270,25 @@
     <!-- Account Information Card -->
     <p-card>
       <ng-template pTemplate="header">
-        <div class="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800">
-          <i class="pi pi-info-circle text-primary-500"></i>
-          <h3 class="font-semibold text-gray-900 dark:text-white">Account Information</h3>
+        <div class="flex items-center gap-3 p-4 bg-emphasis">
+          <i class="pi pi-info-circle text-primary"></i>
+          <h3 class="font-semibold text-color">Account Information</h3>
         </div>
       </ng-template>
       
       <div class="space-y-4">
-        <div class="flex justify-between items-center pb-3 border-b border-gray-200 dark:border-gray-700">
-          <span class="text-gray-600 dark:text-gray-400">Account Role</span>
+        <div class="flex justify-between items-center pb-3 border-b border-surface">
+          <span class="text-muted-color">Account Role</span>
           <p-tag 
             [value]="currentUser()?.role || 'user'"
-            severity="info"
             [rounded]="true">
           </p-tag>
         </div>
         
         @if (currentUser()?.createdAt) {
           <div class="flex justify-between items-center">
-            <span class="text-gray-600 dark:text-gray-400">Member Since</span>
-            <span class="font-medium text-gray-900 dark:text-white">
+            <span class="text-muted-color">Member Since</span>
+            <span class="font-medium text-color">
               {{ currentUser()!.createdAt | date:'longDate' }}
             </span>
           </div>
