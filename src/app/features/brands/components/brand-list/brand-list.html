@@ -1,8 +1,8 @@
 <!-- Enhanced Brand List Page - Pure PrimeNG + Tailwind CSS -->
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+<div class="min-h-screen">
   
   <!-- Compact Page Header -->
-  <div class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 shadow-sm">
+  <div class="border-b border-surface shadow-sm">
     <div class="max-w-7xl mx-auto px-4 py-6">
       
       <!-- Title and Controls Row -->
@@ -10,13 +10,13 @@
         
         <!-- Left: Title and Icon -->
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center">
-            <i class="pi pi-bookmark text-white text-lg"></i>
+          <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
+            <i class="pi pi-bookmark text-primary-contrast text-lg"></i>
           </div>
           <div>
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Brands</h1>
+            <h1 class="text-2xl font-bold text-color">Brands</h1>
             @if (!loading() && hasBrands()) {
-              <p class="text-sm text-gray-500 dark:text-gray-400">
+              <p class="text-sm text-muted-color">
                 {{ totalBrands() | number }} brands available
                 @if (searchQuery()) {
                   <span class="ml-1">for "{{ searchQuery() }}"</span>
@@ -53,11 +53,11 @@
     @if (loading() && !hasBrands()) {
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
         @for (i of [1,2,3,4,5,6,7,8,9,10,11,12]; track i) {
-          <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-            <p-skeleton shape="circle" size="5rem" class="mb-3 mx-auto block"></p-skeleton>
-            <p-skeleton width="100%" height="1rem" class="mb-2"></p-skeleton>
-            <p-skeleton width="60%" height="0.75rem" class="mx-auto"></p-skeleton>
-          </div>
+          <p-card class="shadow-sm">
+            <p-skeleton shape="circle" size="5rem" styleClass="mb-3 mx-auto block"></p-skeleton>
+            <p-skeleton width="100%" height="1rem" styleClass="mb-2"></p-skeleton>
+            <p-skeleton width="60%" height="0.75rem" styleClass="mx-auto"></p-skeleton>
+          </p-card>
         }
       </div>
     }
@@ -84,29 +84,26 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 mb-6">
           @for (brand of brands(); track brand._id) {
             <div 
-              class="group bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 
-                     hover:shadow-lg hover:border-purple-300 dark:hover:border-purple-600 
-                     transition-all duration-300 cursor-pointer"
+              class="group relative overflow-hidden rounded-xl border border-surface shadow-sm hover:shadow-xl hover:border-primary transition-all duration-300 cursor-pointer"
               (click)="navigateToBrand(brand)"
               [attr.aria-label]="'View ' + brand.name + ' brand'">
               
               <!-- Brand Logo -->
-              <div class="relative mb-3 aspect-square flex items-center justify-center bg-gray-50 dark:bg-gray-900 rounded-lg overflow-hidden">
+              <div class="relative aspect-square flex items-center justify-center bg-surface-100 rounded-lg overflow-hidden p-4">
                 <img 
                   [src]="brand.image" 
                   [alt]="brand.name"
-                  class="w-full h-full object-contain p-2 group-hover:scale-110 transition-transform duration-300"
+                  class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
                   loading="lazy"
                 />
               </div>
               
               <!-- Brand Info -->
-              <div class="text-center">
-                <h3 class="font-semibold text-gray-900 dark:text-white text-sm mb-1 line-clamp-1 
-                           group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+              <div class="text-center p-4">
+                <h3 class="font-semibold text-color text-sm mb-1 line-clamp-1 group-hover:text-primary transition-colors">
                   {{ brand.name }}
                 </h3>
-                <p class="text-xs text-gray-500 dark:text-gray-400">
+                <p class="text-xs text-muted-color">
                   View Products →
                 </p>
               </div>
@@ -116,7 +113,7 @@
         
         <!-- Pagination -->
         @if (totalPages() > 1) {
-          <div class="mt-12 border-t border-gray-200 dark:border-gray-700 pt-8">
+          <div class="mt-12 border-t border-surface pt-8">
             <div class="flex flex-col items-center gap-4">
               <p-paginator
                 [rows]="itemsPerPage()"
@@ -141,11 +138,11 @@
     @else if (!loading() && !error()) {
       <div class="flex justify-center items-center py-12">
         <div class="text-center max-w-md">
-          <i class="pi pi-bookmark text-6xl text-gray-300 dark:text-gray-600 mb-4"></i>
-          <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          <i class="pi pi-bookmark text-6xl text-muted-color mb-4"></i>
+          <h3 class="text-xl font-semibold text-color mb-2">
             No brands found
           </h3>
-          <p class="text-gray-500 dark:text-gray-400 mb-4">
+          <p class="text-muted-color mb-4">
             @if (searchQuery()) {
               No brands match your search "{{ searchQuery() }}"
             } @else {

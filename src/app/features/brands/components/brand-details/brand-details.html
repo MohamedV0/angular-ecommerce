@@ -1,5 +1,5 @@
 <!-- Enhanced Brand Details Page - Pure PrimeNG + Tailwind CSS -->
-<div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+<div class="min-h-screen">
   
   <!-- Loading State -->
   @if (loading() && !brand()) {
@@ -9,27 +9,27 @@
       <p-skeleton width="250px" height="1.5rem"></p-skeleton>
       
       <!-- Brand Header Skeleton -->
-      <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+      <p-card class="shadow-sm">
         <div class="flex items-center gap-6">
           <p-skeleton shape="circle" size="4rem"></p-skeleton>
           <div class="flex-1">
-            <p-skeleton width="60%" height="2rem" class="mb-3"></p-skeleton>
+            <p-skeleton width="60%" height="2rem" styleClass="mb-3"></p-skeleton>
             <p-skeleton width="40%" height="1rem"></p-skeleton>
           </div>
         </div>
-      </div>
+      </p-card>
       
       <!-- Products Skeleton -->
       <div class="py-6">
         <div class="max-w-7xl mx-auto px-4">
-          <p-skeleton width="150px" height="1.5rem" class="mb-4"></p-skeleton>
+          <p-skeleton width="150px" height="1.5rem" styleClass="mb-4"></p-skeleton>
           <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
             @for (i of [1,2,3,4,5,6]; track i) {
-              <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-                <p-skeleton width="100%" height="150px" class="mb-3"></p-skeleton>
-                <p-skeleton width="100%" height="1rem" class="mb-2"></p-skeleton>
+              <p-card class="shadow-sm h-64">
+                <p-skeleton width="100%" height="150px" styleClass="mb-3"></p-skeleton>
+                <p-skeleton width="100%" height="1rem" styleClass="mb-2"></p-skeleton>
                 <p-skeleton width="60%" height="0.75rem"></p-skeleton>
-              </div>
+              </p-card>
             }
           </div>
         </div>
@@ -59,7 +59,7 @@
     <div>
       
       <!-- Breadcrumb Navigation -->
-      <div class="border-b border-gray-200 dark:border-gray-700">
+      <div class="border-b border-surface">
         <div class="max-w-7xl mx-auto px-4 py-4">
           <p-breadcrumb 
             [model]="breadcrumbItems()" 
@@ -71,14 +71,13 @@
       </div>
       
       <!-- Brand Header Section - Compact Design -->
-      <div class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+      <div class="border-b border-surface shadow-sm">
         <div class="max-w-7xl mx-auto px-4 py-6">
           <div class="flex items-center gap-6">
             
             <!-- Brand Logo - Circular, Compact -->
             <div class="flex-shrink-0">
-              <div class="w-16 h-16 rounded-full bg-white dark:bg-gray-800 border-2 border-purple-200 dark:border-purple-700 
-                          flex items-center justify-center overflow-hidden shadow-md">
+              <div class="w-16 h-16 rounded-full bg-surface-100 border-2 border-primary/20 flex items-center justify-center overflow-hidden shadow-md">
                 <img 
                   [src]="brand()!.image" 
                   [alt]="brand()!.name"
@@ -89,10 +88,10 @@
             
             <!-- Brand Info -->
             <div class="flex-1 min-w-0">
-              <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-1">
+              <h1 class="text-2xl font-bold text-color mb-1">
                 {{ brand()!.name }}
               </h1>
-              <p class="text-sm text-gray-500 dark:text-gray-400">
+              <p class="text-sm text-muted-color">
                 Discover products from {{ brand()!.name }}
               </p>
             </div>
@@ -132,7 +131,7 @@
           <div class="max-w-7xl mx-auto px-4">
             
             <div class="flex items-center justify-between mb-4">
-              <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+              <h2 class="text-lg font-semibold text-color">
                 Featured Products
               </h2>
             </div>
@@ -151,11 +150,11 @@
         <div class="py-12">
           <div class="max-w-7xl mx-auto px-4">
             <div class="text-center">
-              <i class="pi pi-inbox text-5xl text-gray-300 dark:text-gray-600 mb-4"></i>
-              <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
+              <i class="pi pi-inbox text-5xl text-muted-color mb-4"></i>
+              <h3 class="text-xl font-semibold text-color mb-2">
                 No products available
               </h3>
-              <p class="text-gray-500 dark:text-gray-400">
+              <p class="text-muted-color">
                 Products from {{ brand()!.name }} will appear here soon
               </p>
             </div>
