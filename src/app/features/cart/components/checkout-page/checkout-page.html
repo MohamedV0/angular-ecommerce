@@ -44,32 +44,58 @@
 
     <!-- Error State -->
     @else if (error()) {
-      <div class="max-w-md mx-auto text-center">
-        <p-card class="shadow-sm">
-          <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
-            <i class="pi pi-exclamation-triangle text-2xl text-red-600" aria-hidden="true"></i>
+      <div class="max-w-2xl mx-auto text-center">
+        
+        <!-- Error Icon and Header -->
+        <div class="mb-8">
+          <div class="w-24 h-24 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+            <i class="pi pi-exclamation-triangle text-4xl text-white"></i>
           </div>
-          <h2 class="text-xl font-bold text-color mb-4">Checkout Error</h2>
-          <p-message
-            severity="error"
-            [text]="error()"
-            class="mb-6 text-left">
-          </p-message>
-          <div class="flex gap-3 justify-center">
-            <p-button
-              label="Back to Cart"
-              icon="pi pi-arrow-left"
-              routerLink="/cart"
-              severity="secondary">
-            </p-button>
-            <p-button
-              label="Try Again"
-              icon="pi pi-refresh"
-              (click)="retryCheckout()"
-              severity="primary">
-            </p-button>
+          <h1 class="text-3xl font-bold text-color mb-4">
+            Checkout Error
+          </h1>
+          <p class="text-lg text-muted-color">
+            We encountered a problem while processing your checkout.
+          </p>
+        </div>
+
+        <!-- Error Details Card -->
+        <p-card class="mb-8 shadow-sm">
+          <ng-template pTemplate="header">
+            <div class="flex items-center gap-3 p-4 bg-emphasis">
+              <i class="pi pi-info-circle text-red-600"></i>
+              <h3 class="font-semibold text-color">Error Details</h3>
+            </div>
+          </ng-template>
+          
+          <div class="text-left">
+            <p-message 
+              severity="error" 
+              [text]="error()"
+              class="text-left">
+            </p-message>
           </div>
         </p-card>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <p-button 
+            label="Try Again"
+            icon="pi pi-refresh"
+            (click)="retryCheckout()"
+            severity="primary"
+            size="large">
+          </p-button>
+          <p-button 
+            label="Back to Cart"
+            icon="pi pi-arrow-left"
+            routerLink="/cart"
+            severity="secondary"
+            [outlined]="true"
+            size="large">
+          </p-button>
+        </div>
+
       </div>
     }
 
