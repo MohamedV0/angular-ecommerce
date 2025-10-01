@@ -167,6 +167,18 @@ export class Header implements OnInit, OnDestroy {
   }
 
   /**
+   * Get first name only for mobile display
+   * Extracts first name from full name (e.g., "Mohamed Ashraf" -> "Mohamed")
+   */
+  getFirstName(): string | null {
+    const fullName = this.authService.getCurrentUserName();
+    if (!fullName) return null;
+    
+    // Split by space and return first part
+    return fullName.split(' ')[0];
+  }
+
+  /**
    * Handle user logout
    */
   logout(): void {

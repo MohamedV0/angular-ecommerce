@@ -33,12 +33,24 @@
         <!-- Authentication Buttons -->
         @if (isAuthenticated()) {
           <!-- Authenticated User Dropdown -->
+          <!-- Mobile: Show first name only -->
           <p-button 
             [icon]="'pi pi-user'"
-            severity="secondary" 
+            severity="primary" 
+            [text]="true"
+            [label]="getFirstName() || 'User'"
+            (click)="userMenu.toggle($event)"
+            styleClass="md:!hidden">
+          </p-button>
+          
+          <!-- Desktop: Show full name -->
+          <p-button 
+            [icon]="'pi pi-user'"
+            severity="primary" 
             [text]="true"
             [label]="getCurrentUserName() || 'User'"
-            (click)="userMenu.toggle($event)">
+            (click)="userMenu.toggle($event)"
+            styleClass="!hidden md:!inline-flex">
           </p-button>
           
           <!-- User Dropdown Menu -->
@@ -52,7 +64,7 @@
           <!-- Guest User Actions -->
           <p-button 
             [icon]="'pi pi-sign-in'"
-            severity="secondary" 
+            severity="primary" 
             [text]="true"
             [label]="'AUTH.HEADER_LOGIN' | translate"
             (click)="navigateToLogin()"
@@ -61,7 +73,7 @@
           
           <p-button 
             [icon]="'pi pi-user-plus'"
-            severity="success" 
+            severity="primary" 
             [text]="true"
             [label]="'AUTH.HEADER_REGISTER' | translate"
             (click)="navigateToRegister()"

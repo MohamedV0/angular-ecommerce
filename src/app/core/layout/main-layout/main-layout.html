@@ -2,21 +2,21 @@
 <p-toast position="top-right" [life]="3000" />
 
 <!-- Main Layout Structure - Header + Content + Footer -->
-<div class="main-layout-container min-h-screen flex flex-col">
+<!-- ✅ Using Tailwind classes only - no custom CSS needed -->
+<div class="min-h-screen flex flex-col">
   
-  <!-- Header Section -->
-  <header class="layout-header">
+  <!-- Header Section - Sticky with proper z-index -->
+  <header class="sticky top-0 z-[1000]">
     <app-header></app-header>
   </header>
   
-  <!-- Main Content Area -->
-  <main class="layout-main flex-1">
-    <!-- Router outlet for page content -->
+  <!-- Main Content Area - Flex grow to fill space -->
+  <main class="flex-1">
     <router-outlet></router-outlet>
   </main>
   
-  <!-- Footer Section -->
-  <footer class="layout-footer">
+  <!-- Footer Section - Pushed to bottom -->
+  <footer class="mt-auto">
     <app-footer></app-footer>
   </footer>
   
