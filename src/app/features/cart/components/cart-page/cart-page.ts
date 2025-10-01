@@ -11,7 +11,6 @@ import { MessageModule } from 'primeng/message';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TagModule } from 'primeng/tag';
 import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
 
 // Translation
 import { TranslatePipe } from '@ngx-translate/core';
@@ -40,7 +39,6 @@ import { formatPrice, getProductImageUrl, trackCartItem } from '../../../../shar
     MessageModule,
     SkeletonModule,
     TagModule,
-    ToastModule,
     // Translation
     TranslatePipe
   ],

@@ -8,7 +8,6 @@ import { BadgeModule } from 'primeng/badge';
 import { CardModule } from 'primeng/card';
 import { MessageModule } from 'primeng/message';
 import { SkeletonModule } from 'primeng/skeleton';
-import { ToastModule } from 'primeng/toast';
 
 // Feature Imports
 import { WishlistStore } from '../../store/wishlist.store';
@@ -30,7 +29,6 @@ import { ProductCard } from '../../../../shared/components/product-card/product-
     CardModule,
     MessageModule,
     SkeletonModule,
-    ToastModule,
     // Shared Components
     ProductCard
   ],

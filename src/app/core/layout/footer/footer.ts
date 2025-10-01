@@ -9,7 +9,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { MessageModule } from 'primeng/message';
-import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { MessageService } from 'primeng/api';
@@ -25,7 +24,6 @@ import { MessageService } from 'primeng/api';
     InputGroupModule,
     InputGroupAddonModule,
     MessageModule,
-    ToastModule,
     CardModule,
     DividerModule
   ],

@@ -7,7 +7,6 @@ import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { SkeletonModule } from 'primeng/skeleton';
-import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 
 // Feature Imports
@@ -34,7 +33,6 @@ import { OrderSummaryComponent } from '../order-summary/order-summary';
     ButtonModule,
     MessageModule,
     SkeletonModule,
-    ToastModule,
     // Sub-components
     CheckoutFormComponent,
     PaymentMethodSelectorComponent,
