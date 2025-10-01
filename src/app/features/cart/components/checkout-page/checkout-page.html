@@ -1,12 +1,12 @@
 <!-- Refactored Checkout Page - Clean Component Architecture -->
-<div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+<div class="min-h-screen">
 
   <!-- Page Header -->
-  <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+  <div class="border-b border-surface shadow-sm">
     <div class="container mx-auto px-4 py-6">
       <div class="flex items-center gap-3">
-        <i class="pi pi-credit-card text-2xl text-primary-500" aria-hidden="true"></i>
-        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+        <i class="pi pi-credit-card text-2xl text-primary" aria-hidden="true"></i>
+        <h1 class="text-2xl font-bold text-color">
           Checkout
         </h1>
       </div>
@@ -45,11 +45,11 @@
     <!-- Error State -->
     @else if (error()) {
       <div class="max-w-md mx-auto text-center">
-        <div class="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-sm border border-gray-200 dark:border-gray-700">
-          <div class="w-16 h-16 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-6">
-            <i class="pi pi-exclamation-triangle text-2xl text-red-600 dark:text-red-400" aria-hidden="true"></i>
+        <p-card class="shadow-sm">
+          <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
+            <i class="pi pi-exclamation-triangle text-2xl text-red-600" aria-hidden="true"></i>
           </div>
-          <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Checkout Error</h2>
+          <h2 class="text-xl font-bold text-color mb-4">Checkout Error</h2>
           <p-message
             severity="error"
             [text]="error()"
@@ -69,7 +69,7 @@
               severity="primary">
             </p-button>
           </div>
-        </div>
+        </p-card>
       </div>
     }
 

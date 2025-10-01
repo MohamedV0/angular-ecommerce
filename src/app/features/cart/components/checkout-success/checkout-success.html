@@ -1,0 +1,120 @@
+<div class="min-h-screen">
+  <div class="container mx-auto px-4 py-12">
+    
+    <div class="max-w-2xl mx-auto text-center">
+      
+      <!-- Success Icon and Header -->
+      <div class="mb-8">
+        <div class="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
+          <i class="pi pi-check text-4xl text-white"></i>
+        </div>
+        <h1 class="text-3xl font-bold text-color mb-4">
+          Order Placed Successfully!
+        </h1>
+        <p class="text-lg text-muted-color">
+          Thank you for your purchase. Your order has been confirmed.
+        </p>
+      </div>
+
+      <!-- Order Details Card -->
+      <p-card class="mb-8">
+        <ng-template pTemplate="header">
+          <div class="flex items-center gap-3 p-4 bg-green-50">
+            <i class="pi pi-receipt text-green-600"></i>
+            <h3 class="font-semibold text-color">Order Details</h3>
+          </div>
+        </ng-template>
+        
+        <div class="space-y-4 text-left">
+          @if (orderId()) {
+            <div class="flex justify-between items-center">
+              <span class="text-muted-color font-medium">Order ID:</span>
+              <p-badge 
+                [value]="orderId()!" 
+                severity="info"
+                class="font-mono">
+              </p-badge>
+            </div>
+          }
+          
+          @if (paymentMethod()) {
+            <div class="flex justify-between items-center">
+              <span class="text-muted-color font-medium">Payment Method:</span>
+              <span class="font-semibold text-color">
+                {{ getPaymentMethodLabel() }}
+              </span>
+            </div>
+          }
+          
+          <div class="flex justify-between items-center">
+            <span class="text-muted-color font-medium">Order Date:</span>
+            <span class="font-semibold text-color">
+              {{ getCurrentDate() }}
+            </span>
+          </div>
+          
+          <p-divider></p-divider>
+          
+          @if (paymentMethod() === 'cash') {
+            <p-message 
+              severity="info" 
+              [text]="'Your order will be delivered and you can pay cash on delivery.'"
+              class="text-left">
+            </p-message>
+          } @else {
+            <p-message 
+              severity="success" 
+              [text]="'Payment has been processed successfully. Your order is being prepared.'"
+              class="text-left">
+            </p-message>
+          }
+        </div>
+      </p-card>
+
+      <!-- Next Steps -->
+      <div class="mb-8">
+        <h3 class="text-xl font-semibold text-color mb-4">
+          What's Next?
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+          <p-card class="shadow-sm">
+            <i class="pi pi-clock text-2xl text-primary mb-2"></i>
+            <h4 class="font-medium text-color mb-1">Processing</h4>
+            <p class="text-sm text-muted-color">We're preparing your order</p>
+          </p-card>
+          <p-card class="shadow-sm">
+            <i class="pi pi-truck text-2xl text-primary mb-2"></i>
+            <h4 class="font-medium text-color mb-1">Shipping</h4>
+            <p class="text-sm text-muted-color">Your order is on the way</p>
+          </p-card>
+          <p-card class="shadow-sm">
+            <i class="pi pi-home text-2xl text-green-500 mb-2"></i>
+            <h4 class="font-medium text-color mb-1">Delivered</h4>
+            <p class="text-sm text-muted-color">Enjoy your purchase!</p>
+          </p-card>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <p-button 
+          label="Continue Shopping"
+          icon="pi pi-shopping-bag"
+          routerLink="/"
+          severity="primary"
+          size="large">
+        </p-button>
+        <p-button 
+          label="View Orders"
+          icon="pi pi-list"
+          routerLink="/profile/orders"
+          severity="secondary"
+          [outlined]="true"
+          size="large">
+        </p-button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
