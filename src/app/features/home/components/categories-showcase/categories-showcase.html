@@ -1,13 +1,13 @@
 <!-- Categories Showcase - PrimeNG Cards with Tailwind CSS -->
-<section class="py-12 bg-white dark:bg-gray-900">
+<section class="py-12">
   <div class="max-w-7xl mx-auto px-4">
     
     <!-- Section Header -->
     <div class="text-center mb-10">
-      <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+      <h2 class="text-3xl font-bold text-color mb-4">
         Shop Popular Categories
       </h2>
-      <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+      <p class="text-lg text-muted-color max-w-2xl mx-auto">
         Discover our wide range of product categories and find exactly what you're looking for
       </p>
     </div>
@@ -17,16 +17,16 @@
       @if (loading()) {
         <!-- Loading Skeleton -->
         @for (item of [1,2,3,4,5,6]; track item) {
-          <div class="bg-white dark:bg-gray-700 rounded-lg shadow-sm p-4 border border-gray-200 dark:border-gray-600">
+          <p-card class="shadow-sm">
             <p-skeleton height="8rem" styleClass="mb-3 rounded-lg"></p-skeleton>
             <p-skeleton width="80%" height="1rem" styleClass="mb-2"></p-skeleton>
-          </div>
+          </p-card>
         }
       } @else {
         @for (category of categories(); track category._id) {
           <p-card 
             class="cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-lg"
-            styleClass="h-full border-gray-200 dark:border-gray-700"
+            styleClass="h-full"
             (click)="navigateToCategory(category)">
             
             <ng-template #header>
@@ -41,13 +41,13 @@
             </ng-template>
             
             <div class="text-center py-4">
-              <h3 class="font-semibold text-gray-900 dark:text-white text-sm md:text-base line-clamp-2">
+              <h3 class="font-semibold text-color text-sm md:text-base line-clamp-2">
                 {{ category.name }}
               </h3>
             </div>
           </p-card>
         } @empty {
-          <div class="col-span-full text-center text-gray-500 dark:text-gray-400 py-8">
+          <div class="col-span-full text-center text-muted-color py-8">
             <p>No categories available</p>
           </div>
         }

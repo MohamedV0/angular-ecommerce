@@ -1,24 +1,24 @@
 <!-- FreshCart Header - Following PrimeNG + Tailwind Best Practices -->
-<div class="header-container">
-  <p-menubar 
-    [model]="menuItems()" 
-    class="header-menubar">
-    
-    <!-- Brand/Logo -->
-    <ng-template pTemplate="start">
-      <a 
-        [routerLink]="['/']" 
-        class="flex items-center gap-2 cursor-pointer no-underline hover:opacity-90 transition-opacity brand-logo"
-        [attr.aria-label]="'Navigate to FreshCart homepage'">
-        <i class="pi pi-shopping-cart text-2xl text-white"></i>
-        <span class="text-xl font-bold text-white">FreshCart</span>
-      </a>
-    </ng-template>
+<!-- ✅ Let PrimeNG handle theme-aware styling naturally -->
+<p-menubar 
+  [model]="menuItems()" 
+  styleClass="shadow-md">
+  
+  <!-- Brand/Logo -->
+  <ng-template pTemplate="start">
+    <a 
+      [routerLink]="['/']" 
+      class="flex items-center gap-2 cursor-pointer no-underline hover:opacity-90 transition-opacity"
+      [attr.aria-label]="'Navigate to FreshCart homepage'">
+      <i class="pi pi-shopping-cart text-2xl text-primary"></i>
+      <span class="text-xl font-bold text-color">FreshCart</span>
+    </a>
+  </ng-template>
     
     <!-- Language Toggle & User Actions -->
     <ng-template pTemplate="end">
       <!-- ✅ Using Tailwind utilities for layout only -->
-      <div class="flex items-center gap-3 header-actions">
+      <div class="flex items-center gap-3">
         
         <!-- Language Toggle Button -->
         <p-button 
@@ -27,8 +27,7 @@
           severity="secondary"
           [text]="true"
           (click)="toggleLanguage()"
-          [attr.aria-label]="'Toggle language to ' + (getCurrentLanguage() === 'en' ? 'Arabic' : 'English')"
-          styleClass="language-toggle-btn">
+          [attr.aria-label]="'Toggle language to ' + (getCurrentLanguage() === 'en' ? 'Arabic' : 'English')">
         </p-button>
         
         <!-- Authentication Buttons -->
@@ -39,8 +38,7 @@
             severity="secondary" 
             [text]="true"
             [label]="getCurrentUserName() || 'User'"
-            (click)="userMenu.toggle($event)"
-            styleClass="user-name-btn">
+            (click)="userMenu.toggle($event)">
           </p-button>
           
           <!-- User Dropdown Menu -->
@@ -58,8 +56,7 @@
             [text]="true"
             [label]="'AUTH.HEADER_LOGIN' | translate"
             (click)="navigateToLogin()"
-            [attr.aria-label]="'AUTH.ARIA_LOGIN' | translate"
-            styleClass="login-btn">
+            [attr.aria-label]="'AUTH.ARIA_LOGIN' | translate">
           </p-button>
           
           <p-button 
@@ -68,12 +65,10 @@
             [text]="true"
             [label]="'AUTH.HEADER_REGISTER' | translate"
             (click)="navigateToRegister()"
-            [attr.aria-label]="'AUTH.ARIA_REGISTER' | translate"
-            styleClass="register-btn">
+            [attr.aria-label]="'AUTH.ARIA_REGISTER' | translate">
           </p-button>
         }
         
       </div>
     </ng-template>
-  </p-menubar>
-</div>
+</p-menubar>

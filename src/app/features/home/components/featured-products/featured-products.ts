@@ -2,6 +2,7 @@ import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ProductCard } from '../../../../shared/components/product-card/product-card';
 import { Product } from '../../../products/models/product.model';
@@ -9,7 +10,7 @@ import { ProductsService } from '../../../products/services/products';
 
 @Component({
   selector: 'app-featured-products',
-  imports: [CommonModule, TranslateModule, ButtonModule, SkeletonModule, ProductCard],
+  imports: [CommonModule, TranslateModule, ButtonModule, CardModule, SkeletonModule, ProductCard],
   templateUrl: './featured-products.html',
   styleUrl: './featured-products.scss'
 })

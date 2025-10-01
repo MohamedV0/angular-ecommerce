@@ -6,7 +6,13 @@ import { providePrimeNG } from 'primeng/config';
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { MessageService } from 'primeng/api';
-import Aura from '@primeuix/themes/aura';
+
+// Theme Presets - Switch between these to try different color schemes
+import { FreshPreset } from './theme/fresh-preset';      // ✅ Currently Active (Teal + Zinc)
+import { PremiumPreset } from './theme/premium-preset'; // Indigo + Slate
+import { VibrantPreset } from './theme/vibrant-preset'; // Orange + Neutral
+import { NaturalPreset } from './theme/natural-preset'; // Emerald + Stone
+import { TestAuraPreset } from './theme/test-aura-preset'; // 🧪 Test - Direct from PrimeNG docs
 
 import { authHeaderInterceptor } from './core/interceptors/auth-header-interceptor';
 
@@ -22,7 +28,7 @@ export const appConfig: ApplicationConfig = {
     MessageService, // ✅ Global MessageService for Toast notifications
     providePrimeNG({
       theme: {
-        preset: Aura, // Modern Aura theme
+        preset: VibrantPreset, // 🧪 Test preset - Direct from PrimeNG official docs
         options: {
           prefix: 'p', // CSS variables prefix
           darkModeSelector: 'system', // Auto dark mode detection

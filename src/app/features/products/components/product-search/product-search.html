@@ -2,7 +2,7 @@
 <div class="min-h-screen bg-surface-ground">
   
   <!-- Search Header -->
-  <div class="sticky top-0 z-[100] bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-700 backdrop-blur-sm">
+  <div class="sticky top-0 z-[100] shadow-sm border-b border-surface backdrop-blur-sm">
     <div class="max-w-7xl mx-auto px-4 py-6">
       
       <!-- Main Search Bar -->
@@ -24,7 +24,7 @@
               
               <ng-template #item let-suggestion>
                 <div class="flex items-center gap-2 p-3 transition-colors hover:bg-primary-50">
-                  <i class="pi pi-search text-gray-400"></i>
+                  <i class="pi pi-search text-muted-color"></i>
                   <span>{{ suggestion }}</span>
                 </div>
               </ng-template>
@@ -54,7 +54,7 @@
         @if (recentSearches().length > 0 && !searchQuery()) {
           <div class="mt-4">
             <div class="flex items-center gap-2 mb-2">
-              <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Recent searches:</span>
+              <span class="text-sm font-medium text-muted-color">Recent searches:</span>
               <p-button
                 label="Clear"
                 (click)="clearRecentSearches()"
@@ -87,11 +87,11 @@
             @if (loading()) {
               <p-skeleton width="200px" height="1rem"></p-skeleton>
             } @else if (hasProducts()) {
-              <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+              <h2 class="text-lg font-semibold text-color">
                 {{ totalProducts() | number }} results for "{{ searchQuery() }}"
               </h2>
             } @else if (!error()) {
-              <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+              <h2 class="text-lg font-semibold text-color">
                 No results found for "{{ searchQuery() }}"
               </h2>
             }
@@ -100,7 +100,7 @@
           <!-- Sort Options -->
           @if (hasProducts() && !loading()) {
             <div class="sort-section flex items-center gap-2">
-              <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label class="text-sm font-medium text-color">
                 Sort by:
               </label>
               <p-select
@@ -121,7 +121,7 @@
       @if (hasActiveFilters()) {
         <div class="active-filters mt-4">
           <div class="flex items-center gap-2 mb-2">
-            <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Active filters:</span>
+            <span class="text-sm font-medium text-muted-color">Active filters:</span>
             <p-button
               label="Clear All"
               (click)="clearFilters()"
@@ -179,17 +179,17 @@
   </div>
 
   <!-- Main Content -->
-  <div class="bg-gray-50 dark:bg-gray-800 min-h-screen py-8">
+  <div class="min-h-screen py-8">
     <div class="max-w-7xl mx-auto px-4">
       
       <!-- Welcome State (No Search) -->
       @if (!searchQuery()) {
         <div class="text-center py-16">
-          <i class="pi pi-search text-6xl text-gray-400 dark:text-gray-600 mb-6 opacity-60 animate-pulse"></i>
-          <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+          <i class="pi pi-search text-6xl text-muted-color mb-6 opacity-60 animate-pulse"></i>
+          <h2 class="text-3xl font-bold text-color mb-4">
             Search Products
           </h2>
-          <p class="text-gray-600 dark:text-gray-400 max-w-md mx-auto">
+          <p class="text-muted-color max-w-md mx-auto">
             Find exactly what you're looking for with our advanced search. 
             Use filters to narrow down your results.
           </p>
@@ -234,14 +234,14 @@
       <!-- No Results State -->
       @else if (!hasProducts()) {
         <div class="text-center py-16">
-          <i class="pi pi-search text-6xl text-gray-400 dark:text-gray-600 mb-6 opacity-50"></i>
-          <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
+          <i class="pi pi-search text-6xl text-muted-color mb-6 opacity-50"></i>
+          <h3 class="text-2xl font-semibold text-color mb-4">
             No products found
           </h3>
-          <div class="max-w-md mx-auto text-gray-600 dark:text-gray-400 mb-6">
+          <div class="max-w-md mx-auto text-muted-color mb-6">
             <p class="mb-4">We couldn't find any products matching "{{ searchQuery() }}"</p>
             <p>Try:</p>
-            <ul class="text-left list-disc list-inside space-y-1 text-gray-500 dark:text-gray-400">
+            <ul class="text-left list-disc list-inside space-y-1 text-muted-color">
               <li>Checking your spelling</li>
               <li>Using more general terms</li>
               <li>Removing some filters</li>
@@ -325,7 +325,7 @@
       
       <!-- Price Range -->
       <div>
-        <h4 class="font-medium text-gray-900 dark:text-white mb-3 text-base">Price Range (EGP)</h4>
+        <h4 class="font-medium text-color mb-3 text-base">Price Range (EGP)</h4>
         <div class="px-2">
           <p-slider
             [(ngModel)]="filters().priceRange"
@@ -336,7 +336,7 @@
             (onSlideEnd)="onPriceRangeChange($event)"
             class="w-full">
           </p-slider>
-          <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400 mt-2">
+          <div class="flex justify-between text-sm text-muted-color mt-2">
             <span>{{ filters().priceRange.min | currency:'EGP':'symbol':'1.0-0' }}</span>
             <span>{{ filters().priceRange.max | currency:'EGP':'symbol':'1.0-0' }}</span>
           </div>
@@ -345,7 +345,7 @@
       
       <!-- Rating Filter -->
       <div>
-        <h4 class="font-medium text-gray-900 dark:text-white mb-3 text-base">Minimum Rating</h4>
+        <h4 class="font-medium text-color mb-3 text-base">Minimum Rating</h4>
         <div class="space-y-2">
           @for (rating of [4, 3, 2, 1]; track rating) {
             <label class="flex items-center gap-2 cursor-pointer py-2 px-0 rounded-md transition-all hover:bg-surface-50 hover:px-2">
@@ -357,9 +357,9 @@
               </p-checkbox>
               <div class="flex items-center gap-1">
                 @for (star of [1,2,3,4,5]; track star) {
-                  <i [class]="'pi text-sm ' + (star <= rating ? 'pi-star-fill text-yellow-500' : 'pi-star text-gray-300')"></i>
+                  <i [class]="'pi text-sm ' + (star <= rating ? 'pi-star-fill text-yellow-500' : 'pi-star text-muted-color')"></i>
                 }
-                <span class="text-sm text-gray-600 dark:text-gray-400 ml-1">& up</span>
+                <span class="text-sm text-muted-color ml-1">& up</span>
               </div>
             </label>
           }
@@ -368,7 +368,7 @@
       
       <!-- Availability -->
       <div>
-        <h4 class="font-medium text-gray-900 dark:text-white mb-3 text-base">Availability</h4>
+        <h4 class="font-medium text-color mb-3 text-base">Availability</h4>
         <div class="space-y-2">
           <label class="flex items-center gap-2 cursor-pointer py-2 px-0 rounded-md transition-all hover:bg-surface-50 hover:px-2">
             <p-checkbox

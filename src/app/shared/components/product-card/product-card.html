@@ -1,10 +1,10 @@
 <!-- Enhanced Product Card - Pure PrimeNG + Tailwind CSS -->
-<div class="group relative overflow-hidden rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer h-full flex flex-col"
+<div class="product-card group relative overflow-hidden rounded-xl border border-surface shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer h-full flex flex-col"
      (click)="viewProductDetails()"
      [ariaLabel]="'View details for ' + product().title">
   
   <!-- Product Image Container -->
-  <div class="relative overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600">
+  <div class="relative overflow-hidden">
     <img 
       [src]="product().imageCover" 
       [alt]="product().title"
@@ -30,8 +30,6 @@
       [severity]="isInWishlist() ? 'danger' : 'secondary'"
       size="small"
       class="!absolute !top-3 !right-3 !w-8 !h-8 !rounded-full !drop-shadow-md hover:!drop-shadow-lg !transition-all !duration-200 hover:!scale-110"
-      [class.!bg-white/90]="isInWishlist()"
-      [class.hover:!bg-white/20]="!isInWishlist()"
       [ariaLabel]="isInWishlist() ? 'Remove ' + product().title + ' from wishlist' : 'Add ' + product().title + ' to wishlist'">
     </p-button>
   </div>
@@ -42,13 +40,13 @@
     <!-- Centered Brand Badge -->
     <div class="flex justify-center mb-3">
       <p-badge 
-        [value]="product().brand.name" 
-        class="!text-xs !font-bold !uppercase !tracking-wide !px-3 !py-1.5 !bg-blue-50 !text-blue-700 dark:!bg-blue-900/30 dark:!text-blue-300 !border-0 !rounded-full !shadow-sm">
+        [value]="product().brand.name"
+        class="!text-xs !font-bold !uppercase !tracking-wide !px-3 !py-1.5 !border-0 !rounded-full !shadow-sm">
       </p-badge>
     </div>
     
     <!-- Product Title -->
-    <h3 class="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white mb-3 line-clamp-2 leading-relaxed min-h-[2.75rem] sm:min-h-[3rem]">
+    <h3 class="text-xs sm:text-sm font-semibold text-color mb-3 line-clamp-2 leading-relaxed min-h-[2.75rem] sm:min-h-[3rem]">
       {{ product().title }}
     </h3>
     
@@ -61,7 +59,7 @@
           [stars]="5"
           class="!text-xs">
         </p-rating>
-        <span class="text-xs text-gray-500 dark:text-gray-400">
+        <span class="text-xs text-muted-color">
           {{ product().ratingsAverage }}/5 ({{ product().ratingsQuantity || 0 }})
         </span>
       } @else {
@@ -74,13 +72,13 @@
     <div class="mb-4 mt-auto">
       <div class="flex items-center gap-2 mb-1">
         <!-- Current/Discounted Price -->
-        <span class="text-base sm:text-lg font-bold text-green-600 dark:text-green-400">
+        <span class="text-base sm:text-lg font-bold text-primary">
           {{ currentPrice() | number:'1.0-0' }} EGP
         </span>
         
         <!-- Original Price (if discounted) -->
         @if (hasDiscount()) {
-          <span class="text-sm text-gray-500 dark:text-gray-400 line-through decoration-2">
+          <span class="text-sm text-muted-color line-through decoration-2">
             {{ product().price | number:'1.0-0' }} EGP
           </span>
         }
@@ -88,7 +86,7 @@
       
       <!-- Stock Status -->
       @if (product().quantity > 0) {
-        <p class="text-xs text-green-600 dark:text-green-400 font-medium">
+        <p class="text-xs text-primary font-medium">
           <i class="pi pi-check-circle mr-1"></i>
           In Stock
         </p>
@@ -100,7 +98,9 @@
       }
     </div>
   </div>
-  
+
+  <!-- to make the add to cart button green make it severity="success" -->
+
   <!-- Action Buttons Footer -->
   <div class="p-4 pt-0 flex justify-center">
     <!-- Add to Cart Button (Not in cart) -->
@@ -109,7 +109,7 @@
         label="Add to Cart"
         icon="pi pi-shopping-cart"
         (click)="onAddToCartClick($event)"
-        severity="success"
+
         size="small"
         [loading]="isAddingToCart()"
         [disabled]="!canAddToCart()"
@@ -121,7 +121,7 @@
         <p-chip 
           [label]="'In Cart (' + cartQuantity() + ')'"
           icon="pi pi-check"
-          class="!bg-green-50 !text-green-700 dark:!bg-green-900/30 dark:!text-green-300 !text-xs !font-semibold">
+          class="!text-xs !font-semibold">
         </p-chip>
         <p-button 
           icon="pi pi-plus"

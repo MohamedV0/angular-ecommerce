@@ -3,7 +3,7 @@
 
 // Rating component customization (required for PrimeNG component theming)
 :host ::ng-deep p-rating {
-  --p-rating-icon-color: #d1d5db; // gray-300 for inactive stars  
+  --p-rating-icon-color: var(--surface-300); // Use PrimeNG design token for inactive stars  
   --p-rating-icon-hover-color: #FFC107; // Material Design amber (industry standard)
   --p-rating-icon-active-color: #FFC107; // Material Design amber (industry standard)
 }
