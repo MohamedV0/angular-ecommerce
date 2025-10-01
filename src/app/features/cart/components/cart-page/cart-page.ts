@@ -1,12 +1,10 @@
 import { Component, inject, computed, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 
 // PrimeNG Imports
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
-import { InputNumberModule } from 'primeng/inputnumber';
 import { BadgeModule } from 'primeng/badge';
 import { DividerModule } from 'primeng/divider';
 import { MessageModule } from 'primeng/message';
@@ -34,11 +32,9 @@ import { formatPrice, getProductImageUrl, trackCartItem } from '../../../../shar
   selector: 'app-cart-page',
   imports: [
     CommonModule,
-    FormsModule,
     // PrimeNG
     CardModule,
     ButtonModule,
-    InputNumberModule,
     BadgeModule,
     DividerModule,
     MessageModule,
@@ -101,6 +97,52 @@ export class CartPage {
         quantity: quantity
       });
     }
+  }
+
+  /**
+   * Increment item quantity by 1
+   * ✅ Better UX with explicit +/- buttons
+   */
+  incrementQuantity(item: CartItem): void {
+    const newQuantity = item.quantity + 1;
+    
+    // Check if we can add more (stock limit)
+    if (newQuantity > item.product.quantity) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Stock Limit Reached',
+        detail: `Maximum available quantity is ${item.product.quantity}`
+      });
+      return;
+    }
+    
+    this.cartStore.updateCartItem({
+      productId: item.product._id,
+      quantity: newQuantity
+    });
+  }
+
+  /**
+   * Decrement item quantity by 1
+   * ✅ Better UX with explicit +/- buttons
+   */
+  decrementQuantity(item: CartItem): void {
+    const newQuantity = item.quantity - 1;
+    
+    // Minimum quantity is 1 (use remove button to delete)
+    if (newQuantity < 1) {
+      this.messageService.add({
+        severity: 'info',
+        summary: 'Minimum Quantity',
+        detail: 'Use the delete button to remove this item from cart'
+      });
+      return;
+    }
+    
+    this.cartStore.updateCartItem({
+      productId: item.product._id,
+      quantity: newQuantity
+    });
   }
 
   /**

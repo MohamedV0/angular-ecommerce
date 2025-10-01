@@ -187,20 +187,38 @@
                     
                     <!-- Quantity and Actions -->
                     <div class="flex items-center gap-3">
-                      <!-- Quantity Control -->
+                      <!-- Quantity Control with +/- Buttons -->
                       <div class="flex items-center gap-2">
-                        <span class="text-sm text-muted-color">
+                        <span class="text-sm text-muted-color mr-1">
                           {{ 'CART.QUANTITY' | translate }}:
                         </span>
-                      <p-inputnumber
-                        [(ngModel)]="item.quantity"
-                        [min]="1"
-                        [max]="item.product.quantity"
-                        [disabled]="isOperating()"
-                        size="small"
-                        [style]="{'width': '80px'}"
-                        (onInput)="updateQuantity(item, $event.value)">
-                        </p-inputnumber>
+                        
+                        <!-- Decrement Button -->
+                        <p-button 
+                          icon="pi pi-minus"
+                          severity="secondary"
+                          [outlined]="true"
+                          size="small"
+                          [disabled]="isOperating() || item.quantity <= 1"
+                          (click)="decrementQuantity(item)"
+                          [ariaLabel]="'Decrease quantity'">
+                        </p-button>
+                        
+                        <!-- Quantity Display -->
+                        <span class="font-semibold text-color px-3 min-w-[40px] text-center">
+                          {{ item.quantity }}
+                        </span>
+                        
+                        <!-- Increment Button -->
+                        <p-button 
+                          icon="pi pi-plus"
+                          severity="secondary"
+                          [outlined]="true"
+                          size="small"
+                          [disabled]="isOperating() || item.quantity >= item.product.quantity"
+                          (click)="incrementQuantity(item)"
+                          [ariaLabel]="'Increase quantity'">
+                        </p-button>
                       </div>
                       
                       <!-- Remove Button -->
