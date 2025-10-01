@@ -205,7 +205,7 @@
       @if (isAuthenticated()) {
         <div class="border-t border-surface mt-4 pt-4">
           <ul class="list-none p-0 m-0">
-            @for (item of userMenuItems(); track item.label) {
+            @for (item of userMenuItems(); track $index) {
               @if (item.separator) {
                 <li class="my-2">
                   <hr class="border-surface" />
