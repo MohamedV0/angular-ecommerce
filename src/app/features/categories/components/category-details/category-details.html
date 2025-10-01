@@ -1,21 +1,21 @@
 <!-- Enhanced Category Details Page - Pure PrimeNG + Tailwind CSS -->
-<div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+<div class="min-h-screen">
   
   <!-- Loading State - Compact -->
   @if (loading() && !category()) {
-    <div class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 shadow-sm">
+    <div class="border-b border-surface shadow-sm">
       <div class="max-w-7xl mx-auto px-4 py-4">
         <!-- Breadcrumb Skeleton -->
-        <p-skeleton width="250px" height="1rem" class="mb-3"></p-skeleton>
+        <p-skeleton width="250px" height="1rem" styleClass="mb-3"></p-skeleton>
         
         <!-- Compact Header Skeleton -->
         <div class="flex items-center gap-4">
           <p-skeleton shape="circle" size="4rem"></p-skeleton>
           <div class="flex-1">
-            <p-skeleton width="40%" height="1.5rem" class="mb-2"></p-skeleton>
+            <p-skeleton width="40%" height="1.5rem" styleClass="mb-2"></p-skeleton>
             <p-skeleton width="30%" height="0.875rem"></p-skeleton>
           </div>
-          <p-skeleton width="150px" height="2rem" class="rounded"></p-skeleton>
+          <p-skeleton width="150px" height="2rem" styleClass="rounded"></p-skeleton>
         </div>
       </div>
     </div>
@@ -23,10 +23,10 @@
     <!-- Subcategories Skeleton -->
     <div class="py-6">
       <div class="max-w-7xl mx-auto px-4">
-        <p-skeleton width="150px" height="1.25rem" class="mb-4"></p-skeleton>
+        <p-skeleton width="150px" height="1.25rem" styleClass="mb-4"></p-skeleton>
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
           @for (item of [1,2,3,4,5,6]; track item) {
-            <p-skeleton height="5rem" class="rounded-lg"></p-skeleton>
+            <p-skeleton height="5rem" styleClass="rounded-lg"></p-skeleton>
           }
         </div>
       </div>
@@ -35,14 +35,14 @@
     <!-- Products Skeleton -->
     <div class="py-6">
       <div class="max-w-7xl mx-auto px-4">
-        <p-skeleton width="200px" height="1.25rem" class="mb-4"></p-skeleton>
+        <p-skeleton width="200px" height="1.25rem" styleClass="mb-4"></p-skeleton>
         <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3 sm:gap-4">
           @for (item of [1,2,3,4,5,6]; track item) {
-            <div class="bg-white dark:bg-gray-800 rounded-xl p-3 shadow-sm border border-gray-200 dark:border-gray-700">
-              <p-skeleton height="10rem" class="mb-3 rounded-lg"></p-skeleton>
-              <p-skeleton width="90%" height="0.875rem" class="mb-2"></p-skeleton>
+            <p-card class="shadow-sm h-96">
+              <p-skeleton height="10rem" styleClass="mb-3 rounded-lg"></p-skeleton>
+              <p-skeleton width="90%" height="0.875rem" styleClass="mb-2"></p-skeleton>
               <p-skeleton width="60%" height="1rem"></p-skeleton>
-            </div>
+            </p-card>
           }
         </div>
       </div>
@@ -53,11 +53,11 @@
   @else if (error()) {
     <div class="py-12">
       <div class="max-w-lg mx-auto px-4 text-center">
-        <div class="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-sm border border-gray-200 dark:border-gray-700">
-          <div class="w-16 h-16 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-6">
-            <i class="pi pi-exclamation-triangle text-2xl text-red-600 dark:text-red-400"></i>
+        <p-card class="shadow-sm">
+          <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
+            <i class="pi pi-exclamation-triangle text-2xl text-red-600"></i>
           </div>
-          <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Category Not Found</h2>
+          <h2 class="text-xl font-bold text-color mb-4">Category Not Found</h2>
           <p-message
             severity="error"
             [text]="error()"
@@ -78,7 +78,7 @@
               severity="primary">
             </p-button>
           </div>
-        </div>
+        </p-card>
       </div>
     </div>
   }
@@ -88,7 +88,7 @@
     <div>
       
       <!-- Compact Header with Breadcrumb and Category Info -->
-      <div class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 shadow-sm">
+      <div class="border-b border-surface shadow-sm">
         <div class="max-w-7xl mx-auto px-4 py-4">
           
           <!-- Breadcrumb -->
@@ -97,7 +97,7 @@
               [model]="breadcrumbItems()" 
               [home]="{icon: 'pi pi-home', routerLink: '/'}"
               [style]="{'background': 'transparent', 'border': 'none', 'padding': '0'}"
-              class="!bg-transparent text-sm">
+              class="!bg-transparent">
             </p-breadcrumb>
           </div>
           
@@ -108,16 +108,16 @@
               <img 
                 [src]="category()!.image" 
                 [alt]="category()!.name"
-                class="w-full h-full object-cover rounded-full border-2 border-gray-200 dark:border-gray-700">
+                class="w-full h-full object-cover rounded-full border-2 border-surface">
             </div>
             
             <!-- Category Info - Single Line -->
             <div class="flex-1 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div>
-                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+                <h1 class="text-2xl font-bold text-color">
                   {{ category()!.name }}
                 </h1>
-                <p class="text-sm text-gray-500 dark:text-gray-400">
+                <p class="text-sm text-muted-color">
                   Explore our selection in this category
                 </p>
               </div>
@@ -127,8 +127,7 @@
                 icon="pi pi-shopping-bag"
                 (click)="viewAllProducts()"
                 severity="primary"
-                size="small"
-                class="sm:flex-shrink-0">
+                size="small">
               </p-button>
             </div>
           </div>
@@ -140,8 +139,8 @@
       @if (hasSubcategories()) {
         <div class="py-6">
           <div class="max-w-7xl mx-auto px-4">
-            <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-              <i class="pi pi-th-large text-blue-600 dark:text-blue-400"></i>
+            <h2 class="text-lg font-bold text-color mb-4 flex items-center gap-2">
+              <i class="pi pi-th-large text-primary"></i>
               Subcategories
             </h2>
             
@@ -149,14 +148,14 @@
               @for (subcategory of subcategories(); track subcategory._id) {
                 <button
                   type="button"
-                  class="group flex flex-col items-center gap-2 p-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-md transition-all duration-200 cursor-pointer"
+                  class="group flex flex-col items-center gap-2 p-3 rounded-lg border border-surface hover:border-primary hover:shadow-md transition-all duration-200 cursor-pointer"
                   (click)="navigateToSubcategory(subcategory)"
                   [ariaLabel]="'View ' + subcategory.name + ' subcategory'">
                   
-                  <div class="w-10 h-10 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <i class="pi pi-tag text-lg text-blue-600 dark:text-blue-400"></i>
+                  <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <i class="pi pi-tag text-lg text-primary"></i>
                   </div>
-                  <span class="text-xs font-medium text-gray-900 dark:text-white text-center line-clamp-2">
+                  <span class="text-xs font-medium text-color text-center line-clamp-2">
                     {{ subcategory.name }}
                   </span>
                 </button>
@@ -172,7 +171,7 @@
           <div class="max-w-7xl mx-auto px-4">
             
             <div class="flex items-center justify-between mb-4">
-              <h2 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+              <h2 class="text-lg font-bold text-color flex items-center gap-2">
                 <i class="pi pi-star-fill text-yellow-500"></i>
                 Featured Products
               </h2>
