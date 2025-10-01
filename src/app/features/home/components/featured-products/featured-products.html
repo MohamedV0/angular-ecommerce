@@ -46,12 +46,14 @@
       }
     </div>
     
-    <!-- Load More Button (Mobile) -->
+    <!-- View All Button (Mobile) -->
     <div class="text-center mt-8 md:hidden">
       <p-button 
-        label="Load More Products"
-        icon="pi pi-plus"
-        severity="primary"
+        label="View All Products"
+        icon="pi pi-arrow-right"
+        iconPos="right"
+        severity="secondary"
+        [text]="true"
         size="large"
         routerLink="/products"
         class="w-full sm:w-auto">

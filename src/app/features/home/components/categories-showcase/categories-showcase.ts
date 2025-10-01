@@ -1,6 +1,6 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
@@ -10,7 +10,7 @@ import { CategoriesService } from '../../../categories/services/categories';
 
 @Component({
   selector: 'app-categories-showcase',
-  imports: [CommonModule, TranslateModule, CardModule, ButtonModule, SkeletonModule],
+  imports: [CommonModule, RouterLink, TranslateModule, CardModule, ButtonModule, SkeletonModule],
   templateUrl: './categories-showcase.html',
   styleUrl: './categories-showcase.scss'
 })

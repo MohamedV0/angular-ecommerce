@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, signal, OnInit, OnDestroy, inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { CarouselModule } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
@@ -11,7 +11,12 @@ import { CardModule } from 'primeng/card';
   templateUrl: './hero-section.html',
   styleUrl: './hero-section.scss'
 })
-export class HeroSection {
+export class HeroSection implements OnInit, OnDestroy {
+  private platformId = inject(PLATFORM_ID);
+  private resizeListener?: () => void;
+  
+  mobileView = signal(false);
+  
   heroSlides = [
     {
       id: 1,
@@ -38,5 +43,27 @@ export class HeroSection {
       secondaryAction: { label: 'New Arrivals', action: 'new' }
     }
   ];
+  
+  ngOnInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.checkMobileView();
+      this.resizeListener = () => this.checkMobileView();
+      window.addEventListener('resize', this.resizeListener);
+    }
+  }
+  
+  ngOnDestroy() {
+    if (isPlatformBrowser(this.platformId) && this.resizeListener) {
+      window.removeEventListener('resize', this.resizeListener);
+    }
+  }
+  
+  private checkMobileView() {
+    this.mobileView.set(window.innerWidth < 768);
+  }
+  
+  isMobile(): boolean {
+    return this.mobileView();
+  }
 }
 

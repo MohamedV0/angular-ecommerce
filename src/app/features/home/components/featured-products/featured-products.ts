@@ -1,5 +1,6 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -10,7 +11,7 @@ import { ProductsService } from '../../../products/services/products';
 
 @Component({
   selector: 'app-featured-products',
-  imports: [CommonModule, TranslateModule, ButtonModule, CardModule, SkeletonModule, ProductCard],
+  imports: [CommonModule, RouterLink, TranslateModule, ButtonModule, CardModule, SkeletonModule, ProductCard],
   templateUrl: './featured-products.html',
   styleUrl: './featured-products.scss'
 })
