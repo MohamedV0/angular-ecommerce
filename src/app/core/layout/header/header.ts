@@ -8,6 +8,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { MenuItem, PrimeIcons } from 'primeng/api';
 import { Subscription, combineLatest } from 'rxjs';
 import { I18nService } from '../../services/i18n';
+import { ThemeService } from '../../services/theme';
 import { AuthService } from '../../../features/auth/services/auth';
 import { CartStore } from '../../../features/cart/store/cart.store';
 import { WishlistStore } from '../../../features/wishlist/store/wishlist.store';
@@ -21,6 +22,7 @@ import { WishlistStore } from '../../../features/wishlist/store/wishlist.store';
 })
 export class Header implements OnInit, OnDestroy {
   protected readonly i18nService = inject(I18nService);
+  protected readonly themeService = inject(ThemeService);
   private readonly translateService = inject(TranslateService);
   protected readonly authService = inject(AuthService);
   protected readonly cartStore = inject(CartStore);
@@ -198,4 +200,19 @@ export class Header implements OnInit, OnDestroy {
   navigateToRegister(): void {
     this.authService.navigateToRegister();
   }
+
+  /**
+   * Toggle theme between light and dark
+   */
+  toggleTheme(): void {
+    this.themeService.toggleTheme();
+  }
+
+  /**
+   * ✅ ANGULAR BEST PRACTICE: Expose signals directly instead of wrapping in methods
+   * This prevents unnecessary re-evaluation on every change detection cycle
+   * Reference: Angular v20 Signals documentation
+   */
+  readonly isDarkMode = this.themeService.isDarkMode;
+  readonly currentTheme = this.themeService.currentTheme;
 }

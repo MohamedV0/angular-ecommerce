@@ -31,7 +31,7 @@ export const appConfig: ApplicationConfig = {
         preset: VibrantPreset, // 🧪 Test preset - Direct from PrimeNG official docs
         options: {
           prefix: 'p', // CSS variables prefix
-          darkModeSelector: 'system', // Auto dark mode detection
+          darkModeSelector: '.p-dark', // ✅ Class-based dark mode for manual toggle
           cssLayer: {
             name: 'primeng',
             order: 'theme, base, primeng' // Proper CSS layer ordering for Tailwind integration
