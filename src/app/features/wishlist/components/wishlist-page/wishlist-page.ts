@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 // PrimeNG Imports
 import { ButtonModule } from 'primeng/button';
 import { BadgeModule } from 'primeng/badge';
+import { CardModule } from 'primeng/card';
 import { MessageModule } from 'primeng/message';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ToastModule } from 'primeng/toast';
@@ -26,6 +27,7 @@ import { ProductCard } from '../../../../shared/components/product-card/product-
     // PrimeNG
     ButtonModule,
     BadgeModule,
+    CardModule,
     MessageModule,
     SkeletonModule,
     ToastModule,
