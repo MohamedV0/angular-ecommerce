@@ -42,11 +42,11 @@ import { formatPrice, getProductImageUrl, trackCartItem } from '../../../../shar
     // Translation
     TranslatePipe
   ],
-  providers: [MessageService],
   templateUrl: './cart-page.html',
   // ✅ No custom styles needed - using PrimeNG + Tailwind CSS
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+// ✅ Using global MessageService from app.config.ts (not component-level provider)
 export class CartPage {
   private readonly router = inject(Router);
   private readonly cartStore = inject(CartStore);
@@ -118,6 +118,14 @@ export class CartPage {
       productId: item.product._id,
       quantity: newQuantity
     });
+    
+    // ✅ Show success toast
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Item Added',
+      detail: `Added one more ${item.product.title}`,
+      life: 3000
+    });
   }
 
   /**
@@ -141,6 +149,14 @@ export class CartPage {
       productId: item.product._id,
       quantity: newQuantity
     });
+    
+    // ✅ Show success toast
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Item Removed',
+      detail: `Removed one ${item.product.title}`,
+      life: 3000
+    });
   }
 
   /**
@@ -148,14 +164,37 @@ export class CartPage {
    * @param productId - Product ID to remove
    */
   removeItem(productId: string): void {
+    // Find the item to show its title in the toast
+    const item = this.cartItems().find(item => item.product._id === productId);
+    
     this.cartStore.removeFromCart(productId);
+    
+    // ✅ Show success toast
+    if (item) {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Item Removed',
+        detail: `${item.product.title} has been removed from your cart`,
+        life: 3000
+      });
+    }
   }
 
   /**
    * Clear entire cart
    */
   clearCart(): void {
+    const itemCount = this.cartItems().length;
+    
     this.cartStore.clearCart();
+    
+    // ✅ Show success toast
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Cart Cleared',
+      detail: `All ${itemCount} item${itemCount !== 1 ? 's' : ''} have been removed from your cart`,
+      life: 3000
+    });
   }
 
   /**

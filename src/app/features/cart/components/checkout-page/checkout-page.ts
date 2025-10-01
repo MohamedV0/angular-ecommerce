@@ -38,10 +38,10 @@ import { OrderSummaryComponent } from '../order-summary/order-summary';
     PaymentMethodSelectorComponent,
     OrderSummaryComponent
   ],
-  providers: [MessageService],
   templateUrl: './checkout-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+// ✅ Using global MessageService from app.config.ts (not component-level provider)
 export class CheckoutPage implements OnInit {
   private readonly router = inject(Router);
   private readonly cartStore = inject(CartStore);
