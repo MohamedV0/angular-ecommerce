@@ -199,11 +199,12 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
 
   /**
    * Load related products
+   * Fetch 8 products to provide variety and make carousel dynamic
    */
   private loadRelatedProducts(product: Product): void {
     this.relatedLoading.set(true);
     
-    this.productsService.getRelatedProducts(product, 4).subscribe({
+    this.productsService.getRelatedProducts(product, 8).subscribe({
       next: (products) => {
         this.relatedProducts.set(products);
         this.relatedLoading.set(false);

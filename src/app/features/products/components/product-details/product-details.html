@@ -1,10 +1,10 @@
-<!-- Enhanced Product Details Page - Compact Design with PrimeNG + Tailwind CSS -->
+<!-- Enhanced Product Details Page - Mobile-First Compact Design with PrimeNG + Tailwind CSS -->
 <div class="min-h-screen">
   
   <!-- Loading State -->
   @if (loading() && !product()) {
-    <div class="max-w-6xl mx-auto px-4 py-6">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div class="max-w-6xl mx-auto px-3 md:px-4 py-4 md:py-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
         
         <!-- Image Gallery Skeleton -->
         <p-card class="shadow-sm">
@@ -42,31 +42,35 @@
   
   <!-- Error State -->
   @else if (error()) {
-    <div class="py-12">
-      <div class="max-w-lg mx-auto px-4 text-center">
+    <div class="py-8 md:py-12">
+      <div class="max-w-lg mx-auto px-3 md:px-4 text-center">
         <p-card class="shadow-sm">
-          <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
-            <i class="pi pi-exclamation-triangle text-2xl text-red-600"></i>
+          <div class="w-14 h-14 md:w-16 md:h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6">
+            <i class="pi pi-exclamation-triangle text-xl md:text-2xl text-red-600"></i>
           </div>
-          <h2 class="text-xl font-bold text-color mb-4">Product Not Found</h2>
+          <h2 class="text-lg md:text-xl font-bold text-color mb-3 md:mb-4">Product Not Found</h2>
           <p-message
             severity="error"
             [text]="error()"
-            class="mb-6 text-left">
+            class="mb-4 md:mb-6 text-left text-sm">
           </p-message>
-          <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <div class="flex flex-col sm:flex-row gap-2 md:gap-3 justify-center">
             <p-button
               label="Try Again"
               icon="pi pi-refresh"
               (click)="retryLoading()"
               severity="primary"
-              [outlined]="true">
+              [outlined]="true"
+              size="small"
+              class="w-full sm:w-auto">
             </p-button>
             <p-button
               label="Back to Products"
               icon="pi pi-arrow-left"
               routerLink="/products/list"
-              severity="primary">
+              severity="primary"
+              size="small"
+              class="w-full sm:w-auto">
             </p-button>
           </div>
         </p-card>
@@ -80,20 +84,20 @@
       
       <!-- Breadcrumb Navigation -->
       <div class="border-b border-surface">
-        <div class="max-w-6xl mx-auto px-4 py-4">
+        <div class="max-w-6xl mx-auto px-3 md:px-4 py-3 md:py-4">
           <p-breadcrumb 
             [model]="breadcrumbItems()" 
             [home]="{icon: 'pi pi-home', routerLink: '/'}"
             [style]="{'background': 'transparent', 'border': 'none', 'padding': '0'}"
-            class="!bg-transparent">
+            class="!bg-transparent text-xs md:text-sm">
           </p-breadcrumb>
         </div>
       </div>
       
       <!-- Main Product Section -->
-      <div class="py-4">
-        <div class="max-w-6xl mx-auto px-4">
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+      <div class="py-3 md:py-4">
+        <div class="max-w-6xl mx-auto px-3 md:px-4">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 items-stretch">
             
             <!-- Product Image Gallery -->
             <div class="flex flex-col">
@@ -122,16 +126,16 @@
                         <img 
                           [src]="image.itemImageSrc" 
                           [alt]="image.alt"
-                          class="w-full h-72 object-cover rounded-lg transition-transform duration-300 hover:scale-105" />
+                          class="w-full h-64 sm:h-72 md:h-80 lg:h-72 object-cover rounded-lg transition-transform duration-300 hover:scale-105" />
                       </div>
                     </ng-template>
                     
                     <ng-template #thumbnail let-image>
-                      <div class="p-1">
+                      <div class="p-0.5 md:p-1">
                         <img 
                           [src]="image.thumbnailImageSrc" 
                           [alt]="image.alt"
-                          class="w-12 h-12 object-cover rounded border-2 border-transparent hover:border-primary transition-all duration-200 cursor-pointer" />
+                          class="w-10 h-10 md:w-12 md:h-12 object-cover rounded border-2 border-transparent hover:border-primary transition-all duration-200 cursor-pointer" />
                       </div>
                     </ng-template>
                     
@@ -141,38 +145,39 @@
             </div>
             
             <!-- Product Information -->
-            <p-card class="shadow-sm h-full flex flex-col space-y-4">
+            <p-card class="shadow-sm h-full flex flex-col space-y-3 md:space-y-4">
               
               <!-- Category and Brand Tags -->
-              <div class="flex flex-wrap gap-2">
+              <div class="flex flex-wrap gap-1.5 md:gap-2">
                 <p-chip
                   [label]="product()!.category.name"
                   icon="pi pi-tag"
                   (click)="navigateToCategory()"
-                  class="cursor-pointer transition-colors">
+                  class="cursor-pointer transition-colors text-xs md:text-sm">
                 </p-chip>
                 <p-chip
                   [label]="product()!.brand.name"
                   icon="pi pi-star"
                   (click)="navigateToBrand()"
-                  class="cursor-pointer transition-colors">
+                  class="cursor-pointer transition-colors text-xs md:text-sm">
                 </p-chip>
               </div>
               
               <!-- Product Title -->
               <div>
-                <h1 class="text-2xl lg:text-3xl font-bold text-color leading-tight">
+                <h1 class="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-color leading-tight">
                   {{ product()!.title }}
                 </h1>
               </div>
               
               <!-- Rating and Reviews -->
               @if (product()!.ratingsAverage > 0) {
-                <div class="flex items-center gap-2 p-2 rounded">
+                <div class="flex items-center gap-2 p-1 md:p-2 rounded">
                   <p-rating
                     [ngModel]="product()!.ratingsAverage"
                     [readonly]="true"
-                    [stars]="5">
+                    [stars]="5"
+                    class="text-xs md:text-sm">
                   </p-rating>
                   <div class="flex items-center gap-1 text-xs text-muted-color">
                     <span class="font-medium">{{ product()!.ratingsAverage }}/5</span>
@@ -184,24 +189,25 @@
               
               <!-- Price Section -->
               <div class="price-section">
-                <div class="flex items-center gap-2 mb-1">
-                  <span class="current-price text-xl font-bold text-primary">
+                <div class="flex items-center gap-1.5 md:gap-2 mb-1 flex-wrap">
+                  <span class="current-price text-lg sm:text-xl md:text-2xl font-bold text-primary">
                     {{ formatPrice(currentPrice()) }}
                   </span>
                   @if (isOnSale()) {
-                    <span class="original-price text-base text-muted-color line-through">
+                    <span class="original-price text-sm md:text-base text-muted-color line-through">
                       {{ formatPrice(product()!.price) }}
                     </span>
                     <p-badge 
                       [value]="'-' + discountPercentage() + '%'"
                       severity="success"
-                      size="small">
+                      size="small"
+                      class="text-xs">
                     </p-badge>
                   }
                 </div>
                 
                 <!-- Stock Status and Sales Info -->
-                <div class="stock-status flex items-center justify-between">
+                <div class="stock-status flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-2">
                   <div>
                     @if (isInStock()) {
                       <span class="text-primary text-xs font-medium">
@@ -226,10 +232,10 @@
               
               <!-- Product Description -->
               <div class="description-section">
-                <h3 class="text-sm font-semibold text-color mb-1">
+                <h3 class="text-xs md:text-sm font-semibold text-color mb-1">
                   Description
                 </h3>
-                <div class="description-content text-xs text-muted-color leading-relaxed">
+                <div class="description-content text-xs text-muted-color leading-relaxed line-clamp-3 md:line-clamp-none">
                   {{ product()!.description }}
                 </div>
               </div>
@@ -242,8 +248,8 @@
                 <div class="purchase-section mt-auto">
                   
                   <!-- Quantity Selector -->
-                  <div class="quantity-section mb-3">
-                    <label class="block text-xs font-medium text-color mb-1">
+                  <div class="quantity-section mb-2 md:mb-3">
+                    <label class="block text-xs font-medium text-color mb-1.5">
                       Quantity
                     </label>
                     <div class="quantity-controls flex items-center gap-2">
@@ -253,10 +259,11 @@
                         (click)="decreaseQuantity()"
                         severity="secondary"
                         [outlined]="true"
-                        size="small">
+                        size="small"
+                        class="min-w-[2.5rem] h-10">
                       </p-button>
                       
-                      <span class="quantity-display text-sm font-semibold px-2 py-1 rounded min-w-[2rem] text-center border border-surface">
+                      <span class="quantity-display text-sm md:text-base font-semibold px-3 md:px-4 py-2 rounded min-w-[3rem] text-center border border-surface">
                         {{ quantity() }}
                       </span>
                       
@@ -266,20 +273,21 @@
                         (click)="increaseQuantity()"
                         severity="secondary"
                         [outlined]="true"
-                        size="small">
+                        size="small"
+                        class="min-w-[2.5rem] h-10">
                       </p-button>
                     </div>
                   </div>
                   
                   <!-- Action Buttons -->
-                  <div class="action-buttons space-y-3">
+                  <div class="action-buttons space-y-2 md:space-y-3">
                     
                     <!-- Cart Status Display -->
                     @if (isInCart()) {
-                      <div class="bg-green-50 border border-green-200 rounded-lg p-3">
+                      <div class="bg-green-50 border border-green-200 rounded-lg p-2.5 md:p-3">
                         <div class="flex items-center gap-2 text-green-700">
-                          <i class="pi pi-check-circle text-lg"></i>
-                          <span class="font-medium">
+                          <i class="pi pi-check-circle text-base md:text-lg"></i>
+                          <span class="font-medium text-xs md:text-sm">
                             {{ cartQuantity() }} {{ cartQuantity() === 1 ? 'item' : 'items' }} in cart
                           </span>
                         </div>
@@ -287,16 +295,16 @@
                     }
                     
                     <!-- Add to Cart Button and Wishlist -->
-                    <div class="flex flex-col sm:flex-row gap-2">
+                    <div class="flex flex-row gap-2">
                       <p-button
-                        [label]="isInCart() ? 'Add More to Cart' : 'Add to Cart'"
+                        [label]="isInCart() ? 'Add More' : 'Add to Cart'"
                         icon="pi pi-shopping-cart"
                         [disabled]="!canAddToCart()"
                         [loading]="isAddingToCart()"
                         (click)="addToCart()"
                         severity="primary"
                         size="small"
-                        class="flex-1">
+                        class="flex-1 !h-11 !text-sm md:!text-base">
                       </p-button>
                       
                       <p-button
@@ -305,6 +313,7 @@
                         severity="secondary"
                         [outlined]="true"
                         size="small"
+                        class="!w-11 !h-11"
                         [ariaLabel]="'Add to wishlist'">
                       </p-button>
                     </div>
@@ -322,20 +331,20 @@
       
       <!-- Related Products Section -->
       @if (relatedProducts().length > 0 || relatedLoading()) {
-        <div class="related-products-section py-8">
-          <div class="max-w-6xl mx-auto px-4">
+        <div class="related-products-section py-6 md:py-8 border-t border-surface">
+          <div class="max-w-6xl mx-auto px-3 md:px-4">
             
-            <h2 class="text-xl font-bold text-color mb-6 text-center">
+            <h2 class="text-lg md:text-xl font-bold text-color mb-4 md:mb-6 text-center">
               Related Products
             </h2>
             
             @if (relatedLoading()) {
-              <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                @for (item of [1,2,3,4]; track item) {
+              <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+                @for (item of [1,2,3,4,5,6,7,8]; track item) {
                   <p-card class="product-skeleton-card">
-                    <p-skeleton height="150px" class="mb-3"></p-skeleton>
-                    <p-skeleton width="80%" height="0.875rem" class="mb-2"></p-skeleton>
-                    <p-skeleton width="60%" height="0.875rem"></p-skeleton>
+                    <p-skeleton height="120px" class="mb-3"></p-skeleton>
+                    <p-skeleton width="80%" height="0.75rem" class="mb-2"></p-skeleton>
+                    <p-skeleton width="60%" height="0.75rem"></p-skeleton>
                   </p-card>
                 }
               </div>
@@ -343,18 +352,19 @@
               <p-carousel
                 [value]="relatedProducts()"
                 [numVisible]="4"
-                [numScroll]="1"
+                [numScroll]="2"
                 [responsiveOptions]="[
+                  {breakpoint: '1280px', numVisible: 4, numScroll: 2},
                   {breakpoint: '1024px', numVisible: 3, numScroll: 1},
                   {breakpoint: '768px', numVisible: 2, numScroll: 1},
-                  {breakpoint: '560px', numVisible: 1, numScroll: 1}
+                  {breakpoint: '560px', numVisible: 1.5, numScroll: 1}
                 ]"
                 [circular]="true"
                 [autoplayInterval]="5000"
                 class="related-products-carousel">
                 
                 <ng-template #item let-product>
-                  <div class="carousel-item-wrapper px-2">
+                  <div class="carousel-item-wrapper px-1.5 md:px-2">
                     <app-product-card [product]="product"></app-product-card>
                   </div>
                 </ng-template>
