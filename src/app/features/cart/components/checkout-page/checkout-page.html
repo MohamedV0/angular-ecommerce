@@ -78,15 +78,24 @@
       <div class="max-w-6xl mx-auto">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
           
-          <!-- Left Column: Form & Payment Components -->
+          <!-- Left Column: Address Selection & Payment -->
           <div class="space-y-6">
             
-            <!-- Shipping Address Form Component -->
-            <app-checkout-form
-              [isProcessing]="isProcessing()"
-              (formValidChange)="onFormValidChange($event)"
-              (formValueChange)="onFormValueChange($event)">
-            </app-checkout-form>
+            <!-- Address Selector Component -->
+            <app-address-selector
+              [isDisabled]="isProcessing()"
+              (selectionChange)="onAddressSelectionChange($event)"
+              (addressSelected)="onAddressSelected($event)">
+            </app-address-selector>
+
+            <!-- Shipping Address Form (Only shown when adding new address) -->
+            @if (showAddressForm()) {
+              <app-checkout-form
+                [isProcessing]="isProcessing()"
+                (formValidChange)="onFormValidChange($event)"
+                (formValueChange)="onFormValueChange($event)">
+              </app-checkout-form>
+            }
 
             <!-- Payment Method Selector Component -->
             <app-payment-method-selector

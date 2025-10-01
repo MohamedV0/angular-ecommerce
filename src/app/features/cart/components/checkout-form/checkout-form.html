@@ -7,6 +7,34 @@
   </ng-template>
   
   <form [formGroup]="checkoutForm" class="space-y-4">
+    <!-- Address Name -->
+    <div>
+      <label for="name" class="block text-sm font-medium text-color mb-2">
+        Address Label <span class="text-red-500">*</span>
+      </label>
+      <input
+        id="name"
+        pInputText
+        formControlName="name"
+        placeholder="e.g., Home, Work, Mom's House"
+        class="w-full"
+        [class.p-invalid]="isFieldInvalid('name')"
+        aria-describedby="name-error" />
+      @if (isFieldInvalid('name')) {
+        <small id="name-error" class="text-red-500 mt-1 block">
+          @if (checkoutForm.get('name')?.errors?.['required']) {
+            Address label is required
+          }
+          @if (checkoutForm.get('name')?.errors?.['minlength']) {
+            Address label must be at least 2 characters
+          }
+        </small>
+      }
+      <small class="text-muted-color text-xs mt-1 block">
+        Give this address a name to easily identify it later
+      </small>
+    </div>
+
     <!-- Address Details -->
     <div>
       <label for="details" class="block text-sm font-medium text-color mb-2">

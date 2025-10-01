@@ -11,6 +11,7 @@ import { extractErrorMessage } from '../../../shared/utils/error.utils';
  * Based on API requirements from Postman collection
  */
 export interface ShippingAddress {
+  name?: string;                        // Address label (Home, Work, etc.) - Optional for checkout, required for profile
   details: string;                      // Address details
   phone: string;                        // Phone number
   city: string;                         // City name

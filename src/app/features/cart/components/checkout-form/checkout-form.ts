@@ -81,6 +81,10 @@ export class CheckoutFormComponent implements OnInit {
     const initialData = this.initialData();
     
     this.checkoutForm = this.fb.group({
+      name: [initialData?.name || '', [
+        Validators.required,
+        Validators.minLength(2)
+      ]],
       details: [initialData?.details || '', [
         Validators.required,
         shippingAddressDetailsValidator()
@@ -114,6 +118,7 @@ export class CheckoutFormComponent implements OnInit {
       .subscribe(value => {
         if (this.checkoutForm.valid) {
           this.formValueChange.emit({
+            name: value.name?.trim() || '',
             details: value.details?.trim() || '',
             phone: value.phone?.trim() || '',
             city: value.city || ''
@@ -144,6 +149,7 @@ export class CheckoutFormComponent implements OnInit {
     if (this.checkoutForm.valid) {
       const value = this.checkoutForm.value;
       return {
+        name: value.name?.trim() || '',
         details: value.details?.trim() || '',
         phone: value.phone?.trim() || '',
         city: value.city || ''

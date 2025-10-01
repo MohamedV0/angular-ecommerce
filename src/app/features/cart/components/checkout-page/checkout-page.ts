@@ -12,8 +12,10 @@ import { MessageService } from 'primeng/api';
 // Feature Imports
 import { CartStore } from '../../store/cart.store';
 import { CheckoutService, ShippingAddress } from '../../services/checkout.service';
+import { AddressService } from '../../../profile/services/address.service';
 
 // Sub-components
+import { AddressSelectorComponent, AddressSelectionResult } from '../address-selector/address-selector';
 import { CheckoutFormComponent } from '../checkout-form/checkout-form';
 import { PaymentMethodSelectorComponent, PaymentMethod } from '../payment-method-selector/payment-method-selector';
 import { OrderSummaryComponent } from '../order-summary/order-summary';
@@ -34,6 +36,7 @@ import { OrderSummaryComponent } from '../order-summary/order-summary';
     MessageModule,
     SkeletonModule,
     // Sub-components
+    AddressSelectorComponent,
     CheckoutFormComponent,
     PaymentMethodSelectorComponent,
     OrderSummaryComponent
@@ -46,6 +49,7 @@ export class CheckoutPage implements OnInit {
   private readonly router = inject(Router);
   private readonly cartStore = inject(CartStore);
   private readonly checkoutService = inject(CheckoutService);
+  private readonly addressService = inject(AddressService);
   private readonly messageService = inject(MessageService);
 
   // Component state
@@ -55,6 +59,8 @@ export class CheckoutPage implements OnInit {
   readonly paymentMethod = signal<PaymentMethod>('cash');
   readonly isFormValid = signal(false);
   readonly shippingAddress = signal<ShippingAddress | null>(null);
+  readonly showAddressForm = signal(false);  // Show form when "new address" is selected
+  readonly selectedAddressId = signal<string | null>(null);  // For saving after order
 
   // Cart data from store
   readonly cartItems = this.cartStore.items;
@@ -84,6 +90,31 @@ export class CheckoutPage implements OnInit {
 
   ngOnInit(): void {
     this.validateCheckoutRequirements();
+  }
+
+  /**
+   * Handle address selection changes from AddressSelectorComponent
+   */
+  onAddressSelectionChange(result: AddressSelectionResult): void {
+    if (result.type === 'existing') {
+      // User selected existing address
+      this.showAddressForm.set(false);
+      this.isFormValid.set(true);  // Existing address is always valid
+      this.selectedAddressId.set(result.addressId || null);
+    } else {
+      // User wants to add new address
+      this.showAddressForm.set(true);
+      this.isFormValid.set(false);  // Wait for form validation
+      this.selectedAddressId.set(null);  // New address, not saved yet
+    }
+  }
+
+  /**
+   * Handle address selected from AddressSelectorComponent
+   * (called when existing address is chosen)
+   */
+  onAddressSelected(address: ShippingAddress): void {
+    this.shippingAddress.set(address);
   }
 
   /**
@@ -172,6 +203,9 @@ export class CheckoutPage implements OnInit {
         this.isProcessing.set(false);
         
         if (result.success) {
+          // ✅ Save new address to profile (Amazon style)
+          this.saveNewAddressIfNeeded(shippingAddress, result.orderId);
+          
           // Navigate immediately to success page with order details
           this.router.navigate(['/cart/success'], {
             queryParams: { 
@@ -218,6 +252,10 @@ export class CheckoutPage implements OnInit {
         this.isProcessing.set(false);
         
         if (result.success && result.stripeUrl) {
+          // ✅ Save new address to profile before redirect (Amazon style)
+          // Note: For Stripe, we save before redirect since we won't return to this page
+          this.saveNewAddressIfNeeded(shippingAddress);
+          
           // Redirect immediately to Stripe checkout
           window.location.href = result.stripeUrl;
         } else {
@@ -236,6 +274,40 @@ export class CheckoutPage implements OnInit {
           detail: 'An unexpected error occurred. Please try again.'
         });
         console.error('Stripe session error:', error);
+      }
+    });
+  }
+
+  /**
+   * Save new address to profile after successful checkout (Amazon style)
+   * Only saves if user entered a new address (not selected from existing ones)
+   */
+  private saveNewAddressIfNeeded(shippingAddress: ShippingAddress, orderId?: string): void {
+    // Only save if this was a NEW address (not an existing one)
+    if (this.selectedAddressId() !== null) {
+      // User selected existing address - don't save
+      return;
+    }
+
+    // Use user-provided name or fallback to auto-generated name
+    const addressName = shippingAddress.name || 
+      (orderId ? `Order #${orderId.substring(0, 8)}` : `Shipping Address ${new Date().toLocaleDateString()}`);
+
+    // Save address to profile
+    this.addressService.addAddress({
+      name: addressName,
+      details: shippingAddress.details,
+      phone: shippingAddress.phone,
+      city: shippingAddress.city
+    }).subscribe({
+      next: (result) => {
+        if (result.success) {
+          console.log('✅ New address saved to profile:', addressName);
+        }
+      },
+      error: (error) => {
+        // Silently fail - don't interrupt checkout success flow
+        console.warn('Failed to save address to profile:', error);
       }
     });
   }
