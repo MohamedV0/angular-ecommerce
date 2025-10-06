@@ -42,8 +42,12 @@ export class Header implements OnInit, OnDestroy {
   // ✅ PERFORMANCE: Expose as signals instead of method wrappers
   readonly isAuthenticated = computed(() => this.authService.isAuthenticated());
   readonly currentUserName = computed(() => this.authService.getCurrentUserName());
-  readonly currentLanguage = computed(() => this.i18nService.getCurrentLanguageCode());
+  readonly currentLanguage = this.i18nService.currentLanguage;  // ✅ Direct signal reference (reactive)
   readonly isDarkMode = this.themeService.isDarkMode;
+  
+  // Badge counts for Cart and Wishlist
+  readonly cartBadgeCount = computed(() => this.cartStore.badgeCount());
+  readonly wishlistBadgeCount = computed(() => this.wishlistStore.badgeCount());
   
   // Theme preset management
   readonly availableThemePresets = THEME_PRESETS;
@@ -75,15 +79,10 @@ export class Header implements OnInit, OnDestroy {
     logout: ''
   });
   
-  // ✅ BEST PRACTICE: Computed signal for menu items
-  // This automatically updates when cart badge OR wishlist badge OR translations change
-  readonly menuItems = computed<MenuItem[]>(() => {
-    const t = this.translationStrings();
-    const cartBadge = this.cartStore.badgeCount();
-    const wishlistBadge = this.wishlistStore.badgeCount();
-    const authenticated = this.isAuthenticated();
-    
-    const items: MenuItem[] = [
+  // ✅ REFACTORED: Extract common menu items to reduce duplication
+  // Returns readonly array to prevent accidental mutations
+  private getBaseMenuItems(t: ReturnType<typeof this.translationStrings>): readonly MenuItem[] {
+    return [
       {
         label: t.home,
         icon: PrimeIcons.HOME,
@@ -103,22 +102,55 @@ export class Header implements OnInit, OnDestroy {
         label: t.brands,
         icon: PrimeIcons.BOOKMARK,
         routerLink: '/brands'
-      },
+      }
+    ];
+  }
+  
+  // ✅ Desktop menu items (Cart & Wishlist moved to action buttons)
+  readonly menuItems = computed<MenuItem[]>(() => {
+    const t = this.translationStrings();
+    const authenticated = this.isAuthenticated();
+    
+    // Clone base items to maintain immutability
+    const items = [...this.getBaseMenuItems(t)];
+    
+    // Add Orders as direct link for authenticated users
+    if (authenticated) {
+      items.push({
+        label: t.orders,
+        icon: PrimeIcons.BOX,
+        routerLink: '/profile/orders'
+      });
+    }
+    
+    return items;
+  });
+  
+  // ✅ Mobile drawer menu items (includes Cart & Wishlist)
+  readonly mobileMenuItems = computed<MenuItem[]>(() => {
+    const t = this.translationStrings();
+    const authenticated = this.isAuthenticated();
+    
+    // Clone base items to maintain immutability
+    const items = [...this.getBaseMenuItems(t)];
+    
+    // Add Cart & Wishlist for mobile (using computed badge counts)
+    items.push(
       {
         label: t.wishlist,
         icon: PrimeIcons.HEART,
         routerLink: '/wishlist',
-        badge: wishlistBadge
+        badge: this.wishlistBadgeCount()
       },
       {
         label: t.cart,
         icon: PrimeIcons.SHOPPING_CART,
         routerLink: '/cart',
-        badge: cartBadge
+        badge: this.cartBadgeCount()
       }
-    ];
+    );
     
-    // Add Orders as direct link for authenticated users (outside dropdown)
+    // Add Orders for authenticated users
     if (authenticated) {
       items.push({
         label: t.orders,

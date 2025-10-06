@@ -13,18 +13,4 @@ export class App {
   protected readonly title = signal('fresh-cart');
   protected readonly i18nService = inject(I18nService);
   protected readonly themeService = inject(ThemeService); // ✅ Initialize theme service
-
-  /**
-   * Toggle between English and Arabic
-   */
-  toggleLanguage(): void {
-    this.i18nService.toggleLanguage();
-  }
-
-  /**
-   * Get current language for display
-   */
-  getCurrentLanguage(): string {
-    return this.i18nService.getCurrentLanguageCode();
-  }
 }

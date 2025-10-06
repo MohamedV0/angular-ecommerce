@@ -18,7 +18,35 @@
     
   <!-- Desktop Actions Section -->
   <ng-template pTemplate="end">
-    <div class="flex items-center gap-2">
+    <div class="flex items-center gap-1">
+      
+      <!-- Wishlist Button with Badge -->
+      <p-button 
+        icon="pi pi-heart"
+        severity="secondary"
+        [text]="true"
+        [rounded]="true"
+        [badge]="wishlistBadgeCount() ? wishlistBadgeCount().toString() : undefined"
+        badgeSeverity="danger"
+        routerLink="/wishlist"
+        [attr.aria-label]="'NAVIGATION.WISHLIST' | translate"
+        [pTooltip]="'NAVIGATION.WISHLIST' | translate"
+        tooltipPosition="bottom">
+      </p-button>
+      
+      <!-- Cart Button with Badge -->
+      <p-button 
+        icon="pi pi-shopping-cart"
+        severity="secondary"
+        [text]="true"
+        [rounded]="true"
+        [badge]="cartBadgeCount() ? cartBadgeCount().toString() : undefined"
+        badgeSeverity="success"
+        routerLink="/cart"
+        [attr.aria-label]="'NAVIGATION.CART' | translate"
+        [pTooltip]="'NAVIGATION.CART' | translate"
+        tooltipPosition="bottom">
+      </p-button>
       
       <!-- Theme Preset Selector (Icon Button with Popup Menu) -->
       <p-button 
@@ -136,7 +164,7 @@
   
   <!-- Mobile: Actions -->
   <ng-template pTemplate="end">
-    <div class="flex items-center gap-2">
+    <div class="flex items-center gap-1">
       
       <!-- Theme Preset Selector (Mobile) -->
       <p-button 
@@ -246,7 +274,7 @@
     <!-- Navigation Menu Items -->
     <div class="flex-1 overflow-y-auto">
       <ul class="list-none p-0 m-0">
-        @for (item of menuItems(); track item.label) {
+        @for (item of mobileMenuItems(); track item.label) {
           <li>
             <a 
               [routerLink]="item.routerLink"

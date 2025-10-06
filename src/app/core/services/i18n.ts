@@ -1,7 +1,7 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { PrimeNG } from 'primeng/config';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { StorageService } from './storage';
 
@@ -12,7 +12,9 @@ export class I18nService {
   private readonly translateService = inject(TranslateService);
   private readonly primeNGConfig = inject(PrimeNG);
   private readonly storageService = inject(StorageService);
-  private readonly currentLanguageSubject = new BehaviorSubject<string>('en');
+  
+  // ✅ Single source of truth for current language (reactive signal)
+  readonly currentLanguage = signal<string>('en');
   
   // Supported languages for FreshCart
   readonly supportedLanguages = [
@@ -59,9 +61,11 @@ export class I18nService {
    */
   setLanguage(langCode: string): void {
     if (this.supportedLanguages.some(lang => lang.code === langCode)) {
+      // ✅ Update reactive signal (single source of truth)
+      this.currentLanguage.set(langCode);
+      
       // Apply language to ngx-translate
       this.translateService.use(langCode);
-      this.currentLanguageSubject.next(langCode);
       
       // 💾 Persist language preference to localStorage
       this.storageService.setLanguage(langCode);
@@ -86,24 +90,10 @@ export class I18nService {
   }
 
   /**
-   * Get current language as observable
-   */
-  getCurrentLanguage(): Observable<string> {
-    return this.currentLanguageSubject.asObservable();
-  }
-
-  /**
-   * Get current language code
-   */
-  getCurrentLanguageCode(): string {
-    return this.currentLanguageSubject.value;
-  }
-
-  /**
    * Toggle between English and Arabic
    */
   toggleLanguage(): void {
-    const currentLang = this.getCurrentLanguageCode();
+    const currentLang = this.currentLanguage();
     const newLang = currentLang === 'en' ? 'ar' : 'en';
     this.setLanguage(newLang);
   }
@@ -126,7 +116,7 @@ export class I18nService {
    * Check if current language is RTL
    */
   isRTL(): boolean {
-    const currentLang = this.getCurrentLanguageCode();
+    const currentLang = this.currentLanguage();
     const language = this.supportedLanguages.find(lang => lang.code === currentLang);
     return language?.direction === 'rtl';
   }
