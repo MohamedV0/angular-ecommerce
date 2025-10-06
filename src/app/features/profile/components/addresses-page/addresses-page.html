@@ -14,7 +14,7 @@
         
         <!-- Add Address Button -->
         <p-button 
-          [label]="'PROFILE.ADDRESSES.ADD_NEW' | translate"
+          [label]="'PROFILE.ADDRESSES.ADD_NEW_ADDRESS' | translate"
           severity="primary"
           icon="pi pi-plus"
           (click)="openAddDrawer()"
@@ -70,7 +70,7 @@
         </p>
         
         <p-button 
-          [label]="'PROFILE.ADDRESSES.ADD_FIRST' | translate"
+          [label]="'PROFILE.ADDRESSES.ADD_FIRST_ADDRESS' | translate"
           severity="primary"
           icon="pi pi-plus"
           (click)="openAddDrawer()"
@@ -173,10 +173,10 @@
         @if (isFieldInvalid('name')) {
           <small class="text-red-500">
             @if (addressForm.get('name')?.errors?.['required']) {
-              {{ 'PROFILE.ADDRESSES.DRAWER.ERRORS.LABEL_REQUIRED' | translate }}
+              {{ 'PROFILE.ADDRESSES.DRAWER.ADDRESS_LABEL_REQUIRED' | translate }}
             }
             @if (addressForm.get('name')?.errors?.['minlength']) {
-              {{ 'PROFILE.ADDRESSES.DRAWER.ERRORS.LABEL_MIN_LENGTH' | translate }}
+              {{ 'PROFILE.ADDRESSES.DRAWER.ADDRESS_LABEL_MIN_LENGTH' | translate }}
             }
           </small>
         }
@@ -199,10 +199,10 @@
         @if (isFieldInvalid('details')) {
           <small class="text-red-500">
             @if (addressForm.get('details')?.errors?.['required']) {
-              {{ 'PROFILE.ADDRESSES.DRAWER.ERRORS.DETAILS_REQUIRED' | translate }}
+              {{ 'PROFILE.ADDRESSES.DRAWER.ADDRESS_DETAILS_REQUIRED' | translate }}
             }
             @if (addressForm.get('details')?.errors?.['minAddressLength']) {
-              {{ 'PROFILE.ADDRESSES.DRAWER.ERRORS.DETAILS_MIN_LENGTH' | translate }}
+              {{ 'PROFILE.ADDRESSES.DRAWER.ADDRESS_DETAILS_MIN_LENGTH' | translate }}
             }
           </small>
         }
@@ -223,10 +223,10 @@
         @if (isFieldInvalid('phone')) {
           <small class="text-red-500">
             @if (addressForm.get('phone')?.errors?.['required']) {
-              {{ 'PROFILE.ADDRESSES.DRAWER.ERRORS.PHONE_REQUIRED' | translate }}
+              {{ 'PROFILE.ADDRESSES.DRAWER.PHONE_REQUIRED' | translate }}
             }
             @if (addressForm.get('phone')?.errors?.['invalidEgyptianPhone']) {
-              {{ 'PROFILE.ADDRESSES.DRAWER.ERRORS.PHONE_INVALID' | translate }}
+              {{ 'PROFILE.ADDRESSES.DRAWER.PHONE_INVALID' | translate }}
             }
           </small>
         }
@@ -250,7 +250,7 @@
         </p-select>
         @if (isFieldInvalid('city')) {
           <small class="text-red-500">
-            {{ 'PROFILE.ADDRESSES.DRAWER.ERRORS.CITY_REQUIRED' | translate }}
+            {{ 'PROFILE.ADDRESSES.DRAWER.CITY_REQUIRED' | translate }}
           </small>
         }
       </div>
