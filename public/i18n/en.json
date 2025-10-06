@@ -23,7 +23,11 @@
     "PROFILE": "Profile",
     "LOGIN": "Login",
     "REGISTER": "Register",
-    "LOGOUT": "Logout"
+    "LOGOUT": "Logout",
+    "ORDERS": "Orders",
+    "VIEW_PROFILE": "View Profile",
+    "ADDRESSES": "Addresses",
+    "SETTINGS": "Settings"
   },
   "PRODUCTS": {
     "ADD_TO_CART": "Add to Cart",

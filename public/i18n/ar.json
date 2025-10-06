@@ -23,7 +23,11 @@
     "PROFILE": "الملف الشخصي",
     "LOGIN": "تسجيل الدخول",
     "REGISTER": "إنشاء حساب",
-    "LOGOUT": "تسجيل الخروج"
+    "LOGOUT": "تسجيل الخروج",
+    "ORDERS": "الطلبات",
+    "VIEW_PROFILE": "عرض الملف الشخصي",
+    "ADDRESSES": "العناوين",
+    "SETTINGS": "الإعدادات"
   },
   "PRODUCTS": {
     "ADD_TO_CART": "أضف إلى السلة",

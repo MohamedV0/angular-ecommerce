@@ -50,7 +50,12 @@ export class Header implements OnInit, OnDestroy {
     categories: '',
     brands: '',
     cart: '',
-    wishlist: ''
+    wishlist: '',
+    orders: '',
+    viewProfile: '',
+    addresses: '',
+    settings: '',
+    logout: ''
   });
   
   // ✅ BEST PRACTICE: Computed signal for menu items
@@ -99,7 +104,7 @@ export class Header implements OnInit, OnDestroy {
     // Add Orders as direct link for authenticated users (outside dropdown)
     if (authenticated) {
       items.push({
-        label: 'Orders',
+        label: t.orders,
         icon: PrimeIcons.BOX,
         routerLink: '/profile/orders'
       });
@@ -110,34 +115,38 @@ export class Header implements OnInit, OnDestroy {
 
   // User dropdown menu items (Profile, Addresses, Settings, Logout)
   // Note: Orders is in main menu, not in dropdown
-  readonly userMenuItems = computed<MenuItem[]>(() => [
-    {
-      label: 'View Profile',
-      icon: PrimeIcons.USER,
-      routerLink: '/profile'
-    },
-    {
-      separator: true
-    },
-    {
-      label: 'Addresses',
-      icon: PrimeIcons.MAP_MARKER,
-      routerLink: '/profile/addresses'
-    },
-    {
-      label: 'Settings',
-      icon: PrimeIcons.COG,
-      routerLink: '/profile/settings'
-    },
-    {
-      separator: true
-    },
-    {
-      label: 'Logout',
-      icon: PrimeIcons.SIGN_OUT,
-      command: () => this.logout()
-    }
-  ]);
+  readonly userMenuItems = computed<MenuItem[]>(() => {
+    const t = this.translationStrings();
+    
+    return [
+      {
+        label: t.viewProfile,
+        icon: PrimeIcons.USER,
+        routerLink: '/profile'
+      },
+      {
+        separator: true
+      },
+      {
+        label: t.addresses,
+        icon: PrimeIcons.MAP_MARKER,
+        routerLink: '/profile/addresses'
+      },
+      {
+        label: t.settings,
+        icon: PrimeIcons.COG,
+        routerLink: '/profile/settings'
+      },
+      {
+        separator: true
+      },
+      {
+        label: t.logout,
+        icon: PrimeIcons.SIGN_OUT,
+        command: () => this.logout()
+      }
+    ];
+  });
 
   ngOnInit(): void {
     // Watch for authentication changes and update cart & wishlist accordingly
@@ -154,10 +163,15 @@ export class Header implements OnInit, OnDestroy {
       this.translateService.stream('NAVIGATION.CATEGORIES'),
       this.translateService.stream('NAVIGATION.BRANDS'),
       this.translateService.stream('NAVIGATION.CART'),
-      this.translateService.stream('NAVIGATION.WISHLIST')
-    ]).subscribe(([home, products, categories, brands, cart, wishlist]) => {
+      this.translateService.stream('NAVIGATION.WISHLIST'),
+      this.translateService.stream('NAVIGATION.ORDERS'),
+      this.translateService.stream('NAVIGATION.VIEW_PROFILE'),
+      this.translateService.stream('NAVIGATION.ADDRESSES'),
+      this.translateService.stream('NAVIGATION.SETTINGS'),
+      this.translateService.stream('NAVIGATION.LOGOUT')
+    ]).subscribe(([home, products, categories, brands, cart, wishlist, orders, viewProfile, addresses, settings, logout]) => {
       // Update translation signal - menuItems computed will auto-update
-      this.translationStrings.set({ home, products, categories, brands, cart, wishlist });
+      this.translationStrings.set({ home, products, categories, brands, cart, wishlist, orders, viewProfile, addresses, settings, logout });
     });
   }
 
