@@ -42,9 +42,11 @@
     <div class="max-w-7xl mx-auto px-4 py-12">
       <div class="flex justify-center items-center">
         <div class="text-center max-w-md">
-          <p-message severity="error" [text]="error()" class="mb-4 block"></p-message>
+          <p-message severity="error" styleClass="mb-4 block">
+            {{ error() }}
+          </p-message>
           <p-button 
-            label="Retry" 
+            [label]="'BRANDS.DETAILS.RETRY' | translate" 
             icon="pi pi-refresh" 
             (click)="retry()"
             severity="secondary">
@@ -63,7 +65,7 @@
         <div class="max-w-7xl mx-auto px-4 py-4">
           <p-breadcrumb 
             [model]="breadcrumbItems()" 
-            [home]="{icon: 'pi pi-home', routerLink: '/'}"
+            [home]="{icon: 'pi pi-home', routerLink: '/', label: ('NAVIGATION.BRANDS' | translate)}"
             [style]="{'background': 'transparent', 'border': 'none', 'padding': '0'}"
             class="!bg-transparent">
           </p-breadcrumb>
@@ -92,14 +94,14 @@
                 {{ brand()!.name }}
               </h1>
               <p class="text-sm text-muted-color">
-                Discover products from {{ brand()!.name }}
+                {{ 'BRANDS.DETAILS.DISCOVER' | translate: {name: brand()!.name} }}
               </p>
             </div>
             
             <!-- View All Button -->
             <div class="flex-shrink-0 hidden sm:block">
               <p-button
-                label="View All Products"
+                [label]="'BRANDS.DETAILS.VIEW_ALL_PRODUCTS' | translate"
                 icon="pi pi-arrow-right"
                 iconPos="right"
                 (click)="viewAllProducts()"
@@ -113,7 +115,7 @@
           <!-- Mobile View All Button -->
           <div class="mt-4 sm:hidden">
             <p-button
-              label="View All Products"
+              [label]="'BRANDS.DETAILS.VIEW_ALL_PRODUCTS' | translate"
               icon="pi pi-arrow-right"
               iconPos="right"
               (click)="viewAllProducts()"
@@ -132,7 +134,7 @@
             
             <div class="flex items-center justify-between mb-4">
               <h2 class="text-lg font-semibold text-color">
-                Featured Products
+                {{ 'BRANDS.DETAILS.FEATURED_PRODUCTS' | translate }}
               </h2>
             </div>
             
@@ -152,10 +154,10 @@
             <div class="text-center">
               <i class="pi pi-inbox text-5xl text-muted-color mb-4"></i>
               <h3 class="text-xl font-semibold text-color mb-2">
-                No products available
+                {{ 'BRANDS.DETAILS.NO_PRODUCTS_AVAILABLE' | translate }}
               </h3>
               <p class="text-muted-color">
-                Products from {{ brand()!.name }} will appear here soon
+                {{ 'BRANDS.DETAILS.NO_PRODUCTS_MESSAGE' | translate: {name: brand()!.name} }}
               </p>
             </div>
           </div>

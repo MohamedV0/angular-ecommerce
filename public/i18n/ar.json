@@ -551,6 +551,29 @@
     "emptySearchMessage": "لا توجد نتائج",
     "emptyMessage": "لا توجد نتائج"
   },
+  "BRANDS": {
+    "LIST": {
+      "TITLE": "العلامات التجارية",
+      "BRANDS_AVAILABLE": "{{count}} علامة تجارية متاحة",
+      "SEARCH_PLACEHOLDER": "ابحث عن العلامات التجارية...",
+      "NO_BRANDS_FOUND": "لم يتم العثور على علامات تجارية",
+      "NO_BRANDS_AVAILABLE": "لا توجد علامات تجارية متاحة حالياً",
+      "NO_SEARCH_RESULTS": "لا توجد علامات تجارية تطابق بحثك \"{{query}}\"",
+      "CLEAR_SEARCH": "مسح البحث",
+      "VIEW_PRODUCTS_LINK": "عرض المنتجات",
+      "VIEW_BRAND_ARIA": "عرض علامة {{name}} التجارية",
+      "PAGINATION_TEMPLATE": "عرض {first} إلى {last} من {totalRecords} علامة تجارية",
+      "FOR_QUERY": "لـ \"{{query}}\""
+    },
+    "DETAILS": {
+      "DISCOVER": "اكتشف منتجات {{name}}",
+      "VIEW_ALL_PRODUCTS": "عرض جميع المنتجات",
+      "FEATURED_PRODUCTS": "منتجات مميزة",
+      "NO_PRODUCTS_AVAILABLE": "لا توجد منتجات متاحة",
+      "NO_PRODUCTS_MESSAGE": "ستظهر منتجات {{name}} هنا قريباً",
+      "RETRY": "إعادة المحاولة"
+    }
+  },
   "AUTH": {
     "HEADER_LOGIN": "تسجيل الدخول",
     "HEADER_REGISTER": "إنشاء حساب",

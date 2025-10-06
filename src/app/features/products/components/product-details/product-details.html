@@ -199,7 +199,6 @@
                     </span>
                     <p-badge 
                       [value]="'-' + discountPercentage() + '%'"
-                      severity="success"
                       size="small"
                       class="text-xs">
                     </p-badge>
@@ -284,14 +283,13 @@
                     
                     <!-- Cart Status Display -->
                     @if (isInCart()) {
-                      <div class="bg-green-50 border border-green-200 rounded-lg p-2.5 md:p-3">
-                        <div class="flex items-center gap-2 text-green-700">
-                          <i class="pi pi-check-circle text-base md:text-lg"></i>
-                          <span class="font-medium text-xs md:text-sm">
-                            {{ 'PRODUCTS.DETAILS.CART_STATUS' | translate: {count: cartQuantity()} }}
-                          </span>
-                        </div>
-                      </div>
+                      <p-message
+                        severity="success"
+                        icon="pi pi-check-circle"
+                        size="small"
+                        styleClass="mb-3">
+                        {{ cartQuantity() === 1 ? ('PRODUCTS.DETAILS.CART_STATUS_SINGULAR' | translate) : ('PRODUCTS.DETAILS.CART_STATUS_PLURAL' | translate: {count: cartQuantity()}) }}
+                      </p-message>
                     }
                     
                     <!-- Add to Cart Button and Wishlist -->

@@ -1,6 +1,7 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 // PrimeNG Components
 import { PaginatorModule } from 'primeng/paginator';
@@ -26,6 +27,7 @@ import { Brand, BrandQueryParams } from '../../models/brand.model';
   imports: [
     CommonModule,
     RouterModule,
+    TranslateModule,
     // PrimeNG
     PaginatorModule,
     SkeletonModule,

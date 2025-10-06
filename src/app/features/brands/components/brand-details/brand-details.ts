@@ -1,6 +1,7 @@
 import { Component, inject, signal, computed, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 
 // PrimeNG Components
@@ -29,6 +30,7 @@ import { ProductCard } from '../../../../shared/components/product-card/product-
   imports: [
     CommonModule,
     RouterModule,
+    TranslateModule,
     // PrimeNG
     ButtonModule,
     SkeletonModule,
@@ -59,9 +61,7 @@ export class BrandDetailsComponent implements OnInit, OnDestroy {
   readonly hasBrand = computed(() => !!this.brand());
   readonly hasProducts = computed(() => this.products().length > 0);
   readonly breadcrumbItems = computed<MenuItem[]>(() => {
-    const items: MenuItem[] = [
-      { label: 'Brands', routerLink: '/brands' }
-    ];
+    const items: MenuItem[] = [];
 
     if (this.brand()) {
       items.push({ label: this.brand()!.name });

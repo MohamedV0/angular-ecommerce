@@ -551,6 +551,29 @@
     "emptySearchMessage": "No results found",
     "emptyMessage": "No results found"
   },
+  "BRANDS": {
+    "LIST": {
+      "TITLE": "Brands",
+      "BRANDS_AVAILABLE": "{{count}} brands available",
+      "SEARCH_PLACEHOLDER": "Search brands...",
+      "NO_BRANDS_FOUND": "No brands found",
+      "NO_BRANDS_AVAILABLE": "No brands available at the moment",
+      "NO_SEARCH_RESULTS": "No brands match your search \"{{query}}\"",
+      "CLEAR_SEARCH": "Clear Search",
+      "VIEW_PRODUCTS_LINK": "View Products",
+      "VIEW_BRAND_ARIA": "View {{name}} brand",
+      "PAGINATION_TEMPLATE": "Showing {first} to {last} of {totalRecords} brands",
+      "FOR_QUERY": "for \"{{query}}\""
+    },
+    "DETAILS": {
+      "DISCOVER": "Discover products from {{name}}",
+      "VIEW_ALL_PRODUCTS": "View All Products",
+      "FEATURED_PRODUCTS": "Featured Products",
+      "NO_PRODUCTS_AVAILABLE": "No products available",
+      "NO_PRODUCTS_MESSAGE": "Products from {{name}} will appear here soon",
+      "RETRY": "Retry"
+    }
+  },
   "AUTH": {
     "HEADER_LOGIN": "Login",
     "HEADER_REGISTER": "Register",

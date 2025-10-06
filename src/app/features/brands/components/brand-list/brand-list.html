@@ -14,12 +14,12 @@
             <i class="pi pi-bookmark text-primary-contrast text-lg"></i>
           </div>
           <div>
-            <h1 class="text-2xl font-bold text-color">Brands</h1>
+            <h1 class="text-2xl font-bold text-color">{{ 'BRANDS.LIST.TITLE' | translate }}</h1>
             @if (!loading() && hasBrands()) {
               <p class="text-sm text-muted-color">
-                {{ totalBrands() | number }} brands available
+                {{ 'BRANDS.LIST.BRANDS_AVAILABLE' | translate: {count: totalBrands() | number} }}
                 @if (searchQuery()) {
-                  <span class="ml-1">for "{{ searchQuery() }}"</span>
+                  <span class="ml-1">{{ 'BRANDS.LIST.FOR_QUERY' | translate: {query: searchQuery()} }}</span>
                 }
               </p>
             }
@@ -33,7 +33,7 @@
             <input 
               type="text" 
               pInputText 
-              placeholder="Search brands..."
+              [placeholder]="'BRANDS.LIST.SEARCH_PLACEHOLDER' | translate"
               [value]="searchQuery()"
               (input)="onSearch($event)"
               class="w-full"
@@ -66,9 +66,11 @@
     @else if (error() && !loading()) {
       <div class="flex justify-center items-center py-12">
         <div class="text-center max-w-md">
-          <p-message severity="error" [text]="error()" class="mb-4 block"></p-message>
+          <p-message severity="error" styleClass="mb-4 block">
+            {{ error() }}
+          </p-message>
           <p-button 
-            label="Retry" 
+            [label]="'BRANDS.DETAILS.RETRY' | translate" 
             icon="pi pi-refresh" 
             (click)="retry()"
             severity="secondary">
@@ -83,10 +85,10 @@
         <!-- Grid Container -->
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 mb-6">
           @for (brand of brands(); track brand._id) {
-            <div 
+              <div 
               class="group relative overflow-hidden rounded-xl border border-surface shadow-sm hover:shadow-xl hover:border-primary transition-all duration-300 cursor-pointer"
               (click)="navigateToBrand(brand)"
-              [attr.aria-label]="'View ' + brand.name + ' brand'">
+              [attr.aria-label]="'BRANDS.LIST.VIEW_BRAND_ARIA' | translate: {name: brand.name}">
               
               <!-- Brand Logo -->
               <div class="relative aspect-square flex items-center justify-center bg-surface-100 rounded-lg overflow-hidden p-4">
@@ -104,7 +106,7 @@
                   {{ brand.name }}
                 </h3>
                 <p class="text-xs text-muted-color">
-                  View Products →
+                  {{ 'BRANDS.LIST.VIEW_PRODUCTS_LINK' | translate }}
                 </p>
               </div>
             </div>
@@ -121,7 +123,7 @@
                 [first]="(currentPage() - 1) * itemsPerPage()"
                 (onPageChange)="onPageChange($event)"
                 [showCurrentPageReport]="true"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} brands"
+                [currentPageReportTemplate]="'BRANDS.LIST.PAGINATION_TEMPLATE' | translate"
                 [showJumpToPageDropdown]="false"
                 [showFirstLastIcon]="true"
                 [showPageLinks]="true"
@@ -140,18 +142,18 @@
         <div class="text-center max-w-md">
           <i class="pi pi-bookmark text-6xl text-muted-color mb-4"></i>
           <h3 class="text-xl font-semibold text-color mb-2">
-            No brands found
+            {{ 'BRANDS.LIST.NO_BRANDS_FOUND' | translate }}
           </h3>
           <p class="text-muted-color mb-4">
             @if (searchQuery()) {
-              No brands match your search "{{ searchQuery() }}"
+              {{ 'BRANDS.LIST.NO_SEARCH_RESULTS' | translate: {query: searchQuery()} }}
             } @else {
-              No brands available at the moment
+              {{ 'BRANDS.LIST.NO_BRANDS_AVAILABLE' | translate }}
             }
           </p>
           @if (searchQuery()) {
             <p-button 
-              label="Clear Search" 
+              [label]="'BRANDS.LIST.CLEAR_SEARCH' | translate" 
               icon="pi pi-times" 
               (click)="clearSearch()"
               severity="secondary">
