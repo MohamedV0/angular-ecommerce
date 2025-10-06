@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "fresh-cart": {
+    "angular-ecommerce": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -68,10 +68,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "fresh-cart:build:production"
+              "buildTarget": "angular-ecommerce:build:production"
             },
             "development": {
-              "buildTarget": "fresh-cart:build:development"
+              "buildTarget": "angular-ecommerce:build:development"
             }
           },
           "defaultConfiguration": "development"
