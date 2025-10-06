@@ -12,35 +12,54 @@ import { CardModule } from 'primeng/card';
   styleUrl: './hero-section.scss'
 })
 export class HeroSection implements OnInit, OnDestroy {
-  private platformId = inject(PLATFORM_ID);
+  private readonly platformId = inject(PLATFORM_ID);
   private resizeListener?: () => void;
   
-  mobileView = signal(false);
+  readonly mobileView = signal(false);
   
-  heroSlides = [
+  // Hero slides with translation keys
+  readonly heroSlides = [
     {
       id: 1,
-      title: 'Fresh Products Daily',
-      description: 'Discover our premium collection of fresh products delivered right to your doorstep with guaranteed quality and freshness.',
+      titleKey: 'HOME.HERO.SLIDE_1_TITLE',
+      descriptionKey: 'HOME.HERO.SLIDE_1_DESCRIPTION',
       image: 'images/Fresh-Products.jpg',
-      primaryAction: { label: 'Shop Now', action: 'shop' },
-      secondaryAction: { label: 'Learn More', action: 'learn' }
+      primaryAction: { 
+        labelKey: 'HOME.HERO.SLIDE_1_PRIMARY_ACTION', 
+        action: 'shop' 
+      },
+      secondaryAction: { 
+        labelKey: 'HOME.HERO.SLIDE_1_SECONDARY_ACTION', 
+        action: 'learn' 
+      }
     },
     {
       id: 2,
-      title: 'Electronics & Tech',
-      description: 'Explore the latest in technology and electronics with competitive prices and warranty coverage on all products.',
+      titleKey: 'HOME.HERO.SLIDE_2_TITLE',
+      descriptionKey: 'HOME.HERO.SLIDE_2_DESCRIPTION',
       image: 'images/Electronics.jpg',
-      primaryAction: { label: 'Browse Tech', action: 'tech' },
-      secondaryAction: { label: 'View Deals', action: 'deals' }
+      primaryAction: { 
+        labelKey: 'HOME.HERO.SLIDE_2_PRIMARY_ACTION', 
+        action: 'tech' 
+      },
+      secondaryAction: { 
+        labelKey: 'HOME.HERO.SLIDE_2_SECONDARY_ACTION', 
+        action: 'deals' 
+      }
     },
     {
       id: 3,
-      title: 'Fashion & Style',
-      description: 'Stay trendy with our curated fashion collection featuring the latest styles for men, women, and children.',
+      titleKey: 'HOME.HERO.SLIDE_3_TITLE',
+      descriptionKey: 'HOME.HERO.SLIDE_3_DESCRIPTION',
       image: 'images/Fashion.jpg',
-      primaryAction: { label: 'Explore Fashion', action: 'fashion' },
-      secondaryAction: { label: 'New Arrivals', action: 'new' }
+      primaryAction: { 
+        labelKey: 'HOME.HERO.SLIDE_3_PRIMARY_ACTION', 
+        action: 'fashion' 
+      },
+      secondaryAction: { 
+        labelKey: 'HOME.HERO.SLIDE_3_SECONDARY_ACTION', 
+        action: 'new' 
+      }
     }
   ];
   

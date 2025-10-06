@@ -5,10 +5,10 @@
     <!-- Section Header -->
     <div class="text-center mb-10">
       <h2 class="text-3xl font-bold text-color mb-4">
-        Shop Popular Categories
+        {{ 'HOME.CATEGORIES.TITLE' | translate }}
       </h2>
       <p class="text-lg text-muted-color max-w-2xl mx-auto">
-        Discover our wide range of product categories and find exactly what you're looking for
+        {{ 'HOME.CATEGORIES.SUBTITLE' | translate }}
       </p>
     </div>
     
@@ -48,7 +48,7 @@
           </p-card>
         } @empty {
           <div class="col-span-full text-center text-muted-color py-8">
-            <p>No categories available</p>
+            <p>{{ 'HOME.CATEGORIES.NO_CATEGORIES' | translate }}</p>
           </div>
         }
       }
@@ -57,7 +57,7 @@
     <!-- View All Button -->
     <div class="text-center mt-10">
       <p-button
-        label="View All Categories"
+        [label]="'HOME.CATEGORIES.VIEW_ALL' | translate"
         icon="pi pi-arrow-right"
         iconPos="right"
         routerLink="/categories"
