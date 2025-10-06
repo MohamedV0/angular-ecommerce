@@ -2,14 +2,17 @@ import { Injectable, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { PrimeNG } from 'primeng/config';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { StorageService } from './storage';
 
 @Injectable({
   providedIn: 'root'
 })
 export class I18nService {
-  private translateService = inject(TranslateService);
-  private primeNGConfig = inject(PrimeNG);
-  private currentLanguageSubject = new BehaviorSubject<string>('en');
+  private readonly translateService = inject(TranslateService);
+  private readonly primeNGConfig = inject(PrimeNG);
+  private readonly storageService = inject(StorageService);
+  private readonly currentLanguageSubject = new BehaviorSubject<string>('en');
   
   // Supported languages for FreshCart
   readonly supportedLanguages = [
@@ -23,37 +26,55 @@ export class I18nService {
 
   /**
    * Initialize translations and set default language
+   * Priority: 1) localStorage, 2) browser language, 3) default 'en'
    */
   private initializeTranslations(): void {
     // Set supported languages
     this.translateService.addLangs(this.supportedLanguages.map(lang => lang.code));
     
-    // Set default language
+    // Set default language (fallback)
     this.translateService.setDefaultLang('en');
     
-    // Detect browser language or use default
-    const browserLang = this.translateService.getBrowserLang();
-    const defaultLang = browserLang && this.supportedLanguages.some(lang => lang.code === browserLang) 
-      ? browserLang 
-      : 'en';
+    // Determine initial language with priority order
+    const savedLang = this.storageService.getLanguage(); // 1️⃣ Check localStorage first
+    const browserLang = this.translateService.getBrowserLang(); // 2️⃣ Check browser language
     
-    this.setLanguage(defaultLang);
+    let initialLang = 'en'; // 3️⃣ Default fallback
+    
+    // Priority 1: Use saved language preference if valid
+    if (savedLang && this.supportedLanguages.some(lang => lang.code === savedLang)) {
+      initialLang = savedLang;
+    }
+    // Priority 2: Use browser language if supported and no saved preference
+    else if (browserLang && this.supportedLanguages.some(lang => lang.code === browserLang)) {
+      initialLang = browserLang;
+    }
+    
+    // Apply the determined language
+    this.setLanguage(initialLang);
   }
 
   /**
-   * Set the active language
+   * Set the active language and persist to localStorage
    */
   setLanguage(langCode: string): void {
     if (this.supportedLanguages.some(lang => lang.code === langCode)) {
+      // Apply language to ngx-translate
       this.translateService.use(langCode);
       this.currentLanguageSubject.next(langCode);
       
-      // Sync PrimeNG translations dynamically (per documentation lines 151-153)
-      this.translateService.get('PRIMENG').subscribe(translations => {
-        if (translations && typeof translations === 'object') {
-          this.primeNGConfig.setTranslation(translations);
-        }
-      });
+      // 💾 Persist language preference to localStorage
+      this.storageService.setLanguage(langCode);
+      
+      // Sync PrimeNG translations dynamically
+      // ✅ Using take(1) to auto-unsubscribe after first emission (prevents memory leaks)
+      this.translateService.get('PRIMENG')
+        .pipe(take(1))
+        .subscribe(translations => {
+          if (translations && typeof translations === 'object') {
+            this.primeNGConfig.setTranslation(translations);
+          }
+        });
       
       // Update document direction for RTL support
       const language = this.supportedLanguages.find(lang => lang.code === langCode);
