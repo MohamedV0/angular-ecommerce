@@ -42,6 +42,5 @@ __screenshots__/
 .DS_Store
 Thumbs.db
 .cursor/
-Docs/
 tasks/
 changes.txt
