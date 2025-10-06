@@ -10,6 +10,9 @@ import { TagModule } from 'primeng/tag';
 import { SkeletonModule } from 'primeng/skeleton';
 import { MessageModule } from 'primeng/message';
 
+// Translation
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+
 // Services
 import { AuthService } from '../../../auth/services/auth';
 import { OrdersService } from '../../services/orders.service';
@@ -38,6 +41,8 @@ interface DashboardStats {
   selector: 'app-profile-dashboard',
   imports: [
     CommonModule,
+    // Translation
+    TranslateModule,
     // PrimeNG
     CardModule,
     ButtonModule,
@@ -55,6 +60,7 @@ export class ProfileDashboardPage implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly ordersService = inject(OrdersService);
   private readonly addressService = inject(AddressService);
+  private readonly translateService = inject(TranslateService);
 
   // Component state
   readonly currentUser = signal<User | null>(null);
@@ -168,18 +174,6 @@ export class ProfileDashboardPage implements OnInit {
     });
   }
 
-  /**
-   * Get member since date
-   */
-  getMemberSinceDate(): string {
-    const user = this.currentUser();
-    if (!user?.createdAt) {
-      return 'Recently';
-    }
-
-    const date = new Date(user.createdAt);
-    return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-  }
 
   /**
    * Get order status label

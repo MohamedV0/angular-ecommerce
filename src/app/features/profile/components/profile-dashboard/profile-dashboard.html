@@ -9,8 +9,8 @@
           <i class="pi pi-user text-primary-contrast text-lg"></i>
         </div>
         <div class="min-w-0">
-          <h1 class="text-xl sm:text-2xl font-bold text-color">My Profile</h1>
-          <p class="text-xs sm:text-sm text-muted-color">Manage your account and view your activity</p>
+          <h1 class="text-xl sm:text-2xl font-bold text-color">{{ 'PROFILE.DASHBOARD.TITLE' | translate }}</h1>
+          <p class="text-xs sm:text-sm text-muted-color">{{ 'PROFILE.DASHBOARD.SUBTITLE' | translate }}</p>
         </div>
       </div>
     </div>
@@ -50,7 +50,7 @@
         <div class="text-center max-w-md">
           <p-message severity="error" [text]="error()" class="mb-4 block"></p-message>
           <p-button 
-            label="Retry" 
+            [label]="'PROFILE.DASHBOARD.RETRY' | translate" 
             icon="pi pi-refresh" 
             (click)="loadDashboardData()"
             severity="secondary">
@@ -67,18 +67,18 @@
         <p-card class="shadow-sm">
           <ng-template pTemplate="header">
             <div class="flex items-center justify-between gap-2 p-3 sm:p-4 border-b border-surface">
-              <h3 class="font-semibold text-color text-sm sm:text-base">Account Information</h3>
+              <h3 class="font-semibold text-color text-sm sm:text-base">{{ 'PROFILE.DASHBOARD.ACCOUNT_INFO' | translate }}</h3>
               <p-button 
                 icon="pi pi-pencil"
                 severity="secondary"
                 [outlined]="true"
                 size="small"
                 (click)="navigateToSettings()"
-                [ariaLabel]="'Edit Profile'"
+                [ariaLabel]="'PROFILE.DASHBOARD.EDIT_PROFILE' | translate"
                 styleClass="sm:hidden">
               </p-button>
               <p-button 
-                label="Edit Profile"
+                [label]="'PROFILE.DASHBOARD.EDIT_PROFILE' | translate"
                 icon="pi pi-pencil"
                 severity="secondary"
                 [outlined]="true"
@@ -104,14 +104,13 @@
             <div class="flex-1 min-w-0 space-y-3">
               <div>
                 <h2 class="text-xl sm:text-2xl font-bold text-color mb-1 break-words">{{ currentUser()?.name }}</h2>
-                <p class="text-sm text-muted-color">Member since {{ getMemberSinceDate() }}</p>
               </div>
 
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div class="flex items-start gap-3 min-w-0">
                   <i class="pi pi-envelope text-primary flex-shrink-0 mt-1"></i>
                   <div class="min-w-0 flex-1">
-                    <p class="text-xs text-muted-color mb-1">Email Address</p>
+                    <p class="text-xs text-muted-color mb-1">{{ 'PROFILE.DASHBOARD.EMAIL' | translate }}</p>
                     <p class="font-medium text-color text-sm break-all">{{ currentUser()?.email }}</p>
                   </div>
                 </div>
@@ -119,8 +118,8 @@
                 <div class="flex items-start gap-3 min-w-0">
                   <i class="pi pi-phone text-primary flex-shrink-0 mt-1"></i>
                   <div class="min-w-0 flex-1">
-                    <p class="text-xs text-muted-color mb-1">Phone Number</p>
-                    <p class="font-medium text-color text-sm">{{ currentUser()?.phone || 'Not provided' }}</p>
+                    <p class="text-xs text-muted-color mb-1">{{ 'PROFILE.DASHBOARD.PHONE' | translate }}</p>
+                    <p class="font-medium text-color text-sm">{{ currentUser()?.phone || ('PROFILE.DASHBOARD.NOT_PROVIDED' | translate) }}</p>
                   </div>
                 </div>
               </div>
@@ -140,7 +139,7 @@
                 <i class="pi pi-box text-primary text-lg sm:text-xl"></i>
               </div>
               <div class="flex-1 min-w-0">
-                <p class="text-xs sm:text-sm text-muted-color">Total Orders</p>
+                <p class="text-xs sm:text-sm text-muted-color">{{ 'PROFILE.DASHBOARD.TOTAL_ORDERS' | translate }}</p>
                 <p class="text-xl sm:text-2xl font-bold text-color">{{ stats().totalOrders }}</p>
               </div>
               <i class="pi pi-chevron-right text-muted-color flex-shrink-0"></i>
@@ -156,7 +155,7 @@
                 <i class="pi pi-map-marker text-primary text-lg sm:text-xl"></i>
               </div>
               <div class="flex-1 min-w-0">
-                <p class="text-xs sm:text-sm text-muted-color">Saved Addresses</p>
+                <p class="text-xs sm:text-sm text-muted-color">{{ 'PROFILE.DASHBOARD.SAVED_ADDRESSES' | translate }}</p>
                 <p class="text-xl sm:text-2xl font-bold text-color">{{ stats().totalAddresses }}</p>
               </div>
               <i class="pi pi-chevron-right text-muted-color flex-shrink-0"></i>
@@ -170,7 +169,7 @@
                 <i class="pi pi-wallet text-primary text-lg sm:text-xl"></i>
               </div>
               <div class="flex-1 min-w-0">
-                <p class="text-xs sm:text-sm text-muted-color">Total Spent</p>
+                <p class="text-xs sm:text-sm text-muted-color">{{ 'PROFILE.DASHBOARD.TOTAL_SPENT' | translate }}</p>
                 <p class="text-xl sm:text-2xl font-bold text-color break-all">{{ formatPrice(stats().totalSpent) }}</p>
               </div>
             </div>
@@ -182,10 +181,10 @@
         <p-card class="shadow-sm">
           <ng-template pTemplate="header">
             <div class="flex items-center justify-between gap-2 p-3 sm:p-4 border-b border-surface">
-              <h3 class="font-semibold text-color text-sm sm:text-base">Recent Orders</h3>
+              <h3 class="font-semibold text-color text-sm sm:text-base">{{ 'PROFILE.DASHBOARD.RECENT_ORDERS' | translate }}</h3>
               @if (hasOrders()) {
                 <p-button 
-                  label="View All"
+                  [label]="'PROFILE.DASHBOARD.VIEW_ALL' | translate"
                   icon="pi pi-arrow-right"
                   iconPos="right"
                   severity="secondary"
@@ -214,7 +213,7 @@
                   <!-- Order Info -->
                   <div class="flex-1 min-w-0">
                     <div class="flex flex-wrap items-center gap-2 mb-1">
-                      <h4 class="font-semibold text-color text-sm sm:text-base">Order #{{ order.id }}</h4>
+                      <h4 class="font-semibold text-color text-sm sm:text-base">{{ 'PROFILE.DASHBOARD.ORDER_NUMBER' | translate: { number: order.id } }}</h4>
                       <p-tag 
                         [value]="getOrderStatusLabel(order)"
                         [severity]="getOrderStatusSeverity(order)"
@@ -222,7 +221,7 @@
                       </p-tag>
                     </div>
                     <p class="text-xs sm:text-sm text-muted-color">
-                      {{ order.cartItems.length }} items • {{ formatDate(order.createdAt) }}
+                      {{ order.cartItems.length }} {{ order.cartItems.length === 1 ? ('PROFILE.DASHBOARD.ITEMS_SINGULAR' | translate) : ('PROFILE.DASHBOARD.ITEMS_PLURAL' | translate) }} • {{ formatDate(order.createdAt) }}
                     </p>
                     <!-- Mobile: Show total inline -->
                     <p class="text-sm font-semibold text-color mt-1 sm:hidden">
@@ -232,7 +231,7 @@
 
                   <!-- Desktop: Order Total -->
                   <div class="hidden sm:block text-right flex-shrink-0">
-                    <p class="text-xs text-muted-color">Total</p>
+                    <p class="text-xs text-muted-color">{{ 'PROFILE.DASHBOARD.TOTAL' | translate }}</p>
                     <p class="font-semibold text-base sm:text-lg text-color whitespace-nowrap">{{ formatPrice(order.totalOrderPrice) }}</p>
                   </div>
 
@@ -243,10 +242,10 @@
           } @else {
             <div class="text-center py-8">
               <i class="pi pi-shopping-bag text-5xl text-muted-color mb-4"></i>
-              <h3 class="text-lg font-semibold text-color mb-2">No orders yet</h3>
-              <p class="text-muted-color mb-4">Start shopping to see your orders here</p>
+              <h3 class="text-lg font-semibold text-color mb-2">{{ 'PROFILE.DASHBOARD.NO_ORDERS' | translate }}</h3>
+              <p class="text-muted-color mb-4">{{ 'PROFILE.DASHBOARD.NO_ORDERS_MESSAGE' | translate }}</p>
               <p-button 
-                label="Start Shopping"
+                [label]="'PROFILE.DASHBOARD.START_SHOPPING' | translate"
                 icon="pi pi-arrow-right"
                 iconPos="right"
                 severity="primary"
@@ -260,14 +259,14 @@
         <p-card class="shadow-sm">
           <ng-template pTemplate="header">
             <div class="p-3 sm:p-4 border-b border-surface">
-              <h3 class="font-semibold text-color text-sm sm:text-base">Quick Actions</h3>
+              <h3 class="font-semibold text-color text-sm sm:text-base">{{ 'PROFILE.DASHBOARD.QUICK_ACTIONS' | translate }}</h3>
             </div>
           </ng-template>
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
             
             <p-button 
-              label="Browse Products"
+              [label]="'PROFILE.DASHBOARD.BROWSE_PRODUCTS' | translate"
               icon="pi pi-shopping-bag"
               severity="secondary"
               [outlined]="true"
@@ -276,7 +275,7 @@
             </p-button>
 
             <p-button 
-              label="View Orders"
+              [label]="'PROFILE.DASHBOARD.VIEW_ORDERS' | translate"
               icon="pi pi-box"
               severity="secondary"
               [outlined]="true"
@@ -285,7 +284,7 @@
             </p-button>
 
             <p-button 
-              label="Manage Addresses"
+              [label]="'PROFILE.DASHBOARD.MANAGE_ADDRESSES' | translate"
               icon="pi pi-map-marker"
               severity="secondary"
               [outlined]="true"

@@ -12,6 +12,9 @@ import { DividerModule } from 'primeng/divider';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { MenuItem } from 'primeng/api';
 
+// Translation
+import { TranslateModule } from '@ngx-translate/core';
+
 // Services
 import { OrdersService } from '../../services/orders.service';
 import { AuthService } from '../../../auth/services/auth';
@@ -29,6 +32,8 @@ import { Order, OrderSummary } from '../../models/order.model';
   imports: [
     CommonModule,
     RouterModule,
+    // Translation
+    TranslateModule,
     // PrimeNG
     CardModule,
     ButtonModule,

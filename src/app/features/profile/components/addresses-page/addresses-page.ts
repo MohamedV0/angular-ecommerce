@@ -16,6 +16,9 @@ import { TextareaModule } from 'primeng/textarea';
 import { SelectModule } from 'primeng/select';
 import { MessageService } from 'primeng/api';
 
+// Translation
+import { TranslateModule } from '@ngx-translate/core';
+
 // Services
 import { AddressService } from '../../services/address.service';
 
@@ -43,6 +46,8 @@ import {
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    // Translation
+    TranslateModule,
     // PrimeNG
     CardModule,
     ButtonModule,

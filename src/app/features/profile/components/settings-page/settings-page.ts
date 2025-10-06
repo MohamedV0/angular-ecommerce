@@ -16,6 +16,9 @@ import { DividerModule } from 'primeng/divider';
 import { TagModule } from 'primeng/tag';
 import { MessageService } from 'primeng/api';
 
+// Translation
+import { TranslateModule } from '@ngx-translate/core';
+
 // Services
 import { ProfileService } from '../../services/profile.service';
 import { AuthService } from '../../../auth/services/auth';
@@ -34,6 +37,8 @@ import { UpdateProfileRequest, ChangePasswordRequest } from '../../models/profil
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    // Translation
+    TranslateModule,
     // PrimeNG
     CardModule,
     ButtonModule,

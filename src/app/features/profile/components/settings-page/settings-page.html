@@ -7,7 +7,7 @@
       <div class="flex items-center gap-3">
         <i class="pi pi-cog text-2xl text-primary"></i>
         <h1 class="text-2xl font-bold text-color">
-          Account Settings
+          {{ 'PROFILE.SETTINGS.TITLE' | translate }}
         </h1>
       </div>
     </div>
@@ -20,7 +20,7 @@
       <ng-template pTemplate="header">
         <div class="flex items-center gap-3 p-4 bg-emphasis">
           <i class="pi pi-user text-primary"></i>
-          <h3 class="font-semibold text-color">Profile Information</h3>
+          <h3 class="font-semibold text-color">{{ 'PROFILE.SETTINGS.PROFILE_INFO' | translate }}</h3>
         </div>
       </ng-template>
       
@@ -40,23 +40,23 @@
         <!-- Full Name -->
         <div class="flex flex-col gap-2">
           <label for="name" class="text-sm font-medium text-color">
-            Full Name <span class="text-red-500">*</span>
+            {{ 'PROFILE.SETTINGS.FULL_NAME' | translate }} <span class="text-red-500">*</span>
           </label>
           <input 
             id="name"
             type="text" 
             pInputText 
             formControlName="name"
-            placeholder="Enter your full name"
+            [placeholder]="'PROFILE.SETTINGS.FULL_NAME_PLACEHOLDER' | translate"
             class="w-full"
             [class.p-invalid]="isFieldInvalid(profileForm, 'name')" />
           @if (isFieldInvalid(profileForm, 'name')) {
             <small class="text-red-500">
               @if (profileForm.get('name')?.errors?.['required']) {
-                Full name is required
+                {{ 'PROFILE.SETTINGS.ERRORS.NAME_REQUIRED' | translate }}
               }
               @if (profileForm.get('name')?.errors?.['minlength']) {
-                Name must be at least 2 characters
+                {{ 'PROFILE.SETTINGS.ERRORS.NAME_MIN_LENGTH' | translate }}
               }
             </small>
           }
@@ -65,23 +65,23 @@
         <!-- Email -->
         <div class="flex flex-col gap-2">
           <label for="email" class="text-sm font-medium text-color">
-            Email Address <span class="text-red-500">*</span>
+            {{ 'PROFILE.SETTINGS.EMAIL' | translate }} <span class="text-red-500">*</span>
           </label>
           <input 
             id="email"
             type="email" 
             pInputText 
             formControlName="email"
-            placeholder="Enter your email address"
+            [placeholder]="'PROFILE.SETTINGS.EMAIL_PLACEHOLDER' | translate"
             class="w-full"
             [class.p-invalid]="isFieldInvalid(profileForm, 'email')" />
           @if (isFieldInvalid(profileForm, 'email')) {
             <small class="text-red-500">
               @if (profileForm.get('email')?.errors?.['required']) {
-                Email is required
+                {{ 'PROFILE.SETTINGS.ERRORS.EMAIL_REQUIRED' | translate }}
               }
               @if (profileForm.get('email')?.errors?.['email']) {
-                Please enter a valid email address
+                {{ 'PROFILE.SETTINGS.ERRORS.EMAIL_INVALID' | translate }}
               }
             </small>
           }
@@ -90,23 +90,23 @@
         <!-- Phone -->
         <div class="flex flex-col gap-2">
           <label for="phone" class="text-sm font-medium text-color">
-            Phone Number <span class="text-red-500">*</span>
+            {{ 'PROFILE.SETTINGS.PHONE' | translate }} <span class="text-red-500">*</span>
           </label>
           <input 
             id="phone"
             type="text" 
             pInputText 
             formControlName="phone"
-            placeholder="01234567890"
+            [placeholder]="'PROFILE.SETTINGS.PHONE_PLACEHOLDER' | translate"
             class="w-full"
             [class.p-invalid]="isFieldInvalid(profileForm, 'phone')" />
           @if (isFieldInvalid(profileForm, 'phone')) {
             <small class="text-red-500">
               @if (profileForm.get('phone')?.errors?.['required']) {
-                Phone number is required
+                {{ 'PROFILE.SETTINGS.ERRORS.PHONE_REQUIRED' | translate }}
               }
               @if (profileForm.get('phone')?.errors?.['pattern']) {
-                Please enter a valid Egyptian phone number (11 digits starting with 01)
+                {{ 'PROFILE.SETTINGS.ERRORS.PHONE_INVALID' | translate }}
               }
             </small>
           }
@@ -115,7 +115,7 @@
         <!-- Form Actions -->
         <div class="flex justify-end gap-2 pt-4 border-t border-surface">
           <p-button 
-            label="Reset" 
+            [label]="'PROFILE.SETTINGS.RESET' | translate" 
             severity="secondary"
             [outlined]="true"
             type="button"
@@ -123,7 +123,7 @@
             [disabled]="isUpdatingProfile() || !hasProfileChanges()">
           </p-button>
           <p-button 
-            label="Update Profile" 
+            [label]="'PROFILE.SETTINGS.UPDATE_PROFILE' | translate" 
             severity="primary"
             icon="pi pi-check"
             type="submit"
@@ -140,7 +140,7 @@
       <ng-template pTemplate="header">
         <div class="flex items-center gap-3 p-4 bg-emphasis">
           <i class="pi pi-lock text-primary"></i>
-          <h3 class="font-semibold text-color">Change Password</h3>
+          <h3 class="font-semibold text-color">{{ 'PROFILE.SETTINGS.CHANGE_PASSWORD' | translate }}</h3>
         </div>
       </ng-template>
       
@@ -160,12 +160,12 @@
         <!-- Current Password -->
         <div class="flex flex-col gap-2">
           <label for="currentPassword" class="text-sm font-medium text-color">
-            Current Password <span class="text-red-500">*</span>
+            {{ 'PROFILE.SETTINGS.CURRENT_PASSWORD' | translate }} <span class="text-red-500">*</span>
           </label>
           <p-password 
             id="currentPassword"
             formControlName="currentPassword"
-            placeholder="Enter your current password"
+            [placeholder]="'PROFILE.SETTINGS.CURRENT_PASSWORD_PLACEHOLDER' | translate"
             [toggleMask]="true"
             [feedback]="false"
             class="w-full"
@@ -173,7 +173,7 @@
             [style]="{ width: '100%' }" />
           @if (isFieldInvalid(passwordForm, 'currentPassword')) {
             <small class="text-red-500">
-              Current password is required
+              {{ 'PROFILE.SETTINGS.ERRORS.CURRENT_PASSWORD_REQUIRED' | translate }}
             </small>
           }
         </div>
@@ -181,12 +181,12 @@
         <!-- New Password -->
         <div class="flex flex-col gap-2">
           <label for="password" class="text-sm font-medium text-color">
-            New Password <span class="text-red-500">*</span>
+            {{ 'PROFILE.SETTINGS.NEW_PASSWORD' | translate }} <span class="text-red-500">*</span>
           </label>
           <p-password 
             id="password"
             formControlName="password"
-            placeholder="Enter your new password"
+            [placeholder]="'PROFILE.SETTINGS.NEW_PASSWORD_PLACEHOLDER' | translate"
             [toggleMask]="true"
             [feedback]="true"
             class="w-full"
@@ -195,13 +195,13 @@
           @if (isFieldInvalid(passwordForm, 'password')) {
             <small class="text-red-500">
               @if (passwordForm.get('password')?.errors?.['required']) {
-                New password is required
+                {{ 'PROFILE.SETTINGS.ERRORS.NEW_PASSWORD_REQUIRED' | translate }}
               }
               @if (passwordForm.get('password')?.errors?.['minlength']) {
-                Password must be at least 8 characters
+                {{ 'PROFILE.SETTINGS.ERRORS.PASSWORD_MIN_LENGTH' | translate }}
               }
               @if (passwordForm.get('password')?.errors?.['pattern']) {
-                Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character
+                {{ 'PROFILE.SETTINGS.ERRORS.PASSWORD_PATTERN' | translate }}
               }
             </small>
           }
@@ -210,12 +210,12 @@
         <!-- Confirm Password -->
         <div class="flex flex-col gap-2">
           <label for="rePassword" class="text-sm font-medium text-color">
-            Confirm New Password <span class="text-red-500">*</span>
+            {{ 'PROFILE.SETTINGS.CONFIRM_PASSWORD' | translate }} <span class="text-red-500">*</span>
           </label>
           <p-password 
             id="rePassword"
             formControlName="rePassword"
-            placeholder="Confirm your new password"
+            [placeholder]="'PROFILE.SETTINGS.CONFIRM_PASSWORD_PLACEHOLDER' | translate"
             [toggleMask]="true"
             [feedback]="false"
             class="w-full"
@@ -223,7 +223,7 @@
             [style]="{ width: '100%' }" />
           @if (isFieldInvalid(passwordForm, 'rePassword')) {
             <small class="text-red-500">
-              Please confirm your password
+              {{ 'PROFILE.SETTINGS.ERRORS.CONFIRM_PASSWORD_REQUIRED' | translate }}
             </small>
           }
         </div>
@@ -233,12 +233,12 @@
           <div class="flex items-start gap-3">
             <i class="pi pi-info-circle text-primary mt-1"></i>
             <div class="text-sm text-muted-color">
-              <p class="font-medium mb-1">Password Requirements:</p>
+              <p class="font-medium mb-1">{{ 'PROFILE.SETTINGS.PASSWORD_REQUIREMENTS' | translate }}:</p>
               <ul class="list-disc list-inside space-y-1">
-                <li>At least 8 characters long</li>
-                <li>Contains uppercase and lowercase letters</li>
-                <li>Contains at least one number</li>
-                <li>Contains at least one special character</li>
+                <li>{{ 'PROFILE.SETTINGS.PASSWORD_REQ_LENGTH' | translate }}</li>
+                <li>{{ 'PROFILE.SETTINGS.PASSWORD_REQ_CASE' | translate }}</li>
+                <li>{{ 'PROFILE.SETTINGS.PASSWORD_REQ_NUMBER' | translate }}</li>
+                <li>{{ 'PROFILE.SETTINGS.PASSWORD_REQ_SPECIAL' | translate }}</li>
               </ul>
             </div>
           </div>
@@ -247,7 +247,7 @@
         <!-- Form Actions -->
         <div class="flex justify-end gap-2 pt-4 border-t border-surface">
           <p-button 
-            label="Cancel" 
+            [label]="'PROFILE.SETTINGS.CANCEL' | translate" 
             severity="secondary"
             [outlined]="true"
             type="button"
@@ -255,7 +255,7 @@
             [disabled]="isChangingPassword()">
           </p-button>
           <p-button 
-            label="Change Password" 
+            [label]="'PROFILE.SETTINGS.CHANGE_PASSWORD_BUTTON' | translate" 
             severity="primary"
             icon="pi pi-key"
             type="submit"
@@ -272,13 +272,13 @@
       <ng-template pTemplate="header">
         <div class="flex items-center gap-3 p-4 bg-emphasis">
           <i class="pi pi-info-circle text-primary"></i>
-          <h3 class="font-semibold text-color">Account Information</h3>
+          <h3 class="font-semibold text-color">{{ 'PROFILE.SETTINGS.ACCOUNT_INFO' | translate }}</h3>
         </div>
       </ng-template>
       
       <div class="space-y-4">
         <div class="flex justify-between items-center pb-3 border-b border-surface">
-          <span class="text-muted-color">Account Role</span>
+          <span class="text-muted-color">{{ 'PROFILE.SETTINGS.ACCOUNT_ROLE' | translate }}</span>
           <p-tag 
             [value]="currentUser()?.role || 'user'"
             [rounded]="true">
@@ -287,7 +287,7 @@
         
         @if (currentUser()?.createdAt) {
           <div class="flex justify-between items-center">
-            <span class="text-muted-color">Member Since</span>
+            <span class="text-muted-color">{{ 'PROFILE.SETTINGS.MEMBER_SINCE' | translate }}</span>
             <span class="font-medium text-color">
               {{ currentUser()!.createdAt | date:'longDate' }}
             </span>

@@ -12,6 +12,9 @@ import { TableModule } from 'primeng/table';
 import { BadgeModule } from 'primeng/badge';
 import { DividerModule } from 'primeng/divider';
 
+// Translation
+import { TranslateModule } from '@ngx-translate/core';
+
 // Services
 import { OrdersService } from '../../services/orders.service';
 import { AuthService } from '../../../auth/services/auth';
@@ -29,6 +32,8 @@ import { Order, OrderSummary } from '../../models/order.model';
   imports: [
     CommonModule,
     RouterModule,
+    // Translation
+    TranslateModule,
     // PrimeNG
     CardModule,
     ButtonModule,

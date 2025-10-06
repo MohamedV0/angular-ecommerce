@@ -29,17 +29,17 @@
     <div class="max-w-md mx-auto px-4 py-12 text-center">
       <p-card class="shadow-sm">
         <i class="pi pi-exclamation-triangle text-4xl text-red-600 mb-4"></i>
-        <h2 class="text-xl font-bold text-color mb-4">Order Not Found</h2>
+        <h2 class="text-xl font-bold text-color mb-4">{{ 'PROFILE.ORDER_DETAILS.NOT_FOUND' | translate }}</h2>
         <p-message severity="error" [text]="error()" class="mb-6"></p-message>
         <div class="flex gap-3 justify-center">
           <p-button 
-            label="Back to Orders"
+            [label]="'PROFILE.ORDER_DETAILS.BACK_TO_ORDERS' | translate"
             icon="pi pi-arrow-left"
             (click)="backToOrders()"
             severity="secondary">
           </p-button>
           <p-button 
-            label="Retry"
+            [label]="'PROFILE.ORDER_DETAILS.RETRY' | translate"
             icon="pi pi-refresh"
             (click)="retry()"
             severity="primary">
@@ -70,7 +70,7 @@
           <div class="flex items-center justify-between mb-4">
             <div class="flex items-center gap-4">
               <h1 class="text-2xl font-bold text-color">
-                Order #{{ orderSummary()!.orderNumber }}
+                {{ 'PROFILE.ORDER_DETAILS.ORDER_NUMBER' | translate: { number: orderSummary()!.orderNumber } }}
               </h1>
               <p-tag 
                 [value]="orderSummary()!.status"
@@ -80,7 +80,7 @@
             </div>
             
             <p-button 
-              label="Back to Orders"
+              [label]="'PROFILE.ORDER_DETAILS.BACK_TO_ORDERS' | translate"
               severity="secondary"
               [outlined]="true"
               icon="pi pi-arrow-left"
@@ -90,7 +90,7 @@
           </div>
           
           <p class="text-muted-color">
-            Placed on {{ orderSummary()!.orderDate }}
+            {{ 'PROFILE.ORDER_DETAILS.PLACED_ON' | translate: { date: orderSummary()!.orderDate } }}
           </p>
         </div>
       </div>
@@ -108,7 +108,7 @@
                 <div class="flex items-center gap-3 p-4 bg-emphasis">
                   <i class="pi pi-box text-primary"></i>
                   <h3 class="font-semibold text-color">
-                    Order Items ({{ orderSummary()!.totalItems }})
+                    {{ 'PROFILE.ORDER_DETAILS.ORDER_ITEMS' | translate: { count: orderSummary()!.totalItems } }}
                   </h3>
                 </div>
               </ng-template>
@@ -156,7 +156,7 @@
                       </div>
                       
                       <p class="text-sm text-muted-color">
-                        Quantity: {{ item.count }}
+                        {{ 'PROFILE.ORDER_DETAILS.QUANTITY' | translate }}: {{ item.count }}
                       </p>
                     </div>
                     
@@ -166,7 +166,7 @@
                         {{ formatPrice(item.price) }}
                       </p>
                       <p class="text-sm text-muted-color mt-1">
-                        Total: {{ formatPrice(item.price * item.count) }}
+                        {{ 'PROFILE.ORDER_DETAILS.TOTAL' | translate }}: {{ formatPrice(item.price * item.count) }}
                       </p>
                     </div>
                     
@@ -181,7 +181,7 @@
                 <div class="flex items-center gap-3 p-4 bg-emphasis">
                   <i class="pi pi-map-marker text-primary"></i>
                   <h3 class="font-semibold text-color">
-                    Shipping Address
+                    {{ 'PROFILE.ORDER_DETAILS.SHIPPING_ADDRESS' | translate }}
                   </h3>
                 </div>
               </ng-template>
@@ -218,7 +218,7 @@
                   <div class="flex items-center gap-3 p-4 bg-emphasis">
                     <i class="pi pi-receipt text-primary"></i>
                     <h3 class="font-semibold text-color">
-                      Order Summary
+                      {{ 'PROFILE.ORDER_DETAILS.ORDER_SUMMARY' | translate }}
                     </h3>
                   </div>
                 </ng-template>
@@ -227,7 +227,7 @@
                   
                   <!-- Payment Method -->
                   <div class="flex justify-between items-center">
-                    <span class="text-muted-color">Payment Method</span>
+                    <span class="text-muted-color">{{ 'PROFILE.ORDER_DETAILS.PAYMENT_METHOD' | translate }}</span>
                     <p-tag 
                       [value]="orderSummary()!.paymentMethod"
                       [severity]="getPaymentMethodSeverity(order()!.paymentMethodType)"
@@ -237,9 +237,9 @@
                   
                   <!-- Payment Status -->
                   <div class="flex justify-between items-center">
-                    <span class="text-muted-color">Payment Status</span>
+                    <span class="text-muted-color">{{ 'PROFILE.ORDER_DETAILS.PAYMENT_STATUS' | translate }}</span>
                     <p-tag 
-                      [value]="order()!.isPaid ? 'Paid' : 'Unpaid'"
+                      [value]="order()!.isPaid ? ('PROFILE.ORDER_DETAILS.PAID' | translate) : ('PROFILE.ORDER_DETAILS.UNPAID' | translate)"
                       [severity]="order()!.isPaid ? 'success' : 'warn'"
                       [rounded]="true">
                     </p-tag>
@@ -247,9 +247,9 @@
                   
                   <!-- Delivery Status -->
                   <div class="flex justify-between items-center">
-                    <span class="text-muted-color">Delivery Status</span>
+                    <span class="text-muted-color">{{ 'PROFILE.ORDER_DETAILS.DELIVERY_STATUS' | translate }}</span>
                     <p-tag 
-                      [value]="order()!.isDelivered ? 'Delivered' : 'Pending'"
+                      [value]="order()!.isDelivered ? ('PROFILE.ORDER_DETAILS.DELIVERED' | translate) : ('PROFILE.ORDER_DETAILS.PENDING' | translate)"
                       [severity]="order()!.isDelivered ? 'success' : 'info'"
                       [rounded]="true">
                     </p-tag>
@@ -260,7 +260,7 @@
                   <!-- Price Breakdown -->
                   <div class="space-y-2">
                     <div class="flex justify-between items-center">
-                      <span class="text-muted-color">Subtotal</span>
+                      <span class="text-muted-color">{{ 'PROFILE.ORDER_DETAILS.SUBTOTAL' | translate }}</span>
                       <span class="font-medium text-color">
                         {{ formatPrice(order()!.totalOrderPrice - order()!.taxPrice - order()!.shippingPrice) }}
                       </span>
@@ -268,7 +268,7 @@
                     
                     @if (order()!.shippingPrice > 0) {
                       <div class="flex justify-between items-center">
-                        <span class="text-muted-color">Shipping</span>
+                        <span class="text-muted-color">{{ 'PROFILE.ORDER_DETAILS.SHIPPING' | translate }}</span>
                         <span class="font-medium text-color">
                           {{ formatPrice(order()!.shippingPrice) }}
                         </span>
@@ -277,7 +277,7 @@
                     
                     @if (order()!.taxPrice > 0) {
                       <div class="flex justify-between items-center">
-                        <span class="text-muted-color">Tax</span>
+                        <span class="text-muted-color">{{ 'PROFILE.ORDER_DETAILS.TAX' | translate }}</span>
                         <span class="font-medium text-color">
                           {{ formatPrice(order()!.taxPrice) }}
                         </span>
@@ -289,7 +289,7 @@
                   
                   <!-- Total -->
                   <div class="flex justify-between items-center text-lg font-bold">
-                    <span class="text-color">Total</span>
+                    <span class="text-color">{{ 'PROFILE.ORDER_DETAILS.TOTAL' | translate }}</span>
                     <span class="text-primary">
                       {{ formatPrice(order()!.totalOrderPrice) }}
                     </span>
@@ -299,7 +299,7 @@
                     <p-divider></p-divider>
                     <div class="text-sm text-muted-color">
                       <i class="pi pi-check-circle text-green-500"></i>
-                      Paid on {{ formatDate(order()!.paidAt!) }}
+                      {{ 'PROFILE.ORDER_DETAILS.PAID_ON' | translate: { date: formatDate(order()!.paidAt!) } }}
                     </div>
                   }
                 </div>
@@ -311,22 +311,22 @@
                   <div class="flex items-center gap-3 p-4 bg-emphasis">
                     <i class="pi pi-user text-primary"></i>
                     <h3 class="font-semibold text-color">
-                      Customer Information
+                      {{ 'PROFILE.ORDER_DETAILS.CUSTOMER_INFORMATION' | translate }}
                     </h3>
                   </div>
                 </ng-template>
                 
                 <div class="space-y-3">
                   <div>
-                    <p class="text-sm text-muted-color">Name</p>
+                    <p class="text-sm text-muted-color">{{ 'PROFILE.ORDER_DETAILS.NAME' | translate }}</p>
                     <p class="text-color font-medium">{{ order()!.user.name }}</p>
                   </div>
                   <div>
-                    <p class="text-sm text-muted-color">Email</p>
+                    <p class="text-sm text-muted-color">{{ 'PROFILE.ORDER_DETAILS.EMAIL' | translate }}</p>
                     <p class="text-color">{{ order()!.user.email }}</p>
                   </div>
                   <div>
-                    <p class="text-sm text-muted-color">Phone</p>
+                    <p class="text-sm text-muted-color">{{ 'PROFILE.ORDER_DETAILS.PHONE' | translate }}</p>
                     <p class="text-color">{{ order()!.user.phone }}</p>
                   </div>
                 </div>

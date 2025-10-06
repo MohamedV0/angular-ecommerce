@@ -8,7 +8,7 @@
         <div class="flex items-center gap-3">
           <i class="pi pi-receipt text-2xl text-primary"></i>
           <h1 class="text-2xl font-bold text-color">
-            My Orders
+            {{ 'PROFILE.ORDERS.TITLE' | translate }}
           </h1>
           @if (hasOrders()) {
             <p-badge 
@@ -20,7 +20,7 @@
         
         <!-- Continue Shopping Button -->
         <p-button 
-          label="Continue Shopping"
+          [label]="'PROFILE.ORDERS.CONTINUE_SHOPPING' | translate"
           severity="secondary"
           [outlined]="true"
           icon="pi pi-shopping-bag"
@@ -36,7 +36,7 @@
             <div class="flex items-center gap-3">
               <i class="pi pi-shopping-cart text-2xl text-primary"></i>
               <div>
-                <p class="text-sm text-muted-color">Total Orders</p>
+                <p class="text-sm text-muted-color">{{ 'PROFILE.ORDERS.TOTAL_ORDERS' | translate }}</p>
                 <p class="text-2xl font-bold text-color">{{ totalOrders() }}</p>
               </div>
             </div>
@@ -46,7 +46,7 @@
             <div class="flex items-center gap-3">
               <i class="pi pi-wallet text-2xl text-primary"></i>
               <div>
-                <p class="text-sm text-muted-color">Total Spent</p>
+                <p class="text-sm text-muted-color">{{ 'PROFILE.ORDERS.TOTAL_SPENT' | translate }}</p>
                 <p class="text-2xl font-bold text-color">{{ formatPrice(totalSpent()) }}</p>
               </div>
             </div>
@@ -56,7 +56,7 @@
             <div class="flex items-center gap-3">
               <i class="pi pi-box text-2xl text-primary"></i>
               <div>
-                <p class="text-sm text-muted-color">Total Items</p>
+                <p class="text-sm text-muted-color">{{ 'PROFILE.ORDERS.TOTAL_ITEMS' | translate }}</p>
                 <p class="text-2xl font-bold text-color">{{ totalItems() }}</p>
               </div>
             </div>
@@ -107,15 +107,15 @@
         </div>
         
         <h2 class="text-2xl font-semibold text-color mb-2">
-          No Orders Yet
+          {{ 'PROFILE.ORDERS.NO_ORDERS_YET' | translate }}
         </h2>
         
         <p class="text-muted-color mb-8 max-w-md">
-          You haven't placed any orders yet. Start shopping to see your orders here!
+          {{ 'PROFILE.ORDERS.NO_ORDERS_MESSAGE' | translate }}
         </p>
         
         <p-button 
-          label="Start Shopping"
+          [label]="'PROFILE.ORDERS.START_SHOPPING' | translate"
           severity="primary"
           icon="pi pi-shopping-bag"
           (click)="continueShopping()"
@@ -131,14 +131,14 @@
         <!-- Filter Buttons -->
         <div class="flex flex-wrap gap-2 mb-6">
           <p-button 
-            label="All Orders"
+            [label]="'PROFILE.ORDERS.ALL_ORDERS' | translate"
             [severity]="filterType() === 'all' ? 'primary' : 'secondary'"
             [outlined]="filterType() !== 'all'"
             (click)="filterOrders('all')"
             size="small">
           </p-button>
           <p-button 
-            label="Cash Orders"
+            [label]="'PROFILE.ORDERS.CASH_ORDERS' | translate"
             [severity]="filterType() === 'cash' ? 'primary' : 'secondary'"
             [outlined]="filterType() !== 'cash'"
             icon="pi pi-wallet"
@@ -146,7 +146,7 @@
             size="small">
           </p-button>
           <p-button 
-            label="Card Payments"
+            [label]="'PROFILE.ORDERS.CARD_PAYMENTS' | translate"
             [severity]="filterType() === 'card' ? 'primary' : 'secondary'"
             [outlined]="filterType() !== 'card'"
             icon="pi pi-credit-card"
@@ -154,7 +154,7 @@
             size="small">
           </p-button>
           <p-button 
-            label="Pending"
+            [label]="'PROFILE.ORDERS.PENDING' | translate"
             [severity]="filterType() === 'pending' ? 'primary' : 'secondary'"
             [outlined]="filterType() !== 'pending'"
             icon="pi pi-clock"
@@ -162,7 +162,7 @@
             size="small">
           </p-button>
           <p-button 
-            label="Delivered"
+            [label]="'PROFILE.ORDERS.DELIVERED' | translate"
             [severity]="filterType() === 'delivered' ? 'primary' : 'secondary'"
             [outlined]="filterType() !== 'delivered'"
             icon="pi pi-check-circle"
@@ -198,7 +198,7 @@
                     </div>
                     <div class="flex items-center gap-2">
                       <i class="pi pi-box text-xs"></i>
-                      <span>{{ summary.totalItems }} item(s)</span>
+                      <span>{{ summary.totalItems }} {{ summary.totalItems === 1 ? ('PROFILE.ORDERS.ITEMS_SINGULAR' | translate) : ('PROFILE.ORDERS.ITEMS_PLURAL' | translate) }}</span>
                     </div>
                     <div class="flex items-center gap-2">
                       <i class="pi pi-wallet text-xs"></i>
@@ -215,14 +215,14 @@
                 <!-- Price and Action -->
                 <div class="flex lg:flex-col items-center lg:items-end justify-between lg:justify-center gap-4">
                   <div class="text-right">
-                    <p class="text-sm text-muted-color">Total</p>
+                    <p class="text-sm text-muted-color">{{ 'PROFILE.ORDERS.TOTAL' | translate }}</p>
                     <p class="text-xl font-bold text-primary">
                       {{ formatPrice(summary.totalPrice) }}
                     </p>
                   </div>
                   
                   <p-button 
-                    label="View Details"
+                    [label]="'PROFILE.ORDERS.VIEW_DETAILS' | translate"
                     severity="secondary"
                     [outlined]="true"
                     icon="pi pi-arrow-right"

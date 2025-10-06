@@ -8,13 +8,13 @@
         <div class="flex items-center gap-3">
           <i class="pi pi-map-marker text-2xl text-primary"></i>
           <h1 class="text-2xl font-bold text-color">
-            My Addresses
+            {{ 'PROFILE.ADDRESSES.TITLE' | translate }}
           </h1>
         </div>
         
         <!-- Add Address Button -->
         <p-button 
-          label="Add New Address"
+          [label]="'PROFILE.ADDRESSES.ADD_NEW' | translate"
           severity="primary"
           icon="pi pi-plus"
           (click)="openAddDrawer()"
@@ -62,15 +62,15 @@
         </div>
         
         <h2 class="text-2xl font-semibold text-color mb-2">
-          No Addresses Yet
+          {{ 'PROFILE.ADDRESSES.NO_ADDRESSES_YET' | translate }}
         </h2>
         
         <p class="text-muted-color mb-8 max-w-md">
-          Add your delivery addresses to make checkout faster and easier.
+          {{ 'PROFILE.ADDRESSES.NO_ADDRESSES_MESSAGE' | translate }}
         </p>
         
         <p-button 
-          label="Add Your First Address"
+          [label]="'PROFILE.ADDRESSES.ADD_FIRST' | translate"
           severity="primary"
           icon="pi pi-plus"
           (click)="openAddDrawer()"
@@ -118,7 +118,7 @@
             <ng-template pTemplate="footer">
               <div class="flex justify-end gap-2 pt-4 border-t border-surface">
                 <p-button 
-                  label="Delete"
+                  [label]="'PROFILE.ADDRESSES.DELETE' | translate"
                   severity="danger"
                   [outlined]="true"
                   icon="pi pi-trash"
@@ -136,7 +136,7 @@
       <div class="mt-8">
         <p-message 
           severity="info" 
-          text="Note: To edit an address, please delete the old one and add a new address with the updated information."
+          [text]="'PROFILE.ADDRESSES.EDIT_NOTE' | translate"
           class="block">
         </p-message>
       </div>
@@ -151,7 +151,7 @@
   (onHide)="closeAddDrawer()"
   position="right"
   [style]="{ width: '500px' }"
-  header="Add New Address">
+  [header]="'PROFILE.ADDRESSES.DRAWER.TITLE' | translate">
   
   <form [formGroup]="addressForm" (ngSubmit)="onSubmitAddress()" class="flex flex-col h-full">
     
@@ -160,23 +160,23 @@
       <!-- Address Name -->
       <div class="flex flex-col gap-2">
         <label for="name" class="text-sm font-medium text-color">
-          Address Label <span class="text-red-500">*</span>
+          {{ 'PROFILE.ADDRESSES.DRAWER.ADDRESS_LABEL' | translate }} <span class="text-red-500">*</span>
         </label>
         <input 
           id="name"
           type="text" 
           pInputText 
           formControlName="name"
-          placeholder="e.g., Home, Work, Office"
+          [placeholder]="'PROFILE.ADDRESSES.DRAWER.ADDRESS_LABEL_PLACEHOLDER' | translate"
           class="w-full"
           [class.p-invalid]="isFieldInvalid('name')" />
         @if (isFieldInvalid('name')) {
           <small class="text-red-500">
             @if (addressForm.get('name')?.errors?.['required']) {
-              Address label is required
+              {{ 'PROFILE.ADDRESSES.DRAWER.ERRORS.LABEL_REQUIRED' | translate }}
             }
             @if (addressForm.get('name')?.errors?.['minlength']) {
-              Label must be at least 2 characters
+              {{ 'PROFILE.ADDRESSES.DRAWER.ERRORS.LABEL_MIN_LENGTH' | translate }}
             }
           </small>
         }
@@ -185,13 +185,13 @@
       <!-- Address Details -->
       <div class="flex flex-col gap-2">
         <label for="details" class="text-sm font-medium text-color">
-          Address Details <span class="text-red-500">*</span>
+          {{ 'PROFILE.ADDRESSES.DRAWER.ADDRESS_DETAILS' | translate }} <span class="text-red-500">*</span>
         </label>
         <textarea
           id="details"
           pTextarea
           formControlName="details"
-          placeholder="Enter your full address (street, building number, apartment, etc.)"
+          [placeholder]="'PROFILE.ADDRESSES.DRAWER.ADDRESS_DETAILS_PLACEHOLDER' | translate"
           rows="4"
           class="w-full"
           [class.p-invalid]="isFieldInvalid('details')">
@@ -199,10 +199,10 @@
         @if (isFieldInvalid('details')) {
           <small class="text-red-500">
             @if (addressForm.get('details')?.errors?.['required']) {
-              Address details are required
+              {{ 'PROFILE.ADDRESSES.DRAWER.ERRORS.DETAILS_REQUIRED' | translate }}
             }
             @if (addressForm.get('details')?.errors?.['minAddressLength']) {
-              Address must be at least 10 characters
+              {{ 'PROFILE.ADDRESSES.DRAWER.ERRORS.DETAILS_MIN_LENGTH' | translate }}
             }
           </small>
         }
@@ -211,22 +211,22 @@
       <!-- Phone Number -->
       <div class="flex flex-col gap-2">
         <label for="phone" class="text-sm font-medium text-color">
-          Phone Number <span class="text-red-500">*</span>
+          {{ 'PROFILE.ADDRESSES.DRAWER.PHONE' | translate }} <span class="text-red-500">*</span>
         </label>
         <input
           id="phone"
           pInputText
           formControlName="phone"
-          placeholder="01234567890"
+          [placeholder]="'PROFILE.ADDRESSES.DRAWER.PHONE_PLACEHOLDER' | translate"
           class="w-full"
           [class.p-invalid]="isFieldInvalid('phone')" />
         @if (isFieldInvalid('phone')) {
           <small class="text-red-500">
             @if (addressForm.get('phone')?.errors?.['required']) {
-              Phone number is required
+              {{ 'PROFILE.ADDRESSES.DRAWER.ERRORS.PHONE_REQUIRED' | translate }}
             }
             @if (addressForm.get('phone')?.errors?.['invalidEgyptianPhone']) {
-              Please enter a valid Egyptian phone number (11 digits starting with 01)
+              {{ 'PROFILE.ADDRESSES.DRAWER.ERRORS.PHONE_INVALID' | translate }}
             }
           </small>
         }
@@ -235,13 +235,13 @@
       <!-- City -->
       <div class="flex flex-col gap-2">
         <label for="city" class="text-sm font-medium text-color">
-          City <span class="text-red-500">*</span>
+          {{ 'PROFILE.ADDRESSES.DRAWER.CITY' | translate }} <span class="text-red-500">*</span>
         </label>
         <p-select
           id="city"
           formControlName="city"
           [options]="egyptianCities"
-          placeholder="Select your city"
+          [placeholder]="'PROFILE.ADDRESSES.DRAWER.CITY_PLACEHOLDER' | translate"
           [showClear]="true"
           [filter]="true"
           filterBy="label"
@@ -250,7 +250,7 @@
         </p-select>
         @if (isFieldInvalid('city')) {
           <small class="text-red-500">
-            City selection is required
+            {{ 'PROFILE.ADDRESSES.DRAWER.ERRORS.CITY_REQUIRED' | translate }}
           </small>
         }
       </div>
@@ -260,7 +260,7 @@
     <!-- Form Actions -->
     <div class="flex justify-end gap-2 pt-6 border-t border-surface mt-6">
       <p-button 
-        label="Cancel" 
+        [label]="'PROFILE.ADDRESSES.DRAWER.CANCEL' | translate" 
         severity="secondary"
         [outlined]="true"
         type="button"
@@ -268,7 +268,7 @@
         [disabled]="isProcessing()">
       </p-button>
       <p-button 
-        label="Add Address" 
+        [label]="'PROFILE.ADDRESSES.DRAWER.ADD_ADDRESS' | translate" 
         severity="primary"
         icon="pi pi-check"
         type="submit"
