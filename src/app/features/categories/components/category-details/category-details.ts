@@ -2,6 +2,7 @@ import { Component, inject, signal, computed, OnInit, OnDestroy } from '@angular
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Subject, takeUntil, forkJoin } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 
 // PrimeNG Components
 import { ButtonModule } from 'primeng/button';
@@ -28,6 +29,7 @@ import { ProductCard } from '../../../../shared/components/product-card/product-
   imports: [
     CommonModule,
     RouterModule,
+    TranslateModule,
     // PrimeNG
     ButtonModule,
     SkeletonModule,
@@ -62,8 +64,6 @@ export class CategoryDetailsComponent implements OnInit, OnDestroy {
     if (!cat) return [];
 
     return [
-      { label: 'Home', routerLink: '/' },
-      { label: 'Categories', routerLink: '/categories' },
       { label: cat.name }
     ];
   });

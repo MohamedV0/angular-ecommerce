@@ -57,22 +57,22 @@
           <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
             <i class="pi pi-exclamation-triangle text-2xl text-red-600"></i>
           </div>
-          <h2 class="text-xl font-bold text-color mb-4">Category Not Found</h2>
+          <h2 class="text-xl font-bold text-color mb-4">{{ 'CATEGORIES.DETAILS.NOT_FOUND' | translate }}</h2>
           <p-message
             severity="error"
-            [text]="error()"
             class="mb-6 text-left">
+            {{ error() }}
           </p-message>
           <div class="flex flex-col sm:flex-row gap-3 justify-center">
             <p-button
-              label="Try Again"
+              [label]="'CATEGORIES.DETAILS.RETRY' | translate"
               icon="pi pi-refresh"
               (click)="retryLoading()"
               severity="primary"
               [outlined]="true">
             </p-button>
             <p-button
-              label="Back to Categories"
+              [label]="'CATEGORIES.DETAILS.BACK_TO_CATEGORIES' | translate"
               icon="pi pi-arrow-left"
               routerLink="/categories"
               severity="primary">
@@ -95,7 +95,7 @@
           <div class="mb-3">
             <p-breadcrumb 
               [model]="breadcrumbItems()" 
-              [home]="{icon: 'pi pi-home', routerLink: '/'}"
+              [home]="{icon: 'pi pi-home', routerLink: '/', label: ('NAVIGATION.CATEGORIES' | translate)}"
               [style]="{'background': 'transparent', 'border': 'none', 'padding': '0'}"
               class="!bg-transparent">
             </p-breadcrumb>
@@ -118,12 +118,12 @@
                   {{ category()!.name }}
                 </h1>
                 <p class="text-sm text-muted-color">
-                  Explore our selection in this category
+                  {{ 'CATEGORIES.DETAILS.EXPLORE_SELECTION' | translate }}
                 </p>
               </div>
               
               <p-button
-                label="View All Products"
+                [label]="'CATEGORIES.DETAILS.VIEW_ALL_PRODUCTS' | translate"
                 icon="pi pi-shopping-bag"
                 (click)="viewAllProducts()"
                 severity="primary"
@@ -141,7 +141,7 @@
           <div class="max-w-7xl mx-auto px-4">
             <h2 class="text-lg font-bold text-color mb-4 flex items-center gap-2">
               <i class="pi pi-th-large text-primary"></i>
-              Subcategories
+              {{ 'CATEGORIES.DETAILS.SUBCATEGORIES' | translate }}
             </h2>
             
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
@@ -150,7 +150,7 @@
                   type="button"
                   class="group flex flex-col items-center gap-2 p-3 rounded-lg border border-surface hover:border-primary hover:shadow-md transition-all duration-200 cursor-pointer"
                   (click)="navigateToSubcategory(subcategory)"
-                  [ariaLabel]="'View ' + subcategory.name + ' subcategory'">
+                  [attr.aria-label]="'CATEGORIES.DETAILS.VIEW_SUBCATEGORY_ARIA' | translate: {name: subcategory.name}">
                   
                   <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                     <i class="pi pi-tag text-lg text-primary"></i>
@@ -173,10 +173,10 @@
             <div class="flex items-center justify-between mb-4">
               <h2 class="text-lg font-bold text-color flex items-center gap-2">
                 <i class="pi pi-star-fill text-yellow-500"></i>
-                Featured Products
+                {{ 'CATEGORIES.DETAILS.FEATURED_PRODUCTS' | translate }}
               </h2>
               <p-button
-                label="View All"
+                [label]="'CATEGORIES.DETAILS.VIEW_ALL' | translate"
                 icon="pi pi-arrow-right"
                 iconPos="right"
                 (click)="viewAllProducts()"

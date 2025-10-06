@@ -551,6 +551,34 @@
     "emptySearchMessage": "لا توجد نتائج",
     "emptyMessage": "لا توجد نتائج"
   },
+  "CATEGORIES": {
+    "LIST": {
+      "TITLE": "الفئات",
+      "CATEGORIES_FOUND": "{{count}} فئة متاحة",
+      "SEARCH_PLACEHOLDER": "ابحث عن الفئات...",
+      "NO_CATEGORIES_FOUND": "لا توجد فئات",
+      "NO_CATEGORIES_AVAILABLE": "لا توجد فئات متاحة حالياً",
+      "NO_SEARCH_RESULTS": "لم نتمكن من العثور على أي فئات تطابق بحثك. جرب كلمات مفتاحية مختلفة.",
+      "CLEAR_SEARCH": "مسح البحث",
+      "CLEAR_SEARCH_ARIA": "مسح البحث",
+      "VIEW_CATEGORY_ARIA": "عرض فئة {{name}}",
+      "PAGINATION_TEMPLATE": "عرض {first} إلى {last} من {totalRecords} فئة",
+      "FOR_QUERY": "لـ \"{{query}}\""
+    },
+    "DETAILS": {
+      "NOT_FOUND": "الفئة غير موجودة",
+      "RETRY": "حاول مرة أخرى",
+      "BACK_TO_CATEGORIES": "العودة للفئات",
+      "EXPLORE_SELECTION": "استكشف مجموعتنا في هذه الفئة",
+      "VIEW_ALL_PRODUCTS": "عرض جميع المنتجات",
+      "SUBCATEGORIES": "الفئات الفرعية",
+      "FEATURED_PRODUCTS": "المنتجات المميزة",
+      "VIEW_ALL": "عرض الكل",
+      "VIEW_SUBCATEGORY_ARIA": "عرض الفئة الفرعية {{name}}",
+      "NO_PRODUCTS_AVAILABLE": "لا توجد منتجات متاحة",
+      "SOMETHING_WRONG": "حدث خطأ ما"
+    }
+  },
   "BRANDS": {
     "LIST": {
       "TITLE": "العلامات التجارية",

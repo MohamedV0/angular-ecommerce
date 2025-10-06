@@ -551,6 +551,34 @@
     "emptySearchMessage": "No results found",
     "emptyMessage": "No results found"
   },
+  "CATEGORIES": {
+    "LIST": {
+      "TITLE": "Categories",
+      "CATEGORIES_FOUND": "{{count}} categories found",
+      "SEARCH_PLACEHOLDER": "Search categories...",
+      "NO_CATEGORIES_FOUND": "No categories found",
+      "NO_CATEGORIES_AVAILABLE": "No categories available at the moment",
+      "NO_SEARCH_RESULTS": "We couldn't find any categories matching your search. Try different keywords.",
+      "CLEAR_SEARCH": "Clear Search",
+      "CLEAR_SEARCH_ARIA": "Clear search",
+      "VIEW_CATEGORY_ARIA": "View {{name}} category",
+      "PAGINATION_TEMPLATE": "Showing {first} to {last} of {totalRecords} categories",
+      "FOR_QUERY": "for \"{{query}}\""
+    },
+    "DETAILS": {
+      "NOT_FOUND": "Category Not Found",
+      "RETRY": "Try Again",
+      "BACK_TO_CATEGORIES": "Back to Categories",
+      "EXPLORE_SELECTION": "Explore our selection in this category",
+      "VIEW_ALL_PRODUCTS": "View All Products",
+      "SUBCATEGORIES": "Subcategories",
+      "FEATURED_PRODUCTS": "Featured Products",
+      "VIEW_ALL": "View All",
+      "VIEW_SUBCATEGORY_ARIA": "View {{name}} subcategory",
+      "NO_PRODUCTS_AVAILABLE": "No products available",
+      "SOMETHING_WRONG": "Something went wrong"
+    }
+  },
   "BRANDS": {
     "LIST": {
       "TITLE": "Brands",

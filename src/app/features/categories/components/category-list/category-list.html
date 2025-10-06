@@ -14,12 +14,12 @@
             <i class="pi pi-th-large text-primary-contrast text-lg"></i>
           </div>
           <div>
-            <h1 class="text-2xl font-bold text-color">Categories</h1>
+            <h1 class="text-2xl font-bold text-color">{{ 'CATEGORIES.LIST.TITLE' | translate }}</h1>
             @if (!loading() && hasCategories()) {
               <p class="text-sm text-muted-color">
-                {{ totalCategories() | number }} categories found
+                {{ 'CATEGORIES.LIST.CATEGORIES_FOUND' | translate: {count: totalCategories() | number} }}
                 @if (searchQuery()) {
-                  <span class="ml-1">for "{{ searchQuery() }}"</span>
+                  <span class="ml-1">{{ 'CATEGORIES.LIST.FOR_QUERY' | translate: {query: searchQuery()} }}</span>
                 }
               </p>
             }
@@ -39,7 +39,7 @@
                   pInputText
                   [value]="searchQuery()"
                   (input)="onSearch($any($event.target).value)"
-                  placeholder="Search categories..."
+                  [placeholder]="'CATEGORIES.LIST.SEARCH_PLACEHOLDER' | translate"
                   class="w-full pr-12"
                   (keyup.enter)="onSearch($any($event.target).value)"
                 />
@@ -55,7 +55,7 @@
                   (click)="clearSearch()"
                   [disabled]="loading()"
                   class="!absolute !right-2 !top-1/2 !-translate-y-1/2 !w-7 !h-7 !p-0 !min-w-0 !flex !items-center !justify-center !rounded-full"
-                  [ariaLabel]="'Clear search'">
+                  [ariaLabel]="'CATEGORIES.LIST.CLEAR_SEARCH_ARIA' | translate">
                 </p-button>
               }
             </div>
@@ -93,15 +93,15 @@
               <i class="pi pi-exclamation-triangle text-2xl text-red-600"></i>
             </div>
             <h3 class="text-xl font-semibold text-color mb-4">
-              Something went wrong
+              {{ 'CATEGORIES.DETAILS.SOMETHING_WRONG' | translate }}
             </h3>
             <p-message
               severity="error"
-              [text]="error()"
               class="mb-6 text-left">
+              {{ error() }}
             </p-message>
             <p-button
-              label="Try Again"
+              [label]="'CATEGORIES.DETAILS.RETRY' | translate"
               icon="pi pi-refresh"
               (click)="retryLoading()"
               severity="primary"
@@ -120,21 +120,21 @@
             </div>
             <h3 class="text-2xl font-bold text-color mb-4">
               @if (searchQuery()) {
-                No categories found
+                {{ 'CATEGORIES.LIST.NO_CATEGORIES_FOUND' | translate }}
               } @else {
-                No categories available
+                {{ 'CATEGORIES.LIST.NO_CATEGORIES_AVAILABLE' | translate }}
               }
             </h3>
             <p class="text-muted-color mb-8 leading-relaxed">
               @if (searchQuery()) {
-                We couldn't find any categories matching your search. Try different keywords.
+                {{ 'CATEGORIES.LIST.NO_SEARCH_RESULTS' | translate }}
               } @else {
-                No categories are currently available. Check back soon!
+                {{ 'CATEGORIES.LIST.NO_CATEGORIES_AVAILABLE' | translate }}
               }
             </p>
             @if (searchQuery()) {
               <p-button
-                label="Clear Search"
+                [label]="'CATEGORIES.LIST.CLEAR_SEARCH' | translate"
                 icon="pi pi-times"
                 (click)="clearSearch()"
                 severity="primary"
@@ -156,7 +156,7 @@
               <div 
                 class="group relative overflow-hidden rounded-xl border border-surface shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer h-64 flex flex-col"
                 (click)="navigateToCategory(category)"
-                [ariaLabel]="'View ' + category.name + ' category'">
+                [attr.aria-label]="'CATEGORIES.LIST.VIEW_CATEGORY_ARIA' | translate: {name: category.name}">
                 
                 <!-- Category Image Container -->
                 <div class="relative overflow-hidden bg-surface-100 flex-1">
@@ -188,7 +188,7 @@
                   [first]="(currentPage() - 1) * itemsPerPage()"
                   (onPageChange)="onPageChange($event)"
                   [showCurrentPageReport]="true"
-                  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} categories"
+                  [currentPageReportTemplate]="'CATEGORIES.LIST.PAGINATION_TEMPLATE' | translate"
                   [showJumpToPageDropdown]="false"
                   [showFirstLastIcon]="true"
                   [showPageLinks]="true"
