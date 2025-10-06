@@ -11,6 +11,9 @@ import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
+// Translation
+import { TranslateModule } from '@ngx-translate/core';
+
 import { AuthService } from '../../services/auth';
 import { RegisterRequest } from '../../../../core/models/user.model';
 import { 
@@ -35,7 +38,9 @@ import {
     PasswordModule,
     ButtonModule,
     MessageModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    // Translation
+    TranslateModule
   ],
   templateUrl: './register.html'
 })

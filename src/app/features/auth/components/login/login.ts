@@ -12,6 +12,9 @@ import { MessageModule } from 'primeng/message';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { CheckboxModule } from 'primeng/checkbox';
 
+// Translation
+import { TranslateModule } from '@ngx-translate/core';
+
 import { AuthService } from '../../services/auth';
 import { LoginCredentials } from '../../../../core/models/user.model';
 
@@ -32,7 +35,9 @@ import { LoginCredentials } from '../../../../core/models/user.model';
     ButtonModule,
     MessageModule,
     ProgressSpinnerModule,
-    CheckboxModule
+    CheckboxModule,
+    // Translation
+    TranslateModule
   ],
   templateUrl: './login.html'
 })
