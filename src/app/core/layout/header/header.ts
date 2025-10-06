@@ -1,4 +1,6 @@
 import { Component, inject, OnInit, OnDestroy, signal, computed, ChangeDetectionStrategy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MenubarModule } from 'primeng/menubar';
 import { ToolbarModule } from 'primeng/toolbar';
@@ -7,18 +9,19 @@ import { ButtonModule } from 'primeng/button';
 import { DrawerModule } from 'primeng/drawer';
 import { AvatarModule } from 'primeng/avatar';
 import { RippleModule } from 'primeng/ripple';
+import { TooltipModule } from 'primeng/tooltip';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { MenuItem, PrimeIcons } from 'primeng/api';
 import { Subscription, combineLatest } from 'rxjs';
 import { I18nService } from '../../services/i18n';
-import { ThemeService } from '../../services/theme';
+import { ThemeService, ThemePreset, THEME_PRESETS } from '../../services/theme';
 import { AuthService } from '../../../features/auth/services/auth';
 import { CartStore } from '../../../features/cart/store/cart.store';
 import { WishlistStore } from '../../../features/wishlist/store/wishlist.store';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterModule, MenubarModule, ToolbarModule, MenuModule, ButtonModule, DrawerModule, AvatarModule, RippleModule, TranslatePipe],
+  imports: [CommonModule, FormsModule, RouterModule, MenubarModule, ToolbarModule, MenuModule, ButtonModule, DrawerModule, AvatarModule, RippleModule, TooltipModule, TranslatePipe],
   templateUrl: './header.html',
   styleUrl: './header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -41,6 +44,20 @@ export class Header implements OnInit, OnDestroy {
   readonly currentUserName = computed(() => this.authService.getCurrentUserName());
   readonly currentLanguage = computed(() => this.i18nService.getCurrentLanguageCode());
   readonly isDarkMode = this.themeService.isDarkMode;
+  
+  // Theme preset management
+  readonly availableThemePresets = THEME_PRESETS;
+  readonly currentThemePreset = this.themeService.currentPreset;
+  readonly currentPresetConfig = this.themeService.currentPresetConfig;
+  
+  // Theme preset menu items for mobile
+  readonly themePresetMenuItems = computed<MenuItem[]>(() => 
+    this.availableThemePresets.map(preset => ({
+      label: preset.name,
+      icon: preset.icon,
+      command: () => this.onThemePresetChange(preset.value)
+    }))
+  );
   
   // ✅ MINIMAL CHANGE: Only the parts that need reactivity
   // Store translations in a signal for reactive menu items
@@ -192,6 +209,29 @@ export class Header implements OnInit, OnDestroy {
    */
   toggleTheme(): void {
     this.themeService.toggleTheme();
+  }
+
+  /**
+   * Change theme preset
+   */
+  onThemePresetChange(preset: ThemePreset): void {
+    this.themeService.setPreset(preset);
+  }
+
+  /**
+   * Get preset description by theme name
+   */
+  getPresetDescription(themeName: string): string {
+    const preset = this.availableThemePresets.find(p => p.name === themeName);
+    return preset ? `${preset.primaryColor} • ${preset.description}` : '';
+  }
+
+  /**
+   * Check if given theme name is the current theme
+   */
+  isCurrentTheme(themeName: string): boolean {
+    const preset = this.availableThemePresets.find(p => p.name === themeName);
+    return preset ? preset.value === this.currentThemePreset() : false;
   }
 
   /**

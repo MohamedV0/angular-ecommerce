@@ -20,7 +20,40 @@
   <ng-template pTemplate="end">
     <div class="flex items-center gap-2">
       
-      <!-- Theme Toggle Button -->
+      <!-- Theme Preset Selector (Icon Button with Popup Menu) -->
+      <p-button 
+        icon="pi pi-palette"
+        severity="secondary"
+        [text]="true"
+        [rounded]="true"
+        (click)="themePresetMenu.toggle($event)"
+        [attr.aria-label]="'Change theme: ' + currentPresetConfig().name"
+        pTooltip="Change Theme"
+        tooltipPosition="bottom">
+      </p-button>
+      
+      <!-- Theme Preset Menu (Popup) -->
+      <p-menu 
+        #themePresetMenu
+        [model]="themePresetMenuItems()"
+        [popup]="true"
+        appendTo="body"
+        styleClass="theme-selector-menu">
+        <ng-template pTemplate="item" let-item>
+          <div class="flex items-center gap-3 p-2 w-64">
+            <i [class]="item.icon" class="text-2xl text-primary"></i>
+            <div class="flex flex-col flex-1">
+              <span class="font-semibold text-sm">{{ item.label }}</span>
+              <span class="text-xs text-muted-color">{{ getPresetDescription(item.label) }}</span>
+            </div>
+            @if (isCurrentTheme(item.label)) {
+              <i class="pi pi-check text-primary"></i>
+            }
+          </div>
+        </ng-template>
+      </p-menu>
+      
+      <!-- Theme Toggle Button (Dark/Light) -->
       <p-button 
         [icon]="isDarkMode() ? 'pi pi-sun' : 'pi pi-moon'"
         severity="secondary"
@@ -105,7 +138,38 @@
   <ng-template pTemplate="end">
     <div class="flex items-center gap-2">
       
-      <!-- Theme Toggle Button -->
+      <!-- Theme Preset Selector (Mobile) -->
+      <p-button 
+        icon="pi pi-palette"
+        severity="secondary"
+        [text]="true"
+        [rounded]="true"
+        (click)="themePresetMenuMobile.toggle($event)"
+        [attr.aria-label]="'Change theme: ' + currentPresetConfig().name">
+      </p-button>
+      
+      <!-- Theme Preset Menu (Mobile) -->
+      <p-menu 
+        #themePresetMenuMobile
+        [model]="themePresetMenuItems()"
+        [popup]="true"
+        appendTo="body"
+        styleClass="theme-selector-menu">
+        <ng-template pTemplate="item" let-item>
+          <div class="flex items-center gap-3 p-2 w-64">
+            <i [class]="item.icon" class="text-2xl text-primary"></i>
+            <div class="flex flex-col flex-1">
+              <span class="font-semibold text-sm">{{ item.label }}</span>
+              <span class="text-xs text-muted-color">{{ getPresetDescription(item.label) }}</span>
+            </div>
+            @if (isCurrentTheme(item.label)) {
+              <i class="pi pi-check text-primary"></i>
+            }
+          </div>
+        </ng-template>
+      </p-menu>
+      
+      <!-- Theme Toggle Button (Dark/Light) -->
       <p-button 
         [icon]="isDarkMode() ? 'pi pi-sun' : 'pi pi-moon'"
         severity="secondary"
