@@ -5,7 +5,7 @@ export const wishlistRoutes: Routes = [
   {
     path: '',
     loadComponent: () => import('./components/wishlist-page/wishlist-page').then(c => c.WishlistPage),
-    title: 'My Wishlist - FreshCart'
+    title: 'Wishlist - FreshCart'
   }
 ];
 

@@ -9,6 +9,9 @@ import { ButtonModule } from 'primeng/button';
 import { SkeletonModule } from 'primeng/skeleton';
 import { MessageModule } from 'primeng/message';
 
+// Translation
+import { TranslateModule } from '@ngx-translate/core';
+
 // Services
 import { AddressService } from '../../../profile/services/address.service';
 import { Address } from '../../../profile/models/address.model';
@@ -45,7 +48,9 @@ export interface AddressSelectionResult {
     RadioButtonModule,
     ButtonModule,
     SkeletonModule,
-    MessageModule
+    MessageModule,
+    // Translation
+    TranslateModule
   ],
   templateUrl: './address-selector.html',
   changeDetection: ChangeDetectionStrategy.OnPush

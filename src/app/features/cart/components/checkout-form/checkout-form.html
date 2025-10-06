@@ -2,7 +2,7 @@
   <ng-template pTemplate="header">
     <div class="flex items-center gap-3 p-4 bg-emphasis">
       <i class="pi pi-map-marker text-primary"></i>
-      <h3 class="font-semibold text-color">Shipping Address</h3>
+      <h3 class="font-semibold text-color">{{ 'ADDRESS.FORM_TITLE' | translate }}</h3>
     </div>
   </ng-template>
   
@@ -10,41 +10,41 @@
     <!-- Address Name -->
     <div>
       <label for="name" class="block text-sm font-medium text-color mb-2">
-        Address Label <span class="text-red-500">*</span>
+        {{ 'ADDRESS.LABEL' | translate }} <span class="text-red-500">{{ 'ADDRESS.REQUIRED_FIELD' | translate }}</span>
       </label>
       <input
         id="name"
         pInputText
         formControlName="name"
-        placeholder="e.g., Home, Work, Mom's House"
+        [placeholder]="'ADDRESS.LABEL_PLACEHOLDER' | translate"
         class="w-full"
         [class.p-invalid]="isFieldInvalid('name')"
         aria-describedby="name-error" />
       @if (isFieldInvalid('name')) {
         <small id="name-error" class="text-red-500 mt-1 block">
           @if (checkoutForm.get('name')?.errors?.['required']) {
-            Address label is required
+            {{ 'ADDRESS.LABEL_REQUIRED' | translate }}
           }
           @if (checkoutForm.get('name')?.errors?.['minlength']) {
-            Address label must be at least 2 characters
+            {{ 'ADDRESS.LABEL_MIN_LENGTH' | translate }}
           }
         </small>
       }
       <small class="text-muted-color text-xs mt-1 block">
-        Give this address a name to easily identify it later
+        {{ 'ADDRESS.LABEL_HELP' | translate }}
       </small>
     </div>
 
     <!-- Address Details -->
     <div>
       <label for="details" class="block text-sm font-medium text-color mb-2">
-        Address Details <span class="text-red-500">*</span>
+        {{ 'ADDRESS.DETAILS' | translate }} <span class="text-red-500">{{ 'ADDRESS.REQUIRED_FIELD' | translate }}</span>
       </label>
       <textarea
         id="details"
         pTextarea
         formControlName="details"
-        placeholder="Enter your full address (street, building number, apartment, etc.)"
+        [placeholder]="'ADDRESS.DETAILS_PLACEHOLDER' | translate"
         rows="3"
         class="w-full"
         [class.p-invalid]="isFieldInvalid('details')"
@@ -53,10 +53,10 @@
       @if (isFieldInvalid('details')) {
         <small id="details-error" class="text-red-500 mt-1 block">
           @if (checkoutForm.get('details')?.errors?.['required']) {
-            Address details are required
+            {{ 'ADDRESS.DETAILS_REQUIRED' | translate }}
           }
           @if (checkoutForm.get('details')?.errors?.['minAddressLength']) {
-            Address must be at least 10 characters
+            {{ 'ADDRESS.DETAILS_MIN_LENGTH' | translate }}
           }
         </small>
       }
@@ -65,23 +65,23 @@
     <!-- Phone Number -->
     <div>
       <label for="phone" class="block text-sm font-medium text-color mb-2">
-        Phone Number <span class="text-red-500">*</span>
+        {{ 'ADDRESS.PHONE' | translate }} <span class="text-red-500">{{ 'ADDRESS.REQUIRED_FIELD' | translate }}</span>
       </label>
       <input
         id="phone"
         pInputText
         formControlName="phone"
-        placeholder="01234567890"
+        [placeholder]="'ADDRESS.PHONE_PLACEHOLDER' | translate"
         class="w-full"
         [class.p-invalid]="isFieldInvalid('phone')"
         aria-describedby="phone-error" />
       @if (isFieldInvalid('phone')) {
         <small id="phone-error" class="text-red-500 mt-1 block">
           @if (checkoutForm.get('phone')?.errors?.['required']) {
-            Phone number is required
+            {{ 'ADDRESS.PHONE_REQUIRED' | translate }}
           }
           @if (checkoutForm.get('phone')?.errors?.['invalidEgyptianPhone']) {
-            Please enter a valid Egyptian phone number (11 digits starting with 01)
+            {{ 'ADDRESS.PHONE_INVALID' | translate }}
           }
         </small>
       }
@@ -90,12 +90,12 @@
     <!-- City -->
     <div>
       <label for="city" class="block text-sm font-medium text-color mb-2">
-        City <span class="text-red-500">*</span>
+        {{ 'ADDRESS.CITY' | translate }} <span class="text-red-500">{{ 'ADDRESS.REQUIRED_FIELD' | translate }}</span>
       </label>
       <p-select
         formControlName="city"
         [options]="egyptianCities"
-        placeholder="Select your city"
+        [placeholder]="'ADDRESS.CITY_PLACEHOLDER' | translate"
         [showClear]="true"
         [filter]="true"
         filterBy="label"
@@ -105,7 +105,7 @@
       </p-select>
       @if (isFieldInvalid('city')) {
         <small id="city-error" class="text-red-500 mt-1 block">
-          City selection is required
+          {{ 'ADDRESS.CITY_REQUIRED' | translate }}
         </small>
       }
     </div>

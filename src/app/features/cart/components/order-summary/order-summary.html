@@ -40,7 +40,7 @@
       } @else {
         <div class="text-center text-muted-color py-8">
           <i class="pi pi-shopping-cart text-3xl mb-2 block" aria-hidden="true"></i>
-          <p>No items in cart</p>
+          <p>{{ 'CHECKOUT.NO_ITEMS' | translate }}</p>
         </div>
       }
 
@@ -49,7 +49,11 @@
         <div class="space-y-3 pt-4 border-t border-surface">
           <div class="flex justify-between items-center">
             <span class="text-muted-color">
-              Subtotal ({{ cartSummary().totalItems }} items)
+              @if (cartSummary().totalItems === 1) {
+                {{ 'CART.SUBTOTAL' | translate }} ({{ 'CART.ITEMS_COUNT_SINGULAR' | translate }})
+              } @else {
+                {{ 'CART.SUBTOTAL' | translate }} ({{ 'CART.ITEMS_COUNT_PLURAL' | translate: { count: cartSummary().totalItems } }})
+              }
             </span>
             <span class="font-medium text-color">
               {{ formatPrice(cartSummary().totalPrice) }}
@@ -57,14 +61,14 @@
           </div>
           
           <div class="flex justify-between items-center">
-            <span class="text-muted-color">Shipping</span>
-            <span class="font-medium text-green-600">Free</span>
+            <span class="text-muted-color">{{ 'CHECKOUT.SHIPPING' | translate }}</span>
+            <span class="font-medium text-green-600">{{ 'CHECKOUT.FREE' | translate }}</span>
           </div>
           
           <p-divider></p-divider>
           
           <div class="flex justify-between items-center text-lg font-bold">
-            <span class="text-color">Total</span>
+            <span class="text-color">{{ 'CART.TOTAL' | translate }}</span>
             <span class="text-primary">
               {{ formatPrice(cartSummary().totalPrice) }}
             </span>
@@ -78,14 +82,14 @@
 
         <!-- Back to Cart Button -->
         <p-button 
-          label="Back to Cart"
+          label="{{ 'CHECKOUT.BACK_TO_CART' | translate }}"
           severity="secondary"
           [text]="true"
           icon="pi pi-arrow-left"
           routerLink="/cart"
           [disabled]="isProcessing()"
           class="w-full"
-          [attr.aria-label]="'Go back to shopping cart'">
+          [attr.aria-label]="'CHECKOUT.BACK_TO_CART' | translate">
         </p-button>
       }
     </div>

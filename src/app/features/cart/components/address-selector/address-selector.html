@@ -2,7 +2,7 @@
   <ng-template pTemplate="header">
     <div class="flex items-center gap-3 p-4 bg-emphasis">
       <i class="pi pi-map-marker text-primary"></i>
-      <h3 class="font-semibold text-color">Select Shipping Address</h3>
+      <h3 class="font-semibold text-color">{{ 'ADDRESS.SELECTOR_TITLE' | translate }}</h3>
     </div>
   </ng-template>
   
@@ -54,7 +54,7 @@
             (keydown.enter)="selectExistingAddress(address)"
             (keydown.space)="selectExistingAddress(address)"
             [attr.aria-pressed]="isAddressSelected(address._id)"
-            [attr.aria-label]="'Select address: ' + address.name">
+            [attr.aria-label]="'ADDRESS.SELECT_ADDRESS_ARIA' | translate: { name: address.name }">
             
             <div class="flex items-start gap-3">
               <!-- Radio Button -->
@@ -106,7 +106,7 @@
         (keydown.enter)="selectNewAddress()"
         (keydown.space)="selectNewAddress()"
         [attr.aria-pressed]="isNewAddressSelected()"
-        aria-label="Add new shipping address">
+        [attr.aria-label]="'ADDRESS.ADD_NEW_ADDRESS' | translate">
         
         <div class="flex items-center gap-3">
           <!-- Radio Button -->
@@ -121,7 +121,7 @@
           <div class="flex items-center gap-2">
             <i class="pi pi-plus text-primary" aria-hidden="true"></i>
             <label for="address-new" class="font-medium text-color cursor-pointer">
-              {{ hasAddresses() ? 'Use a different address' : 'Add shipping address' }}
+              {{ hasAddresses() ? ('ADDRESS.USE_DIFFERENT_ADDRESS' | translate) : ('ADDRESS.ADD_SHIPPING_ADDRESS' | translate) }}
             </label>
           </div>
         </div>

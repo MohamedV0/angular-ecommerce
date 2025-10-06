@@ -1,6 +1,7 @@
 import { Component, inject, computed, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 // PrimeNG Imports
 import { ButtonModule } from 'primeng/button';
@@ -23,6 +24,7 @@ import { ProductCard } from '../../../../shared/components/product-card/product-
   selector: 'app-wishlist-page',
   imports: [
     CommonModule,
+    TranslateModule,
     // PrimeNG
     ButtonModule,
     BadgeModule,

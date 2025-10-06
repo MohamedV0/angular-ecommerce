@@ -10,6 +10,9 @@ import { MessageModule } from 'primeng/message';
 import { DividerModule } from 'primeng/divider';
 import { BadgeModule } from 'primeng/badge';
 
+// Translation
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+
 // Feature Imports
 import { CartStore } from '../../store/cart.store';
 
@@ -30,7 +33,9 @@ import { formatDate } from '../../../../shared/utils/cart.utils';
     ButtonModule,
     MessageModule,
     DividerModule,
-    BadgeModule
+    BadgeModule,
+    // Translation
+    TranslateModule
   ],
   templateUrl: './checkout-success.html',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -39,6 +44,7 @@ export class CheckoutSuccessPage implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly cartStore = inject(CartStore);
+  private readonly translateService = inject(TranslateService);
 
   // Component state
   readonly orderId = signal<string | null>(null);
@@ -78,11 +84,11 @@ export class CheckoutSuccessPage implements OnInit {
     const method = this.paymentMethod();
     switch (method) {
       case 'cash':
-        return 'Cash on Delivery';
+        return this.translateService.instant('ORDER_SUCCESS.PAYMENT_CASH');
       case 'card':
-        return 'Credit/Debit Card';
+        return this.translateService.instant('ORDER_SUCCESS.PAYMENT_CARD');
       default:
-        return 'Unknown';
+        return '';
     }
   }
 

@@ -6,14 +6,16 @@
     <div class="max-w-7xl mx-auto px-4 py-6">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <i class="pi pi-heart text-2xl text-red-500"></i>
-          <h1 class="text-2xl font-bold text-color">My Wishlist</h1>
+          <i class="pi pi-heart text-2xl text-primary"></i>
+          <h1 class="text-2xl font-bold text-color">
+            {{ 'WISHLIST.TITLE' | translate }}
+          </h1>
           @if (!isEmpty()) {
-            <p-badge [value]="wishlistSummary().totalItems" severity="danger" size="large"></p-badge>
+            <p-badge [value]="wishlistSummary().totalItems" size="large"></p-badge>
           }
         </div>
         <p-button 
-          label="Continue Shopping"
+          [label]="'WISHLIST.CONTINUE_SHOPPING' | translate"
           severity="secondary"
           [outlined]="true"
           icon="pi pi-arrow-left"
@@ -54,23 +56,86 @@
 
     <!-- Empty State -->
     @else if (showEmptyState()) {
-      <div class="flex flex-col items-center justify-center py-16 text-center">
-        <div class="bg-red-50 rounded-full p-8 mb-6">
-          <i class="pi pi-heart text-6xl text-red-400"></i>
+      <div class="max-w-2xl mx-auto text-center">
+        
+        <!-- Empty Icon and Header -->
+        <div class="mb-6">
+          <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="pi pi-heart text-3xl text-primary"></i>
+          </div>
+          <h1 class="text-2xl font-bold text-color mb-3">
+            {{ 'WISHLIST.EMPTY_TITLE' | translate }}
+          </h1>
+          <p class="text-base text-muted-color">
+            {{ 'WISHLIST.EMPTY_MESSAGE' | translate }}
+          </p>
         </div>
-        <h2 class="text-2xl font-semibold text-color mb-2">
-          Your Wishlist is Empty
-        </h2>
-        <p class="text-muted-color mb-8 max-w-md">
-          Save your favorite items to your wishlist and shop them later!
-        </p>
+
+        <!-- Suggestions Card -->
+        <p-card class="mb-6 shadow-sm">
+          <ng-template pTemplate="header">
+            <div class="flex items-center gap-2 p-3 bg-emphasis">
+              <i class="pi pi-lightbulb text-primary"></i>
+              <h3 class="font-semibold text-color text-sm">
+                {{ 'WISHLIST.EMPTY_SUGGESTIONS.TITLE' | translate }}
+              </h3>
+            </div>
+          </ng-template>
+          
+          <div class="text-left space-y-3 p-4">
+            <p class="text-sm text-muted-color">
+              {{ 'WISHLIST.EMPTY_SUGGESTIONS.DESCRIPTION' | translate }}
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div class="flex items-start gap-2 p-3 bg-emphasis rounded-lg">
+                <i class="pi pi-heart text-xl text-primary flex-shrink-0 mt-0.5"></i>
+                <div class="min-w-0">
+                  <h4 class="font-medium text-color text-sm mb-0.5">
+                    {{ 'WISHLIST.EMPTY_SUGGESTIONS.SAVE_TITLE' | translate }}
+                  </h4>
+                  <p class="text-xs text-muted-color">
+                    {{ 'WISHLIST.EMPTY_SUGGESTIONS.SAVE_DESCRIPTION' | translate }}
+                  </p>
+                </div>
+              </div>
+              
+              <div class="flex items-start gap-2 p-3 bg-emphasis rounded-lg">
+                <i class="pi pi-bell text-xl text-green-600 flex-shrink-0 mt-0.5"></i>
+                <div class="min-w-0">
+                  <h4 class="font-medium text-color text-sm mb-0.5">
+                    {{ 'WISHLIST.EMPTY_SUGGESTIONS.NOTIFY_TITLE' | translate }}
+                  </h4>
+                  <p class="text-xs text-muted-color">
+                    {{ 'WISHLIST.EMPTY_SUGGESTIONS.NOTIFY_DESCRIPTION' | translate }}
+                  </p>
+                </div>
+              </div>
+              
+              <div class="flex items-start gap-2 p-3 bg-emphasis rounded-lg">
+                <i class="pi pi-shopping-cart text-xl text-blue-600 flex-shrink-0 mt-0.5"></i>
+                <div class="min-w-0">
+                  <h4 class="font-medium text-color text-sm mb-0.5">
+                    {{ 'WISHLIST.EMPTY_SUGGESTIONS.QUICK_ADD_TITLE' | translate }}
+                  </h4>
+                  <p class="text-xs text-muted-color">
+                    {{ 'WISHLIST.EMPTY_SUGGESTIONS.QUICK_ADD_DESCRIPTION' | translate }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </p-card>
+
+        <!-- Action Button -->
         <p-button 
-          label="Start Shopping"
+          [label]="'WISHLIST.START_SHOPPING' | translate"
           severity="primary"
           icon="pi pi-shopping-bag"
           (click)="continueShopping()"
           size="large">
         </p-button>
+
       </div>
     }
 
@@ -78,7 +143,11 @@
     @else if (!isEmpty()) {
       <div class="mb-6">
         <h2 class="text-lg font-semibold text-color">
-          {{ wishlistSummary().itemsCount }}
+          @if (wishlistSummary().totalItems === 1) {
+            {{ 'WISHLIST.ITEMS_COUNT_SINGULAR' | translate }}
+          } @else {
+            {{ 'WISHLIST.ITEMS_COUNT_PLURAL' | translate: { count: wishlistSummary().totalItems } }}
+          }
         </h2>
       </div>
 

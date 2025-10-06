@@ -7,6 +7,9 @@ import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 
+// Translation
+import { TranslateModule } from '@ngx-translate/core';
+
 // Types
 import { CartItem, CartSummary } from '../../models/cart.model';
 
@@ -26,7 +29,9 @@ import { formatPrice, getProductImageUrl, trackCartItem } from '../../../../shar
     // PrimeNG
     CardModule,
     ButtonModule,
-    DividerModule
+    DividerModule,
+    // Translation
+    TranslateModule
   ],
   templateUrl: './order-summary.html',
   changeDetection: ChangeDetectionStrategy.OnPush

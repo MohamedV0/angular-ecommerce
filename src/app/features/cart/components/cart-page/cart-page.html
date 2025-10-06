@@ -12,7 +12,7 @@
           </h1>
           @if (!isEmpty()) {
             <p-badge 
-              [value]="cartSummary().itemsCount"
+              [value]="cartSummary().totalItems"
               size="large">
             </p-badge>
           }
@@ -99,48 +99,56 @@
       <div class="max-w-2xl mx-auto text-center">
         
         <!-- Empty Icon and Header -->
-        <div class="mb-8">
-          <div class="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
-            <i class="pi pi-shopping-cart text-4xl text-primary"></i>
+        <div class="mb-6">
+          <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="pi pi-shopping-cart text-3xl text-primary"></i>
           </div>
-          <h1 class="text-3xl font-bold text-color mb-4">
+          <h1 class="text-2xl font-bold text-color mb-3">
             {{ 'CART.EMPTY_TITLE' | translate }}
           </h1>
-          <p class="text-lg text-muted-color">
+          <p class="text-base text-muted-color">
             {{ 'CART.EMPTY_MESSAGE' | translate }}
           </p>
         </div>
 
         <!-- Suggestions Card -->
-        <p-card class="mb-8 shadow-sm">
+        <p-card class="mb-6 shadow-sm">
           <ng-template pTemplate="header">
-            <div class="flex items-center gap-3 p-4 bg-emphasis">
+            <div class="flex items-center gap-2 p-3 bg-emphasis">
               <i class="pi pi-lightbulb text-primary"></i>
-              <h3 class="font-semibold text-color">Start Shopping</h3>
+              <h3 class="font-semibold text-color text-sm">{{ 'CART.EMPTY_SUGGESTIONS.TITLE' | translate }}</h3>
             </div>
           </ng-template>
           
-          <div class="text-left space-y-4">
-            <p class="text-muted-color">
-              Browse our wide selection of fresh products and add items to your cart to get started.
+          <div class="text-left space-y-3 p-4">
+            <p class="text-sm text-muted-color">
+              {{ 'CART.EMPTY_SUGGESTIONS.DESCRIPTION' | translate }}
             </p>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-              <p-card class="shadow-sm">
-                <i class="pi pi-box text-2xl text-primary mb-2"></i>
-                <h4 class="font-medium text-color mb-1 text-sm">Fresh Products</h4>
-                <p class="text-xs text-muted-color">Quality guaranteed</p>
-              </p-card>
-              <p-card class="shadow-sm">
-                <i class="pi pi-truck text-2xl text-green-600 mb-2"></i>
-                <h4 class="font-medium text-color mb-1 text-sm">Fast Delivery</h4>
-                <p class="text-xs text-muted-color">Same-day available</p>
-              </p-card>
-              <p-card class="shadow-sm">
-                <i class="pi pi-shield text-2xl text-blue-600 mb-2"></i>
-                <h4 class="font-medium text-color mb-1 text-sm">Secure Payment</h4>
-                <p class="text-xs text-muted-color">100% protected</p>
-              </p-card>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div class="flex items-start gap-2 p-3 bg-emphasis rounded-lg">
+                <i class="pi pi-box text-xl text-primary flex-shrink-0 mt-0.5"></i>
+                <div class="min-w-0">
+                  <h4 class="font-medium text-color text-sm mb-0.5">{{ 'CART.EMPTY_SUGGESTIONS.FRESH_TITLE' | translate }}</h4>
+                  <p class="text-xs text-muted-color">{{ 'CART.EMPTY_SUGGESTIONS.FRESH_DESCRIPTION' | translate }}</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start gap-2 p-3 bg-emphasis rounded-lg">
+                <i class="pi pi-truck text-xl text-green-600 flex-shrink-0 mt-0.5"></i>
+                <div class="min-w-0">
+                  <h4 class="font-medium text-color text-sm mb-0.5">{{ 'CART.EMPTY_SUGGESTIONS.DELIVERY_TITLE' | translate }}</h4>
+                  <p class="text-xs text-muted-color">{{ 'CART.EMPTY_SUGGESTIONS.DELIVERY_DESCRIPTION' | translate }}</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start gap-2 p-3 bg-emphasis rounded-lg">
+                <i class="pi pi-shield text-xl text-blue-600 flex-shrink-0 mt-0.5"></i>
+                <div class="min-w-0">
+                  <h4 class="font-medium text-color text-sm mb-0.5">{{ 'CART.EMPTY_SUGGESTIONS.PAYMENT_TITLE' | translate }}</h4>
+                  <p class="text-xs text-muted-color">{{ 'CART.EMPTY_SUGGESTIONS.PAYMENT_DESCRIPTION' | translate }}</p>
+                </div>
+              </div>
             </div>
           </div>
         </p-card>
@@ -167,7 +175,11 @@
             <ng-template pTemplate="header">
               <div class="flex items-center justify-between p-4 bg-emphasis">
                 <h3 class="font-semibold text-color">
-                  {{ 'CART.ITEMS' | translate }} ({{ cartSummary().itemsCount }})
+                  @if (cartSummary().totalItems === 1) {
+                    {{ 'CART.ITEMS' | translate }} ({{ 'CART.ITEMS_COUNT_SINGULAR' | translate }})
+                  } @else {
+                    {{ 'CART.ITEMS' | translate }} ({{ 'CART.ITEMS_COUNT_PLURAL' | translate: { count: cartSummary().totalItems } }})
+                  }
                 </h3>
               </div>
             </ng-template>
@@ -303,7 +315,11 @@
                 <!-- Items Summary -->
                 <div class="flex justify-between items-center">
                   <span class="text-muted-color">
-                    {{ 'CART.ITEMS' | translate }} ({{ cartSummary().totalItems }})
+                    @if (cartSummary().totalItems === 1) {
+                      {{ 'CART.ITEMS_COUNT_SINGULAR' | translate }}
+                    } @else {
+                      {{ 'CART.ITEMS_COUNT_PLURAL' | translate: { count: cartSummary().totalItems } }}
+                    }
                   </span>
                   <span class="font-medium text-color">
                     {{ formatPrice(cartSummary().totalPrice) }}

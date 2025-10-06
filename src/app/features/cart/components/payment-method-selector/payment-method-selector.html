@@ -2,7 +2,7 @@
   <ng-template pTemplate="header">
     <div class="flex items-center gap-3 p-4 bg-emphasis">
       <i class="pi pi-credit-card text-primary"></i>
-      <h3 class="font-semibold text-color">Payment Method</h3>
+      <h3 class="font-semibold text-color">{{ 'PAYMENT.TITLE' | translate }}</h3>
     </div>
   </ng-template>
   
@@ -21,7 +21,7 @@
       (keydown.enter)="selectPaymentMethod('cash')"
       (keydown.space)="selectPaymentMethod('cash')"
       [attr.aria-pressed]="paymentMethodSignal() === 'cash'"
-      aria-label="Select cash on delivery payment method">
+      [attr.aria-label]="'PAYMENT.CASH_ARIA' | translate">
       <div class="flex items-center gap-3">
         <p-radiobutton 
           value="cash" 
@@ -34,11 +34,11 @@
           <div class="flex items-center gap-2">
             <i class="pi pi-wallet text-lg text-muted-color" aria-hidden="true"></i>
             <label for="cash" class="font-medium text-color cursor-pointer">
-              Cash on Delivery
+              {{ 'PAYMENT.CASH_TITLE' | translate }}
             </label>
           </div>
           <p class="text-sm text-muted-color mt-1">
-            Pay with cash when your order arrives
+            {{ 'PAYMENT.CASH_DESCRIPTION' | translate }}
           </p>
         </div>
       </div>
@@ -58,7 +58,7 @@
       (keydown.enter)="selectPaymentMethod('card')"
       (keydown.space)="selectPaymentMethod('card')"
       [attr.aria-pressed]="paymentMethodSignal() === 'card'"
-      aria-label="Select credit or debit card payment method">
+      [attr.aria-label]="'PAYMENT.CARD_ARIA' | translate">
       <div class="flex items-center gap-3">
         <p-radiobutton 
           value="card" 
@@ -71,11 +71,11 @@
           <div class="flex items-center gap-2">
             <i class="pi pi-credit-card text-lg text-muted-color" aria-hidden="true"></i>
             <label for="card" class="font-medium text-color cursor-pointer">
-              Credit/Debit Card
+              {{ 'PAYMENT.CARD_TITLE' | translate }}
             </label>
           </div>
           <p class="text-sm text-muted-color mt-1">
-            Pay securely with your card via Stripe
+            {{ 'PAYMENT.CARD_DESCRIPTION' | translate }}
           </p>
         </div>
       </div>

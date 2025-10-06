@@ -6,6 +6,9 @@ import { FormsModule } from '@angular/forms';
 import { CardModule } from 'primeng/card';
 import { RadioButtonModule } from 'primeng/radiobutton';
 
+// Translation
+import { TranslateModule } from '@ngx-translate/core';
+
 /**
  * Payment Method Type
  */
@@ -23,7 +26,9 @@ export type PaymentMethod = 'cash' | 'card';
     FormsModule,
     // PrimeNG
     CardModule,
-    RadioButtonModule
+    RadioButtonModule,
+    // Translation
+    TranslateModule
   ],
   templateUrl: './payment-method-selector.html',
   changeDetection: ChangeDetectionStrategy.OnPush

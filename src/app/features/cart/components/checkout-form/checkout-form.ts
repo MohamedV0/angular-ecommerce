@@ -9,6 +9,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { SelectModule } from 'primeng/select';
 
+// Translation
+import { TranslateModule } from '@ngx-translate/core';
+
 // Shared Validators
 import { 
   isFieldInvalid,
@@ -38,7 +41,9 @@ import { ShippingAddress } from '../../services/checkout.service';
     CardModule,
     InputTextModule,
     TextareaModule,
-    SelectModule
+    SelectModule,
+    // Translation
+    TranslateModule
   ],
   templateUrl: './checkout-form.html',
   changeDetection: ChangeDetectionStrategy.OnPush

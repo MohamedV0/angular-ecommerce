@@ -79,7 +79,7 @@ export const CartStore = signalStore(
         totalItems,
         totalPrice,
         isEmpty: totalItems === 0,
-        itemsCount: totalItems === 1 ? '1 item' : `${totalItems} items`
+        itemsCount: '' // Deprecated - use totalItems with translation in template
       };
     }),
     

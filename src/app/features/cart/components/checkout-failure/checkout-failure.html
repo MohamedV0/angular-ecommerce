@@ -9,10 +9,10 @@
           <i class="pi pi-times text-4xl text-white"></i>
         </div>
         <h1 class="text-3xl font-bold text-color mb-4">
-          Payment Failed
+          {{ 'ORDER_FAILURE.TITLE' | translate }}
         </h1>
         <p class="text-lg text-muted-color">
-          We're sorry, but your payment could not be processed.
+          {{ 'ORDER_FAILURE.MESSAGE' | translate }}
         </p>
       </div>
 
@@ -21,7 +21,7 @@
         <ng-template pTemplate="header">
           <div class="flex items-center gap-3 p-4 bg-emphasis">
             <i class="pi pi-exclamation-triangle text-red-600"></i>
-            <h3 class="font-semibold text-color">What Happened?</h3>
+            <h3 class="font-semibold text-color">{{ 'ORDER_FAILURE.WHAT_HAPPENED' | translate }}</h3>
           </div>
         </ng-template>
         
@@ -35,19 +35,19 @@
           } @else {
             <p-message 
               severity="error" 
-              text="Your payment was not successful. This could be due to insufficient funds, an expired card, or a technical issue."
+              [text]="'ORDER_FAILURE.DEFAULT_ERROR' | translate"
               class="text-left">
             </p-message>
           }
           
           <div class="bg-emphasis rounded-lg p-4">
-            <h4 class="font-medium text-color mb-2">Common reasons for payment failure:</h4>
+            <h4 class="font-medium text-color mb-2">{{ 'ORDER_FAILURE.REASONS_TITLE' | translate }}</h4>
             <ul class="text-sm text-muted-color space-y-1">
-              <li>• Insufficient funds in your account</li>
-              <li>• Expired or invalid card details</li>
-              <li>• Bank security restrictions</li>
-              <li>• Network connectivity issues</li>
-              <li>• Card not authorized for online payments</li>
+              <li>{{ 'ORDER_FAILURE.REASON_FUNDS' | translate }}</li>
+              <li>{{ 'ORDER_FAILURE.REASON_EXPIRED' | translate }}</li>
+              <li>{{ 'ORDER_FAILURE.REASON_SECURITY' | translate }}</li>
+              <li>{{ 'ORDER_FAILURE.REASON_NETWORK' | translate }}</li>
+              <li>{{ 'ORDER_FAILURE.REASON_AUTHORIZATION' | translate }}</li>
             </ul>
           </div>
         </div>
@@ -56,21 +56,21 @@
       <!-- Next Steps -->
       <div class="mb-8">
         <h3 class="text-xl font-semibold text-color mb-4">
-          What Can You Do?
+          {{ 'ORDER_FAILURE.WHAT_TO_DO' | translate }}
         </h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-center">
           <p-card class="shadow-sm">
             <i class="pi pi-refresh text-2xl text-primary mb-2"></i>
-            <h4 class="font-medium text-color mb-1">Try Again</h4>
+            <h4 class="font-medium text-color mb-1">{{ 'ORDER_FAILURE.TRY_AGAIN_TITLE' | translate }}</h4>
             <p class="text-sm text-muted-color">
-              Retry payment with the same or different card
+              {{ 'ORDER_FAILURE.TRY_AGAIN_MESSAGE' | translate }}
             </p>
           </p-card>
           <p-card class="shadow-sm">
             <i class="pi pi-wallet text-2xl text-green-600 mb-2"></i>
-            <h4 class="font-medium text-color mb-1">Cash on Delivery</h4>
+            <h4 class="font-medium text-color mb-1">{{ 'ORDER_FAILURE.CASH_OPTION_TITLE' | translate }}</h4>
             <p class="text-sm text-muted-color">
-              Choose cash payment instead
+              {{ 'ORDER_FAILURE.CASH_OPTION_MESSAGE' | translate }}
             </p>
           </p-card>
         </div>
@@ -79,14 +79,14 @@
       <!-- Action Buttons -->
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
         <p-button 
-          label="Try Payment Again"
+          [label]="'ORDER_FAILURE.TRY_PAYMENT_AGAIN' | translate"
           icon="pi pi-credit-card"
           routerLink="/cart/checkout"
           severity="primary"
           size="large">
         </p-button>
         <p-button 
-          label="Back to Cart"
+          [label]="'ORDER_FAILURE.BACK_TO_CART' | translate"
           icon="pi pi-arrow-left"
           routerLink="/cart"
           severity="secondary"
@@ -97,12 +97,12 @@
 
       <!-- Help Section -->
       <div class="mt-8 p-4 bg-emphasis rounded-lg border border-surface">
-        <h4 class="font-medium text-color mb-2">Need Help?</h4>
+        <h4 class="font-medium text-color mb-2">{{ 'ORDER_FAILURE.NEED_HELP' | translate }}</h4>
         <p class="text-sm text-muted-color mb-3">
-          If you continue to experience issues, please contact our support team.
+          {{ 'ORDER_FAILURE.HELP_MESSAGE' | translate }}
         </p>
         <p-button 
-          label="Contact Support"
+          [label]="'ORDER_FAILURE.CONTACT_SUPPORT' | translate"
           icon="pi pi-phone"
           severity="secondary"
           [text]="true"

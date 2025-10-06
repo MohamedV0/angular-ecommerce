@@ -5,9 +5,12 @@ import { Router, RouterModule } from '@angular/router';
 // PrimeNG Imports
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
-import { MessageModule } from 'primeng/message';
+import { MessageModule} from 'primeng/message';
 import { SkeletonModule } from 'primeng/skeleton';
 import { MessageService } from 'primeng/api';
+
+// Translation
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 // Feature Imports
 import { CartStore } from '../../store/cart.store';
@@ -35,6 +38,8 @@ import { OrderSummaryComponent } from '../order-summary/order-summary';
     ButtonModule,
     MessageModule,
     SkeletonModule,
+    // Translation
+    TranslateModule,
     // Sub-components
     AddressSelectorComponent,
     CheckoutFormComponent,
@@ -51,6 +56,7 @@ export class CheckoutPage implements OnInit {
   private readonly checkoutService = inject(CheckoutService);
   private readonly addressService = inject(AddressService);
   private readonly messageService = inject(MessageService);
+  private readonly translateService = inject(TranslateService);
 
   // Component state
   readonly loading = signal(false);
@@ -82,10 +88,14 @@ export class CheckoutPage implements OnInit {
     const isProcessing = this.isProcessing();
     
     if (isProcessing) {
-      return method === 'cash' ? 'Placing Order...' : 'Processing Payment...';
+      return method === 'cash' 
+        ? this.translateService.instant('CHECKOUT.PLACING_ORDER')
+        : this.translateService.instant('CHECKOUT.PROCESSING_PAYMENT');
     }
     
-    return method === 'cash' ? 'Place Order (Cash on Delivery)' : 'Pay with Card';
+    return method === 'cash' 
+      ? this.translateService.instant('CHECKOUT.PLACE_ORDER_CASH')
+      : this.translateService.instant('CHECKOUT.PLACE_ORDER_CARD');
   });
 
   ngOnInit(): void {

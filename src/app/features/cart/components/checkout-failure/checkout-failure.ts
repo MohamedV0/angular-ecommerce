@@ -8,6 +8,9 @@ import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 
+// Translation
+import { TranslateModule } from '@ngx-translate/core';
+
 /**
  * Checkout Failure Page
  * Displays payment failure message and options to retry
@@ -20,7 +23,9 @@ import { MessageModule } from 'primeng/message';
     // PrimeNG
     CardModule,
     ButtonModule,
-    MessageModule
+    MessageModule,
+    // Translation
+    TranslateModule
   ],
   templateUrl: './checkout-failure.html',
   changeDetection: ChangeDetectionStrategy.OnPush

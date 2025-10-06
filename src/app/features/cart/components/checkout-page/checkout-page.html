@@ -7,7 +7,7 @@
       <div class="flex items-center gap-3">
         <i class="pi pi-credit-card text-2xl text-primary" aria-hidden="true"></i>
         <h1 class="text-2xl font-bold text-color">
-          Checkout
+          {{ 'CHECKOUT.TITLE' | translate }}
         </h1>
       </div>
     </div>
@@ -52,10 +52,10 @@
             <i class="pi pi-exclamation-triangle text-4xl text-white"></i>
           </div>
           <h1 class="text-3xl font-bold text-color mb-4">
-            Checkout Error
+            {{ 'CHECKOUT.ERROR_TITLE' | translate }}
           </h1>
           <p class="text-lg text-muted-color">
-            We encountered a problem while processing your checkout.
+            {{ 'CHECKOUT.ERROR_MESSAGE' | translate }}
           </p>
         </div>
 
@@ -64,7 +64,7 @@
           <ng-template pTemplate="header">
             <div class="flex items-center gap-3 p-4 bg-emphasis">
               <i class="pi pi-info-circle text-red-600"></i>
-              <h3 class="font-semibold text-color">Error Details</h3>
+              <h3 class="font-semibold text-color">{{ 'CHECKOUT.ERROR_DETAILS' | translate }}</h3>
             </div>
           </ng-template>
           
@@ -80,14 +80,14 @@
         <!-- Action Buttons -->
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
           <p-button 
-            label="Try Again"
+            [label]="'CHECKOUT.TRY_AGAIN' | translate"
             icon="pi pi-refresh"
             (click)="retryCheckout()"
             severity="primary"
             size="large">
           </p-button>
           <p-button 
-            label="Back to Cart"
+            [label]="'CHECKOUT.BACK_TO_CART' | translate"
             icon="pi pi-arrow-left"
             routerLink="/cart"
             severity="secondary"
