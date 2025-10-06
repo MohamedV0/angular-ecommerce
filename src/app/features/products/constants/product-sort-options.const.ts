@@ -1,20 +1,21 @@
 /**
  * Product Sort Options
  * Shared sorting options for product list and search components
+ * labelKey contains the i18n translation key
  */
 export const PRODUCT_SORT_OPTIONS = [
-  { label: 'Newest First', value: '-createdAt' },
-  { label: 'Oldest First', value: 'createdAt' },
-  { label: 'Price: Low to High', value: 'price' },
-  { label: 'Price: High to Low', value: '-price' },
-  { label: 'Highest Rated', value: '-ratingsAverage' },
-  { label: 'Most Popular', value: '-sold' }
+  { labelKey: 'PRODUCTS.SORT.NEWEST_FIRST', value: '-createdAt' },
+  { labelKey: 'PRODUCTS.SORT.OLDEST_FIRST', value: 'createdAt' },
+  { labelKey: 'PRODUCTS.SORT.PRICE_LOW_HIGH', value: 'price' },
+  { labelKey: 'PRODUCTS.SORT.PRICE_HIGH_LOW', value: '-price' },
+  { labelKey: 'PRODUCTS.SORT.HIGHEST_RATED', value: '-ratingsAverage' },
+  { labelKey: 'PRODUCTS.SORT.MOST_POPULAR', value: '-sold' }
 ] as const;
 
 /**
  * Search-specific sort options (includes relevance)
  */
 export const SEARCH_SORT_OPTIONS = [
-  { label: 'Best Match', value: 'relevance' },
+  { labelKey: 'PRODUCTS.SORT.BEST_MATCH', value: 'relevance' },
   ...PRODUCT_SORT_OPTIONS
 ] as const;

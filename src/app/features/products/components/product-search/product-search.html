@@ -16,10 +16,10 @@
               [suggestions]="suggestions()"
               (completeMethod)="onSearchSuggestion($event)"
               (onSelect)="onSuggestionSelect($event)"
-              placeholder="Search for products..."
+              [placeholder]="'PRODUCTS.SEARCH.PLACEHOLDER' | translate"
               [dropdown]="true"
               [showEmptyMessage]="true"
-              emptyMessage="No suggestions found"
+              [emptyMessage]="'PRODUCTS.SEARCH.NO_SUGGESTIONS' | translate"
               class="w-full">
               
               <ng-template #item let-suggestion>
@@ -37,7 +37,7 @@
             <!-- Filters Toggle Button -->
             <p-button
               [icon]="showFilters() ? 'pi pi-times' : 'pi pi-filter'"
-              [label]="showFilters() ? 'Hide' : 'Filters'"
+              [label]="showFilters() ? ('PRODUCTS.SEARCH.HIDE_FILTERS' | translate) : ('PRODUCTS.SEARCH.SHOW_FILTERS' | translate)"
               (click)="toggleFilters()"
               severity="secondary"
               [outlined]="true"
@@ -54,9 +54,9 @@
         @if (recentSearches().length > 0 && !searchQuery()) {
           <div class="mt-4">
             <div class="flex items-center gap-2 mb-2">
-              <span class="text-sm font-medium text-muted-color">Recent searches:</span>
+              <span class="text-sm font-medium text-muted-color">{{ 'PRODUCTS.SEARCH.RECENT_SEARCHES' | translate }}</span>
               <p-button
-                label="Clear"
+                [label]="'PRODUCTS.SEARCH.CLEAR' | translate"
                 (click)="clearRecentSearches()"
                 severity="secondary"
                 [text]="true"
@@ -88,11 +88,11 @@
               <p-skeleton width="200px" height="1rem"></p-skeleton>
             } @else if (hasProducts()) {
               <h2 class="text-lg font-semibold text-color">
-                {{ totalProducts() | number }} results for "{{ searchQuery() }}"
+                {{ 'PRODUCTS.SEARCH.RESULTS_FOR' | translate: {count: totalProducts(), query: searchQuery()} }}
               </h2>
             } @else if (!error()) {
               <h2 class="text-lg font-semibold text-color">
-                No results found for "{{ searchQuery() }}"
+                {{ 'PRODUCTS.SEARCH.NO_RESULTS_FOR' | translate: {query: searchQuery()} }}
               </h2>
             }
           </div>
@@ -101,10 +101,10 @@
           @if (hasProducts() && !loading()) {
             <div class="sort-section flex items-center gap-2">
               <label class="text-sm font-medium text-color">
-                Sort by:
+                {{ 'PRODUCTS.SEARCH.SORT_BY' | translate }}
               </label>
               <p-select
-                [options]="sortOptions"
+                [options]="sortOptions()"
                 [ngModel]="sortBy()"
                 (ngModelChange)="onSortChange($event)"
                 optionLabel="label"
@@ -121,9 +121,9 @@
       @if (hasActiveFilters()) {
         <div class="active-filters mt-4">
           <div class="flex items-center gap-2 mb-2">
-            <span class="text-sm font-medium text-muted-color">Active filters:</span>
+            <span class="text-sm font-medium text-muted-color">{{ 'PRODUCTS.SEARCH.ACTIVE_FILTERS' | translate }}</span>
             <p-button
-              label="Clear All"
+              [label]="'PRODUCTS.SEARCH.CLEAR_ALL' | translate"
               (click)="clearFilters()"
               severity="danger"
               [text]="true"
@@ -133,7 +133,7 @@
           <div class="flex flex-wrap gap-2">
             @for (category of filters().categories; track category) {
               <p-chip
-                [label]="'Category: ' + category"
+                [label]="('PRODUCTS.SEARCH.CATEGORY_PREFIX' | translate) + category"
                 [removable]="true"
                 (onRemove)="removeCategory(category)"
                 icon="pi pi-tag">
@@ -141,7 +141,7 @@
             }
             @for (brand of filters().brands; track brand) {
               <p-chip
-                [label]="'Brand: ' + brand"
+                [label]="('PRODUCTS.SEARCH.BRAND_PREFIX' | translate) + brand"
                 [removable]="true"
                 (onRemove)="removeBrand(brand)"
                 icon="pi pi-star">
@@ -149,7 +149,7 @@
             }
             @if (filters().rating > 0) {
               <p-chip
-                [label]="'Rating: ' + filters().rating + '+ stars'"
+                [label]="('PRODUCTS.SEARCH.RATING_PREFIX' | translate) + filters().rating + ('PRODUCTS.SEARCH.RATING_SUFFIX' | translate)"
                 [removable]="true"
                 (onRemove)="updateFilters({ rating: 0 })"
                 icon="pi pi-star-fill">
@@ -157,7 +157,7 @@
             }
             @if (filters().inStock) {
               <p-chip
-                label="In Stock"
+                [label]="'PRODUCTS.SEARCH.IN_STOCK_FILTER' | translate"
                 [removable]="true"
                 (onRemove)="updateFilters({ inStock: false })"
                 icon="pi pi-check">
@@ -165,7 +165,7 @@
             }
             @if (filters().onSale) {
               <p-chip
-                label="On Sale"
+                [label]="'PRODUCTS.SEARCH.ON_SALE_FILTER' | translate"
                 [removable]="true"
                 (onRemove)="updateFilters({ onSale: false })"
                 icon="pi pi-percentage">
@@ -187,11 +187,10 @@
         <div class="text-center py-16">
           <i class="pi pi-search text-6xl text-muted-color mb-6 opacity-60 animate-pulse"></i>
           <h2 class="text-3xl font-bold text-color mb-4">
-            Search Products
+            {{ 'PRODUCTS.SEARCH.WELCOME_TITLE' | translate }}
           </h2>
           <p class="text-muted-color max-w-md mx-auto">
-            Find exactly what you're looking for with our advanced search. 
-            Use filters to narrow down your results.
+            {{ 'PRODUCTS.SEARCH.WELCOME_MESSAGE' | translate }}
           </p>
         </div>
       }
@@ -223,7 +222,7 @@
             class="max-w-md mx-auto mb-6 inline-block">
           </p-message>
           <p-button
-            label="Try Again"
+            [label]="'PRODUCTS.ERRORS.TRY_AGAIN' | translate"
             icon="pi pi-refresh"
             (click)="performSearch()"
             severity="secondary">
@@ -236,21 +235,21 @@
         <div class="text-center py-16">
           <i class="pi pi-search text-6xl text-muted-color mb-6 opacity-50"></i>
           <h3 class="text-2xl font-semibold text-color mb-4">
-            No products found
+            {{ 'PRODUCTS.SEARCH.NO_PRODUCTS_TITLE' | translate }}
           </h3>
           <div class="max-w-md mx-auto text-muted-color mb-6">
-            <p class="mb-4">We couldn't find any products matching "{{ searchQuery() }}"</p>
-            <p>Try:</p>
+            <p class="mb-4">{{ 'PRODUCTS.SEARCH.NO_PRODUCTS_MESSAGE' | translate: {query: searchQuery()} }}</p>
+            <p>{{ 'PRODUCTS.SEARCH.SEARCH_TIPS_TITLE' | translate }}</p>
             <ul class="text-left list-disc list-inside space-y-1 text-muted-color">
-              <li>Checking your spelling</li>
-              <li>Using more general terms</li>
-              <li>Removing some filters</li>
-              <li>Trying different keywords</li>
+              <li>{{ 'PRODUCTS.SEARCH.SEARCH_TIP_1' | translate }}</li>
+              <li>{{ 'PRODUCTS.SEARCH.SEARCH_TIP_2' | translate }}</li>
+              <li>{{ 'PRODUCTS.SEARCH.SEARCH_TIP_3' | translate }}</li>
+              <li>{{ 'PRODUCTS.SEARCH.SEARCH_TIP_4' | translate }}</li>
             </ul>
           </div>
           @if (hasActiveFilters()) {
             <p-button
-              label="Clear Filters"
+              [label]="'PRODUCTS.SEARCH.CLEAR_FILTERS' | translate"
               icon="pi pi-filter-slash"
               (click)="clearFilters()"
               severity="secondary"
@@ -280,7 +279,7 @@
                 [first]="(currentPage() - 1) * itemsPerPage()"
                 (onPageChange)="onPageChange($event)"
                 [showCurrentPageReport]="true"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} results"
+                [currentPageReportTemplate]="'PRODUCTS.SEARCH.PAGINATION_TEMPLATE' | translate"
                 [showJumpToPageDropdown]="totalPages() > 5"
                 [showFirstLastIcon]="true"
                 [rowsPerPageOptions]="rowsPerPageOptions()"
@@ -307,10 +306,10 @@
     
     <ng-template #header>
       <div class="flex items-center justify-between w-full">
-        <h3 class="text-lg font-semibold">Filters</h3>
+        <h3 class="text-lg font-semibold">{{ 'PRODUCTS.SEARCH.FILTERS_TITLE' | translate }}</h3>
         @if (hasActiveFilters()) {
           <p-button
-            label="Clear All"
+            [label]="'PRODUCTS.SEARCH.CLEAR_ALL' | translate"
             (click)="clearFilters()"
             severity="danger"
             [text]="true"
@@ -325,7 +324,7 @@
       
       <!-- Price Range -->
       <div>
-        <h4 class="font-medium text-color mb-3 text-base">Price Range (EGP)</h4>
+        <h4 class="font-medium text-color mb-3 text-base">{{ 'PRODUCTS.SEARCH.PRICE_RANGE' | translate }}</h4>
         <div class="px-2">
           <p-slider
             [(ngModel)]="filters().priceRange"
@@ -345,7 +344,7 @@
       
       <!-- Rating Filter -->
       <div>
-        <h4 class="font-medium text-color mb-3 text-base">Minimum Rating</h4>
+        <h4 class="font-medium text-color mb-3 text-base">{{ 'PRODUCTS.SEARCH.MINIMUM_RATING' | translate }}</h4>
         <div class="space-y-2">
           @for (rating of [4, 3, 2, 1]; track rating) {
             <label class="flex items-center gap-2 cursor-pointer py-2 px-0 rounded-md transition-all hover:bg-surface-50 hover:px-2">
@@ -359,7 +358,7 @@
                 @for (star of [1,2,3,4,5]; track star) {
                   <i [class]="'pi text-sm ' + (star <= rating ? 'pi-star-fill text-yellow-500' : 'pi-star text-muted-color')"></i>
                 }
-                <span class="text-sm text-muted-color ml-1">& up</span>
+                <span class="text-sm text-muted-color ml-1">{{ 'PRODUCTS.SEARCH.RATING_AND_UP' | translate }}</span>
               </div>
             </label>
           }
@@ -368,7 +367,7 @@
       
       <!-- Availability -->
       <div>
-        <h4 class="font-medium text-color mb-3 text-base">Availability</h4>
+        <h4 class="font-medium text-color mb-3 text-base">{{ 'PRODUCTS.SEARCH.AVAILABILITY' | translate }}</h4>
         <div class="space-y-2">
           <label class="flex items-center gap-2 cursor-pointer py-2 px-0 rounded-md transition-all hover:bg-surface-50 hover:px-2">
             <p-checkbox
@@ -376,7 +375,7 @@
               (ngModelChange)="onInStockChange($event)"
               [binary]="true">
             </p-checkbox>
-            <span class="text-sm">In Stock</span>
+            <span class="text-sm">{{ 'PRODUCTS.SEARCH.IN_STOCK_FILTER' | translate }}</span>
           </label>
           <label class="flex items-center gap-2 cursor-pointer py-2 px-0 rounded-md transition-all hover:bg-surface-50 hover:px-2">
             <p-checkbox
@@ -384,7 +383,7 @@
               (ngModelChange)="onSaleChange($event)"
               [binary]="true">
             </p-checkbox>
-            <span class="text-sm">On Sale</span>
+            <span class="text-sm">{{ 'PRODUCTS.SEARCH.ON_SALE_FILTER' | translate }}</span>
           </label>
         </div>
       </div>

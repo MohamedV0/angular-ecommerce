@@ -48,7 +48,7 @@
           <div class="w-14 h-14 md:w-16 md:h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6">
             <i class="pi pi-exclamation-triangle text-xl md:text-2xl text-red-600"></i>
           </div>
-          <h2 class="text-lg md:text-xl font-bold text-color mb-3 md:mb-4">Product Not Found</h2>
+          <h2 class="text-lg md:text-xl font-bold text-color mb-3 md:mb-4">{{ 'PRODUCTS.DETAILS.NOT_FOUND' | translate }}</h2>
           <p-message
             severity="error"
             [text]="error()"
@@ -56,7 +56,7 @@
           </p-message>
           <div class="flex flex-col sm:flex-row gap-2 md:gap-3 justify-center">
             <p-button
-              label="Try Again"
+              [label]="'PRODUCTS.DETAILS.TRY_AGAIN' | translate"
               icon="pi pi-refresh"
               (click)="retryLoading()"
               severity="primary"
@@ -65,7 +65,7 @@
               class="w-full sm:w-auto">
             </p-button>
             <p-button
-              label="Back to Products"
+              [label]="'PRODUCTS.DETAILS.BACK_TO_PRODUCTS' | translate"
               icon="pi pi-arrow-left"
               routerLink="/products/list"
               severity="primary"
@@ -89,7 +89,7 @@
             [model]="breadcrumbItems()" 
             [home]="{icon: 'pi pi-home', routerLink: '/'}"
             [style]="{'background': 'transparent', 'border': 'none', 'padding': '0'}"
-            class="!bg-transparent text-xs md:text-sm">
+            class="!bg-transparent text-xs md:text-sm whitespace-nowrap">
           </p-breadcrumb>
         </div>
       </div>
@@ -212,19 +212,19 @@
                     @if (isInStock()) {
                       <span class="text-primary text-xs font-medium">
                         <i class="pi pi-check mr-1"></i>
-                        In Stock ({{ product()!.quantity }} available)
+                        {{ 'PRODUCTS.DETAILS.IN_STOCK_COUNT' | translate: {count: product()!.quantity} }}
                       </span>
                     } @else {
                       <span class="text-red-500 text-xs font-medium">
                         <i class="pi pi-times mr-1"></i>
-                        Out of Stock
+                        {{ 'PRODUCTS.DETAILS.OUT_OF_STOCK' | translate }}
                       </span>
                     }
                   </div>
                   @if (product()!.sold > 0) {
                     <span class="text-xs text-muted-color">
                       <i class="pi pi-shopping-bag mr-1"></i>
-                      {{ product()!.sold | number }} sold
+                      {{ 'PRODUCTS.DETAILS.SOLD_COUNT' | translate: {count: product()!.sold} }}
                     </span>
                   }
                 </div>
@@ -233,7 +233,7 @@
               <!-- Product Description -->
               <div class="description-section">
                 <h3 class="text-xs md:text-sm font-semibold text-color mb-1">
-                  Description
+                  {{ 'PRODUCTS.DETAILS.DESCRIPTION' | translate }}
                 </h3>
                 <div class="description-content text-xs text-muted-color leading-relaxed line-clamp-3 md:line-clamp-none">
                   {{ product()!.description }}
@@ -250,7 +250,7 @@
                   <!-- Quantity Selector -->
                   <div class="quantity-section mb-2 md:mb-3">
                     <label class="block text-xs font-medium text-color mb-1.5">
-                      Quantity
+                      {{ 'PRODUCTS.DETAILS.QUANTITY' | translate }}
                     </label>
                     <div class="quantity-controls flex items-center gap-2">
                       <p-button
@@ -288,7 +288,7 @@
                         <div class="flex items-center gap-2 text-green-700">
                           <i class="pi pi-check-circle text-base md:text-lg"></i>
                           <span class="font-medium text-xs md:text-sm">
-                            {{ cartQuantity() }} {{ cartQuantity() === 1 ? 'item' : 'items' }} in cart
+                            {{ 'PRODUCTS.DETAILS.CART_STATUS' | translate: {count: cartQuantity()} }}
                           </span>
                         </div>
                       </div>
@@ -297,7 +297,7 @@
                     <!-- Add to Cart Button and Wishlist -->
                     <div class="flex flex-row gap-2">
                       <p-button
-                        [label]="isInCart() ? 'Add More' : 'Add to Cart'"
+                        [label]="isInCart() ? ('PRODUCTS.ADD_MORE' | translate) : ('PRODUCTS.ADD_TO_CART' | translate)"
                         icon="pi pi-shopping-cart"
                         [disabled]="!canAddToCart()"
                         [loading]="isAddingToCart()"
@@ -314,7 +314,7 @@
                         [outlined]="true"
                         size="small"
                         class="!w-11 !h-11"
-                        [ariaLabel]="'Add to wishlist'">
+                        [ariaLabel]="'PRODUCTS.DETAILS.ADD_TO_WISHLIST_ARIA' | translate">
                       </p-button>
                     </div>
                   </div>
@@ -335,7 +335,7 @@
           <div class="max-w-6xl mx-auto px-3 md:px-4">
             
             <h2 class="text-lg md:text-xl font-bold text-color mb-4 md:mb-6 text-center">
-              Related Products
+              {{ 'PRODUCTS.DETAILS.RELATED_PRODUCTS' | translate }}
             </h2>
             
             @if (relatedLoading()) {

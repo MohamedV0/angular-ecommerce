@@ -1,7 +1,9 @@
-import { Component, input, inject, computed, ChangeDetectionStrategy } from '@angular/core';
+import { Component, input, inject, computed, signal, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Subject, takeUntil } from 'rxjs';
 
 // PrimeNG Components
 import { ButtonModule } from 'primeng/button';
@@ -24,6 +26,7 @@ import { WishlistStore } from '../../../features/wishlist/store/wishlist.store';
     CommonModule, 
     FormsModule, 
     RouterModule,
+    TranslateModule,
     // PrimeNG
     ButtonModule, 
     BadgeModule, 
@@ -34,13 +37,32 @@ import { WishlistStore } from '../../../features/wishlist/store/wishlist.store';
   styleUrl: './product-card.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProductCard {
+export class ProductCard implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly cartStore = inject(CartStore);
   private readonly wishlistStore = inject(WishlistStore);
+  private readonly translateService = inject(TranslateService);
+  private readonly destroy$ = new Subject<void>();
   
   // Input signals
   readonly product = input.required<Product>();
+  
+  // Track current language to make translations reactive
+  readonly currentLang = signal('en');
+  
+  ngOnInit(): void {
+    // Subscribe to language changes to update computed translations
+    this.translateService.onLangChange
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(event => {
+        this.currentLang.set(event.lang);
+      });
+  }
+  
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   // Computed properties - following Angular best practices with signals
   readonly currentPrice = computed(() => {
@@ -99,6 +121,38 @@ export class ProductCard {
 
   readonly wishlistIconClass = computed(() => {
     return this.isInWishlist() ? 'pi pi-heart-fill' : 'pi pi-heart';
+  });
+  
+  // Translated labels - reactive to language changes
+  readonly viewDetailsAriaLabel = computed(() => {
+    const lang = this.currentLang(); // Create dependency
+    return this.translateService.instant('PRODUCTS.CARD.VIEW_DETAILS_ARIA', {
+      title: this.product().title
+    });
+  });
+  
+  readonly wishlistAriaLabel = computed(() => {
+    const lang = this.currentLang(); // Create dependency
+    const key = this.isInWishlist() 
+      ? 'PRODUCTS.CARD.REMOVE_FROM_WISHLIST_ARIA'
+      : 'PRODUCTS.CARD.ADD_TO_WISHLIST_ARIA';
+    return this.translateService.instant(key, {
+      title: this.product().title
+    });
+  });
+  
+  readonly inCartLabel = computed(() => {
+    const lang = this.currentLang(); // Create dependency
+    return this.translateService.instant('PRODUCTS.CARD.IN_CART', {
+      count: this.cartQuantity()
+    });
+  });
+  
+  readonly addAnotherAriaLabel = computed(() => {
+    const lang = this.currentLang(); // Create dependency
+    return this.translateService.instant('PRODUCTS.CARD.ADD_ANOTHER_ARIA', {
+      title: this.product().title
+    });
   });
 
   /**

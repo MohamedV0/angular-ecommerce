@@ -1,7 +1,7 @@
 <!-- Enhanced Product Card - Pure PrimeNG + Tailwind CSS -->
 <div class="product-card group relative overflow-hidden rounded-xl border border-surface shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer h-full flex flex-col"
      (click)="viewProductDetails()"
-     [ariaLabel]="'View details for ' + product().title">
+     [ariaLabel]="viewDetailsAriaLabel()">
   
   <!-- Product Image Container -->
   <div class="relative overflow-hidden">
@@ -30,7 +30,7 @@
       [severity]="isInWishlist() ? 'danger' : 'secondary'"
       size="small"
       class="!absolute !top-3 !right-3 !w-8 !h-8 !rounded-full !drop-shadow-md hover:!drop-shadow-lg !transition-all !duration-200 hover:!scale-110"
-      [ariaLabel]="isInWishlist() ? 'Remove ' + product().title + ' from wishlist' : 'Add ' + product().title + ' to wishlist'">
+      [ariaLabel]="wishlistAriaLabel()">
     </p-button>
   </div>
   
@@ -46,7 +46,7 @@
     </div>
     
     <!-- Product Title -->
-    <h3 class="text-xs sm:text-sm font-semibold text-color mb-3 line-clamp-2 leading-relaxed min-h-[2.75rem] sm:min-h-[3rem]">
+    <h3 class="text-xs sm:text-sm font-semibold text-color mb-3 line-clamp-2 leading-relaxed min-h-[2.75rem] sm:min-h-[3rem] text-left" dir="ltr">
       {{ product().title }}
     </h3>
     
@@ -88,12 +88,12 @@
       @if (product().quantity > 0) {
         <p class="text-xs text-primary font-medium">
           <i class="pi pi-check-circle mr-1"></i>
-          In Stock
+          {{ 'PRODUCTS.IN_STOCK' | translate }}
         </p>
       } @else {
         <p class="text-xs text-red-500 font-medium">
           <i class="pi pi-times-circle mr-1"></i>
-          Out of Stock
+          {{ 'PRODUCTS.OUT_OF_STOCK' | translate }}
         </p>
       }
     </div>
@@ -106,7 +106,7 @@
     <!-- Add to Cart Button (Not in cart) -->
     @if (!isInCart()) {
       <p-button 
-        label="Add to Cart"
+        [label]="'PRODUCTS.ADD_TO_CART' | translate"
         icon="pi pi-shopping-cart"
         (click)="onAddToCartClick($event)"
 
@@ -119,7 +119,7 @@
       <!-- In Cart - Show quantity and view cart option -->
       <div class="flex items-center gap-2">
         <p-chip 
-          [label]="'In Cart (' + cartQuantity() + ')'"
+          [label]="inCartLabel()"
           icon="pi pi-check"
           class="!text-xs !font-semibold">
         </p-chip>
@@ -132,7 +132,7 @@
           [disabled]="!canAddToCart()"
           [text]="true"
           class="!w-6 !h-6 !p-0"
-          [ariaLabel]="'Add another ' + product().title + ' to cart'">
+          [ariaLabel]="addAnotherAriaLabel()">
         </p-button>
       </div>
     }

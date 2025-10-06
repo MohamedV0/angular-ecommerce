@@ -14,18 +14,18 @@
             <i class="pi pi-shopping-bag text-primary-contrast text-lg"></i>
           </div>
           <div>
-            <h1 class="text-2xl font-bold text-color">Products</h1>
+            <h1 class="text-2xl font-bold text-color">{{ 'PRODUCTS.LIST.TITLE' | translate }}</h1>
             @if (!loading() && hasProducts()) {
               <p class="text-sm text-muted-color">
-                {{ totalProducts() | number }} products found
+                {{ 'PRODUCTS.LIST.PRODUCTS_FOUND' | translate: {count: totalProducts()} }}
                 @if (searchQuery()) {
-                  <span class="ml-1">for "{{ searchQuery() }}"</span>
+                  <span class="ml-1">{{ 'PRODUCTS.LIST.FOR_QUERY' | translate: {query: searchQuery()} }}</span>
                 }
                 @if (categoryFilter().length > 0) {
-                  <span class="ml-1">in {{ selectedCategoryName() }}</span>
+                  <span class="ml-1">{{ 'PRODUCTS.LIST.IN_CATEGORY' | translate: {category: selectedCategoryName()} }}</span>
                 }
                 @if (brandFilter()) {
-                  <span class="ml-1">from {{ selectedBrandName() }}</span>
+                  <span class="ml-1">{{ 'PRODUCTS.LIST.FROM_BRAND' | translate: {brand: selectedBrandName()} }}</span>
                 }
               </p>
             }
@@ -44,7 +44,7 @@
                   type="text"
                   pInputText
                   [formControl]="searchControl"
-                  placeholder="Search for products, brands, categories..."
+                  [placeholder]="'PRODUCTS.LIST.SEARCH_PLACEHOLDER' | translate"
                   class="w-full pr-12"
                   (keyup.enter)="onSearch()"
                 />
@@ -60,7 +60,7 @@
                   (click)="clearSearch()"
                   [disabled]="loading()"
                   class="!absolute !right-2 !top-1/2 !-translate-y-1/2 !w-7 !h-7 !p-0 !min-w-0 !flex !items-center !justify-center !rounded-full"
-                  [ariaLabel]="'Clear search'">
+                  [ariaLabel]="'PRODUCTS.LIST.CLEAR_SEARCH' | translate">
                 </p-button>
               }
             </div>
@@ -76,7 +76,7 @@
                 (ngModelChange)="onCategoryChange($event)"
                 optionLabel="name"
                 optionValue="_id"
-                placeholder="Category"
+                [placeholder]="'PRODUCTS.LIST.CATEGORY_FILTER' | translate"
                 [showClear]="true"
                 [disabled]="categoriesLoading()"
                 class="w-full">
@@ -91,7 +91,7 @@
                 (ngModelChange)="onBrandChange($event)"
                 optionLabel="name"
                 optionValue="_id"
-                placeholder="Brand"
+                [placeholder]="'PRODUCTS.LIST.BRAND_FILTER' | translate"
                 [showClear]="true"
                 [disabled]="brandsLoading()"
                 class="w-full">
@@ -101,12 +101,12 @@
             <!-- Sort Dropdown -->
             <div class="w-20 flex-shrink-0">
               <p-select
-                [options]="sortOptions"
+                [options]="sortOptions()"
                 [ngModel]="sortBy()"
                 (ngModelChange)="onSortChange($event)"
                 optionLabel="label"
                 optionValue="value"
-                placeholder="Sort"
+                [placeholder]="'PRODUCTS.LIST.SORT_BY' | translate"
                 class="w-full">
               </p-select>
             </div>
@@ -121,7 +121,7 @@
                   type="text"
                   pInputText
                   [formControl]="searchControl"
-                  placeholder="Search for products, brands, categories..."
+                  [placeholder]="'PRODUCTS.LIST.SEARCH_PLACEHOLDER' | translate"
                   class="w-full pr-12"
                   (keyup.enter)="onSearch()"
                 />
@@ -137,7 +137,7 @@
                   (click)="clearSearch()"
                   [disabled]="loading()"
                   class="!absolute !right-2 !top-1/2 !-translate-y-1/2 !w-7 !h-7 !p-0 !min-w-0 !flex !items-center !justify-center !rounded-full"
-                  [ariaLabel]="'Clear search'">
+                  [ariaLabel]="'PRODUCTS.LIST.CLEAR_SEARCH' | translate">
                 </p-button>
               }
             </div>
@@ -150,7 +150,7 @@
                 (ngModelChange)="onCategoryChange($event)"
                 optionLabel="name"
                 optionValue="_id"
-                placeholder="Category"
+                [placeholder]="'PRODUCTS.LIST.CATEGORY_FILTER' | translate"
                 [showClear]="true"
                 [disabled]="categoriesLoading()"
                 class="w-full">
@@ -165,7 +165,7 @@
                 (ngModelChange)="onBrandChange($event)"
                 optionLabel="name"
                 optionValue="_id"
-                placeholder="Brand"
+                [placeholder]="'PRODUCTS.LIST.BRAND_FILTER' | translate"
                 [showClear]="true"
                 [disabled]="brandsLoading()"
                 class="w-full">
@@ -175,12 +175,12 @@
             <!-- Sort Dropdown - Desktop -->
             <div class="w-40">
               <p-select
-                [options]="sortOptions"
+                [options]="sortOptions()"
                 [ngModel]="sortBy()"
                 (ngModelChange)="onSortChange($event)"
                 optionLabel="label"
                 optionValue="value"
-                placeholder="Sort"
+                [placeholder]="'PRODUCTS.LIST.SORT_BY' | translate"
                 class="w-full">
               </p-select>
             </div>
@@ -223,7 +223,7 @@
               <i class="pi pi-exclamation-triangle text-2xl text-red-600"></i>
             </div>
             <h3 class="text-xl font-semibold text-color mb-4">
-              Something went wrong
+              {{ 'PRODUCTS.ERRORS.SOMETHING_WRONG' | translate }}
             </h3>
             <p-message
               severity="error"
@@ -231,7 +231,7 @@
               styleClass="mb-6 text-left">
             </p-message>
             <p-button
-              label="Try Again"
+              [label]="'PRODUCTS.ERRORS.TRY_AGAIN' | translate"
               icon="pi pi-refresh"
               (click)="retryLoading()"
               severity="primary"
@@ -250,21 +250,21 @@
             </div>
             <h3 class="text-2xl font-bold text-color mb-4">
               @if (searchQuery()) {
-                No products found
+                {{ 'PRODUCTS.LIST.NO_PRODUCTS_FOUND' | translate }}
               } @else {
-                No products available
+                {{ 'PRODUCTS.LIST.NO_PRODUCTS_AVAILABLE' | translate }}
               }
             </h3>
             <p class="text-muted-color mb-8 leading-relaxed">
               @if (searchQuery()) {
-                We couldn't find any products matching your search. Try different keywords or browse our categories.
+                {{ 'PRODUCTS.LIST.SEARCH_NO_RESULTS' | translate }}
               } @else {
-                Our product catalog is currently empty. Check back soon for new arrivals!
+                {{ 'PRODUCTS.LIST.EMPTY_MESSAGE' | translate }}
               }
             </p>
             @if (searchQuery()) {
               <p-button
-                label="Clear Search"
+                [label]="'PRODUCTS.LIST.CLEAR_SEARCH_BUTTON' | translate"
                 icon="pi pi-times"
                 (click)="clearSearch()"
                 severity="primary"
@@ -296,7 +296,7 @@
                   [first]="(currentPage() - 1) * itemsPerPage()"
                   (onPageChange)="onPageChange($event)"
                   [showCurrentPageReport]="true"
-                  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+                  [currentPageReportTemplate]="'PRODUCTS.LIST.PAGINATION_TEMPLATE' | translate"
                   [showJumpToPageDropdown]="false"
                   [showFirstLastIcon]="true"
                   [showPageLinks]="true"

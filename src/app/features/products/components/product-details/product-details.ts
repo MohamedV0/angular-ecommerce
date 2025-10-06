@@ -2,6 +2,7 @@ import { Component, inject, signal, computed, OnInit, OnDestroy } from '@angular
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 
 // PrimeNG Components
@@ -39,6 +40,7 @@ interface GalleryImage {
     CommonModule,
     FormsModule,
     RouterModule,
+    TranslateModule,
     // PrimeNG
     GalleriaModule,
     ButtonModule,

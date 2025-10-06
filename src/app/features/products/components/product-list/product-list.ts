@@ -2,6 +2,7 @@ import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 // PrimeNG Components
 import { PaginatorModule } from 'primeng/paginator';
@@ -35,6 +36,7 @@ import { Brand } from '../../../brands/models/brand.model';
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
+    TranslateModule,
     // PrimeNG
     PaginatorModule,
     SkeletonModule,
@@ -57,6 +59,7 @@ export class ProductListComponent implements OnInit {
   private readonly brandsService = inject(BrandsService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly translateService = inject(TranslateService);
 
   // Component state
   readonly products = signal<Product[]>([]);
@@ -81,8 +84,18 @@ export class ProductListComponent implements OnInit {
   readonly brands = signal<Brand[]>([]);
   readonly brandsLoading = signal(false);
 
-  // Sort options
-  readonly sortOptions = [...PRODUCT_SORT_OPTIONS];
+  // Track current language to make sort options reactive
+  readonly currentLang = signal('en');
+
+  // Sort options - translated dynamically and reactively
+  readonly sortOptions = computed(() => {
+    // Include currentLang in the computed to create reactive dependency
+    const lang = this.currentLang();
+    return PRODUCT_SORT_OPTIONS.map(option => ({
+      label: this.translateService.instant(option.labelKey),
+      value: option.value
+    }));
+  });
 
   // Computed properties
   readonly totalPages = computed(() => 
@@ -114,6 +127,11 @@ export class ProductListComponent implements OnInit {
     this.loadBrands();
     this.initializeFromRoute();
     this.setupSearchControl();
+    
+    // Subscribe to language changes to update sort options
+    this.translateService.onLangChange.subscribe(event => {
+      this.currentLang.set(event.lang);
+    });
   }
 
   /**

@@ -2,6 +2,7 @@ import { Component, inject, signal, computed, OnInit, OnDestroy } from '@angular
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 
 // PrimeNG Components
@@ -35,6 +36,7 @@ import { SEARCH_SORT_OPTIONS } from '../../constants/product-sort-options.const'
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
+    TranslateModule,
     // PrimeNG
     AutoCompleteModule,
     ButtonModule,
@@ -59,6 +61,7 @@ export class ProductSearchComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly productsService = inject(ProductsService);
+  private readonly translateService = inject(TranslateService);
   private readonly destroy$ = new Subject<void>();
 
   // Component state
@@ -86,9 +89,19 @@ export class ProductSearchComponent implements OnInit, OnDestroy {
     onSale: false
   });
 
-  // Sort options
+  // Track current language to make sort options reactive
+  readonly currentLang = signal('en');
+
+  // Sort options - translated dynamically and reactively
   readonly sortBy = signal('relevance');
-  readonly sortOptions = [...SEARCH_SORT_OPTIONS];
+  readonly sortOptions = computed(() => {
+    // Include currentLang in the computed to create reactive dependency
+    const lang = this.currentLang();
+    return SEARCH_SORT_OPTIONS.map(option => ({
+      label: this.translateService.instant(option.labelKey),
+      value: option.value
+    }));
+  });
 
   // Pagination options
   readonly rowsPerPageOptions = signal([15, 30, 50, 100]);
@@ -131,6 +144,13 @@ export class ProductSearchComponent implements OnInit, OnDestroy {
     this.setupSearchControl();
     this.loadRecentSearches();
     this.performSearch();
+    
+    // Subscribe to language changes to update sort options
+    this.translateService.onLangChange
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(event => {
+        this.currentLang.set(event.lang);
+      });
   }
 
   ngOnDestroy(): void {
