@@ -34,6 +34,7 @@
                 <p-button 
                   [label]="slide.primaryAction.labelKey | translate"
                   icon="pi pi-shopping-cart"
+                  routerLink="/products"
                   severity="primary"
                   [size]="isMobile() ? 'small' : 'large'"
                   class="w-full sm:w-auto sm:flex-none">
@@ -42,6 +43,7 @@
                   [label]="slide.secondaryAction.labelKey | translate"
                   icon="pi pi-arrow-right"
                   iconPos="right"
+                  routerLink="/products"
                   severity="secondary"
                   [outlined]="true"
                   [size]="isMobile() ? 'small' : 'large'"

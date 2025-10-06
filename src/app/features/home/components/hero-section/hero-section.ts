@@ -1,5 +1,6 @@
 import { Component, signal, OnInit, OnDestroy, inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { CarouselModule } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
@@ -7,7 +8,7 @@ import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-hero-section',
-  imports: [CommonModule, TranslateModule, CarouselModule, ButtonModule, CardModule],
+  imports: [CommonModule, RouterLink, TranslateModule, CarouselModule, ButtonModule, CardModule],
   templateUrl: './hero-section.html',
   styleUrl: './hero-section.scss'
 })
