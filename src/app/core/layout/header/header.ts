@@ -2,6 +2,7 @@ import { Component, inject, OnInit, OnDestroy, signal, computed, ChangeDetection
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MenubarModule } from 'primeng/menubar';
 import { ToolbarModule } from 'primeng/toolbar';
 import { MenuModule } from 'primeng/menu';
@@ -36,13 +37,13 @@ export class Header implements OnInit, OnDestroy {
   private translationSubscription?: Subscription;
   private authSubscription?: Subscription;
   
-  // Mobile drawer visibility
   readonly drawerVisible = signal(false);
   
-  // ✅ PERFORMANCE: Expose as signals instead of method wrappers
-  readonly isAuthenticated = computed(() => this.authService.isAuthenticated());
-  readonly currentUserName = computed(() => this.authService.getCurrentUserName());
-  readonly currentLanguage = this.i18nService.currentLanguage;  // ✅ Direct signal reference (reactive)
+  readonly isAuthenticated = toSignal(this.authService.isAuthenticated$, { initialValue: false });
+  readonly currentUser = toSignal(this.authService.currentUser$, { initialValue: null });
+  readonly currentUserName = computed(() => this.currentUser()?.name ?? null);
+  
+  readonly currentLanguage = this.i18nService.currentLanguage;
   readonly isDarkMode = this.themeService.isDarkMode;
   
   // Badge counts for Cart and Wishlist
