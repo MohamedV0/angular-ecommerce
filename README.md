@@ -23,7 +23,7 @@
 Developed as the **final project** for [Route Academy](https://www.linkedin.com/company/routeacademy/)'s Frontend Angular Developer course, FreshCart demonstrates real-world e-commerce functionality through standalone components, reactive programming, and a scalable feature-based architecture designed for production environments.
 
 <div align="center">
-  <a href="#">
+  <a href="https://angular-ecommerce-v0.vercel.app/" target="_blank">
     <img src="https://img.shields.io/badge/View_Live_Demo-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Live Preview" />
   </a>
 </div>
