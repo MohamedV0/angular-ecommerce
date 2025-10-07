@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet, Router, NavigationStart, NavigationEnd, NavigationCancel, NavigationError } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ToastModule } from 'primeng/toast';
+import { ScrollTopModule } from 'primeng/scrolltop';
 
 import { Header } from '../header/header';
 import { Footer } from '../footer/footer';
@@ -18,6 +19,7 @@ import { LoadingSpinner } from '../../../shared/components/loading-spinner/loadi
     CommonModule,
     RouterOutlet,
     ToastModule,
+    ScrollTopModule,
     Header,
     Footer,
     LoadingSpinner

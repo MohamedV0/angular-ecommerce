@@ -17,3 +17,15 @@
     <app-footer></app-footer>
   </footer>
 </div>
+
+<!-- Scroll to Top Button - Appears globally when scrolling down -->
+<p-scrolltop 
+  [threshold]="200"
+  icon="pi pi-arrow-up"
+  [buttonProps]="{ 
+    severity: 'primary', 
+    rounded: true, 
+    size: 'large',
+    ariaLabel: 'Scroll to top' 
+  }"
+  styleClass="!bottom-20 !right-4 md:!bottom-24 md:!right-8 shadow-lg hover:shadow-xl transition-shadow duration-300" />
