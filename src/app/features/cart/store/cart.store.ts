@@ -136,25 +136,81 @@ export const CartStore = signalStore(
         patchState(store, { isAuthenticated });
         
         if (isAuthenticated) {
-          // Load from API for authenticated users - reactive pattern
-          patchState(store, { isLoading: true, error: null });
-          cartService.getCart().subscribe({
-            next: ({ items, cartId }) => {
-              patchState(store, {
-                items,
-                cartId,
-                lastUpdated: Date.now(),
-                isLoading: false,
-                error: null
-              });
-            },
-            error: (error) => {
-              patchState(store, {
-                error: error.message || 'Failed to load cart',
-                isLoading: false
-              });
-            }
-          });
+          // Check if there are unsynchronized items in localStorage
+          const localItems = cartService.loadCartFromStorage();
+          
+          if (localItems.length > 0) {
+            // User is authenticated but has local items (race condition scenario)
+            // This happens when:
+            // 1. User logged in and sync started
+            // 2. User refreshed before sync completed
+            // 3. localStorage still has items that weren't synced
+            
+            patchState(store, { isSyncing: true, error: null });
+            
+            // Sync local items first, then load complete cart
+            cartService.syncCartWithServer(localItems).subscribe({
+              next: (result) => {
+                if (result?.success) {
+                  // Sync succeeded - clear localStorage and load from server
+                  cartService.clearCartFromStorage();
+                  
+                  cartService.getCart().subscribe({
+                    next: ({ items, cartId }) => {
+                      patchState(store, {
+                        items,
+                        cartId,
+                        lastUpdated: Date.now(),
+                        isSyncing: false,
+                        error: null
+                      });
+                    },
+                    error: (error) => {
+                      patchState(store, {
+                        error: error.message || 'Failed to load cart after sync',
+                        isSyncing: false
+                      });
+                    }
+                  });
+                } else {
+                  // Sync failed - keep local items and show error
+                  patchState(store, {
+                    items: localItems,
+                    error: result?.message || 'Failed to sync cart',
+                    isSyncing: false
+                  });
+                }
+              },
+              error: (error) => {
+                // Sync failed - keep local items
+                patchState(store, {
+                  items: localItems,
+                  error: error.message || 'Failed to sync cart with server',
+                  isSyncing: false
+                });
+              }
+            });
+          } else {
+            // No local items - just load from API
+            patchState(store, { isLoading: true, error: null });
+            cartService.getCart().subscribe({
+              next: ({ items, cartId }) => {
+                patchState(store, {
+                  items,
+                  cartId,
+                  lastUpdated: Date.now(),
+                  isLoading: false,
+                  error: null
+                });
+              },
+              error: (error) => {
+                patchState(store, {
+                  error: error.message || 'Failed to load cart',
+                  isLoading: false
+                });
+              }
+            });
+          }
         } else {
           // Load from localStorage for guest users
           const items = cartService.loadCartFromStorage();

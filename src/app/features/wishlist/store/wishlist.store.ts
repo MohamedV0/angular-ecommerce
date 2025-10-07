@@ -114,24 +114,107 @@ export const WishlistStore = signalStore(
         patchState(store, { isAuthenticated });
         
         if (isAuthenticated) {
-          // Load from API for authenticated users - reactive pattern
-          patchState(store, { isLoading: true, error: null });
-          wishlistService.getWishlist().subscribe({
-            next: (items) => {
-              patchState(store, {
-                items,
-                lastUpdated: Date.now(),
-                isLoading: false,
-                error: null
-              });
-            },
-            error: (error) => {
-              patchState(store, {
-                error: error.message || 'Failed to load wishlist',
-                isLoading: false
-              });
-            }
-          });
+          // Check if there are unsynchronized items in localStorage
+          const localProductIds = wishlistService.loadWishlistFromStorage();
+          
+          if (localProductIds.length > 0) {
+            // User is authenticated but has local items (race condition scenario)
+            // This happens when:
+            // 1. User logged in and sync started
+            // 2. User refreshed before sync completed
+            // 3. localStorage still has product IDs that weren't synced
+            
+            patchState(store, { isLoading: true, error: null });
+            
+            // Sync local items first, then load complete wishlist
+            wishlistService.syncWishlistWithServer(localProductIds).subscribe({
+              next: (result) => {
+                if (result?.success) {
+                  // Sync succeeded - clear localStorage and load from server
+                  wishlistService.clearWishlistFromStorage();
+                  
+                  wishlistService.getWishlist().subscribe({
+                    next: (items) => {
+                      patchState(store, {
+                        items,
+                        lastUpdated: Date.now(),
+                        isLoading: false,
+                        error: null
+                      });
+                    },
+                    error: (error) => {
+                      patchState(store, {
+                        error: error.message || 'Failed to load wishlist after sync',
+                        isLoading: false
+                      });
+                    }
+                  });
+                } else {
+                  // Sync failed - fetch products for local IDs and show error
+                  productsService.getProducts().subscribe({
+                    next: (response) => {
+                      const guestItems = response.data.filter(product => 
+                        localProductIds.includes(product._id)
+                      );
+                      
+                      patchState(store, {
+                        items: guestItems,
+                        error: result?.message || 'Failed to sync wishlist',
+                        isLoading: false
+                      });
+                    },
+                    error: (error) => {
+                      patchState(store, {
+                        error: error.message || 'Failed to load local wishlist',
+                        isLoading: false
+                      });
+                    }
+                  });
+                }
+              },
+              error: (error) => {
+                // Sync failed - fetch products for local IDs
+                productsService.getProducts().subscribe({
+                  next: (response) => {
+                    const guestItems = response.data.filter(product => 
+                      localProductIds.includes(product._id)
+                    );
+                    
+                    patchState(store, {
+                      items: guestItems,
+                      error: error.message || 'Failed to sync wishlist with server',
+                      isLoading: false
+                    });
+                  },
+                  error: (loadError) => {
+                    patchState(store, {
+                      error: loadError.message || 'Failed to load wishlist',
+                      isLoading: false
+                    });
+                  }
+                });
+              }
+            });
+          } else {
+            // No local items - just load from API
+            patchState(store, { isLoading: true, error: null });
+            wishlistService.getWishlist().subscribe({
+              next: (items) => {
+                patchState(store, {
+                  items,
+                  lastUpdated: Date.now(),
+                  isLoading: false,
+                  error: null
+                });
+              },
+              error: (error) => {
+                patchState(store, {
+                  error: error.message || 'Failed to load wishlist',
+                  isLoading: false
+                });
+              }
+            });
+          }
         } else {
           // Load from localStorage for guest users (product IDs only)
           const productIds = wishlistService.loadWishlistFromStorage();
