@@ -13,6 +13,11 @@
     "SEARCH": "Search",
     "VIEW_ALL": "View All"
   },
+  "LOADING": {
+    "TITLE": "Loading...",
+    "MESSAGE": "Please wait a moment",
+    "ARIA_LABEL": "Loading content"
+  },
   "NAVIGATION": {
     "HOME": "Home",
     "PRODUCTS": "Products",
